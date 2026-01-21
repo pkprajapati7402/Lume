@@ -1,0 +1,10 @@
+# robots.txt for Lume
+
+User-agent: *
+Allow: /
+
+# Disallow admin or sensitive routes if any
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://lume.pay/sitemap.xml

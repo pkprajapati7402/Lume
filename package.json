@@ -1,6 +1,28 @@
 {
   "name": "lume",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Global payroll platform built on Stellar blockchain. Pay your international team in seconds with 90% lower fees.",
+  "author": "Lume <support@lume.pay>",
+  "license": "MIT",
+  "homepage": "https://lume.pay",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pkprajapati7402/Lume.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pkprajapati7402/Lume/issues",
+    "email": "support@lume.pay"
+  },
+  "keywords": [
+    "stellar",
+    "blockchain",
+    "payroll",
+    "payments",
+    "crypto",
+    "global-payments",
+    "remittance",
+    "fintech"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev",

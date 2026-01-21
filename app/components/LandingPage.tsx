@@ -304,7 +304,7 @@ export default function LandingPage() {
               </div>
               <div className="mb-6">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-5xl font-bold text-white">1%</span>
+                  <span className="text-5xl font-bold text-white">0.9%</span>
                   <span className="text-slate-400">per transaction</span>
                 </div>
               </div>

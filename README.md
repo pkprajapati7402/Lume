@@ -1,36 +1,168 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lume - Global Payroll at the Speed of Light ⚡
 
-## Getting Started
+Lume is a modern global payroll platform built on the Stellar blockchain network. Pay your international team in seconds with 90% lower fees compared to traditional payment methods like SWIFT and wire transfers.
 
-First, run the development server:
+## 🌟 Features
 
+### Core Functionality
+- **Individual Payouts** - Instant FX conversion for single payments with real-time exchange rates
+- **Bulk Payments** - CSV upload for mass distributions, process hundreds of transactions in one click
+- **Direct Off-Ramps** - MoneyGram integration for cash pickups without requiring bank accounts
+- **Live FX Rates** - Real-time orderbook monitoring with liquidity status indicators
+- **Account Balance Tracking** - View all asset balances across Stellar testnet and mainnet
+- **Savings Calculator** - Automated calculation showing cost savings vs traditional payment methods
+
+### Dashboard Features
+- **Network Toggle** - Switch between Stellar testnet and mainnet seamlessly
+- **Transaction History** - View and track all payment transactions on-chain
+- **Network Statistics** - Live monitoring of Stellar network speed and base fees
+- **Employee Directory** - Manage and organize your global team members
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ installed
+- [Freighter Wallet](https://www.freighter.app/) browser extension installed
+- A funded Stellar account (testnet or mainnet)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/pkprajapati7402/Lume.git
+cd Lume
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Learn More
+### Connect Your Wallet
 
-To learn more about Next.js, take a look at the following resources:
+1. Install the [Freighter Wallet](https://www.freighter.app/) browser extension
+2. Create or import your Stellar account
+3. Click "Get Started" or "Connect Wallet" on the Lume homepage
+4. Approve the connection request in Freighter
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Frontend**: Next.js 16, React 19, TypeScript
+- **Styling**: Tailwind CSS 4
+- **Animations**: Framer Motion
+- **Blockchain**: Stellar SDK
+- **Wallet Integration**: Freighter API
+- **State Management**: Zustand
+- **Icons**: Lucide React
 
-## Deploy on Vercel
+## 📋 Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+Lume/
+├── app/
+│   ├── components/
+│   │   ├── dashboard/
+│   │   │   ├── AccountBalance.tsx      # Account balance display
+│   │   │   ├── LiquidityMonitor.tsx    # Live FX rate monitor
+│   │   │   ├── SavingsCalculator.tsx   # Cost savings calculator
+│   │   │   ├── OverviewSection.tsx     # Dashboard overview
+│   │   │   ├── PayEmployeeSection.tsx  # Individual payment form
+│   │   │   ├── BulkUploadSection.tsx   # Bulk payment upload
+│   │   │   └── DirectorySection.tsx    # Employee directory
+│   │   ├── AppLayout.tsx               # Main app layout
+│   │   ├── Footer.tsx                  # Footer component
+│   │   ├── LandingPage.tsx             # Homepage
+│   │   ├── MainDashboard.tsx           # Dashboard container
+│   │   └── Navbar.tsx                  # Navigation bar
+│   ├── hooks/
+│   │   └── useStellarNetworkStats.ts   # Network stats hook
+│   ├── store/
+│   │   └── authStore.ts                # Zustand state management
+│   ├── globals.css                     # Global styles
+│   ├── layout.tsx                      # Root layout
+│   └── page.tsx                        # Root page
+├── public/                             # Static assets
+└── package.json                        # Dependencies
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 💰 Pricing
+
+- **Transaction Fee**: 1% flat rate per transaction
+- **No Hidden Fees**: Transparent pricing with no surprises
+- **Volume Discounts**: Available for enterprise customers
+- **Instant Settlement**: 5-second transaction finality
+
+## 🔧 Configuration
+
+### Network Selection
+Toggle between Stellar testnet and mainnet using the network selector in the dashboard header:
+- **Testnet**: For testing and development
+- **Mainnet**: For production payments
+
+### Supported Assets
+- XLM (Stellar Lumens)
+- USDC (USD Coin)
+- EURT (Euro Token)
+- NGNT (Nigerian Naira Token)
+- And all other Stellar-issued assets
+
+## 📖 Usage
+
+### Making Individual Payments
+1. Navigate to "Pay Employee" section
+2. Enter recipient's Stellar address
+3. Select asset and amount
+4. Confirm transaction in Freighter wallet
+
+### Bulk Payments
+1. Go to "Bulk Upload" section
+2. Download CSV template
+3. Fill in payment details
+4. Upload CSV file
+5. Review and confirm batch transaction
+
+### Monitoring Liquidity
+The Live FX Rate component shows:
+- Current exchange rate between asset pairs
+- Top bid/ask prices from the orderbook
+- Spread percentage
+- Liquidity status (Stable < 1% spread)
+
+## 🔐 Security
+
+- Non-custodial: You maintain full control of your funds
+- Secure wallet integration via Freighter
+- All transactions signed locally in your wallet
+- Built on Stellar's proven blockchain infrastructure
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🔗 Links
+
+- [Stellar Network](https://stellar.org)
+- [Freighter Wallet](https://www.freighter.app/)
+- [Stellar SDK Documentation](https://stellar.github.io/js-stellar-sdk/)
+
+## 📞 Support
+
+For questions or support:
+- Email: support@lume.pay
+- Documentation: Check the docs folder
+- Issues: GitHub Issues
+
+---
+
+Built with ❤️ on the Stellar Network
