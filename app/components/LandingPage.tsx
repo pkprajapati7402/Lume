@@ -1,7 +1,22 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Zap, Users, Building2, ArrowRight, Wallet } from 'lucide-react';
+import { 
+  Zap, 
+  Users, 
+  Building2, 
+  ArrowRight, 
+  Wallet, 
+  CheckCircle, 
+  Globe, 
+  Shield, 
+  TrendingDown,
+  Clock,
+  DollarSign,
+  Mail,
+  MessageSquare,
+  Send
+} from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useAuthStore } from '../store/authStore';
@@ -148,6 +163,21 @@ export default function LandingPage() {
         {/* Feature Grid Section */}
         <div id="features" className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-32">
           <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              Everything You Need
+            </h2>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+              Powerful features designed for modern global teams
+            </p>
+          </motion.div>
+
+          <motion.div
             initial="initial"
             whileInView="animate"
             viewport={{ once: true, margin: "-100px" }}
@@ -178,6 +208,415 @@ export default function LandingPage() {
               </motion.div>
             ))}
           </motion.div>
+
+          {/* Additional Features */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"
+          >
+            {[
+              { icon: Globe, title: 'Global Reach', desc: '180+ countries supported' },
+              { icon: Shield, title: 'Secure', desc: 'Bank-level encryption' },
+              { icon: Clock, title: '5-Second Settlements', desc: 'Lightning fast transfers' },
+            ].map((item, idx) => (
+              <div key={idx} className="flex items-start gap-4 bg-slate-800/30 rounded-xl p-6 border border-slate-700/30">
+                <div className="p-3 rounded-lg bg-slate-700/50">
+                  <item.icon className="w-5 h-5 text-purple-400" />
+                </div>
+                <div>
+                  <h4 className="text-white font-semibold mb-1">{item.title}</h4>
+                  <p className="text-slate-400 text-sm">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Pricing Section */}
+        <div id="pricing" className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              Simple, Transparent Pricing
+            </h2>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+              Pay only 1% per transaction. No hidden fees, no surprises.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Starter Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8"
+            >
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold text-white mb-2">Starter</h3>
+                <p className="text-slate-400">For small teams</p>
+              </div>
+              <div className="mb-6">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-bold text-white">1%</span>
+                  <span className="text-slate-400">per transaction</span>
+                </div>
+              </div>
+              <ul className="space-y-4 mb-8">
+                {['Up to 50 payments/month', 'Individual payouts', 'Basic support', 'Email notifications'].map((feature) => (
+                  <li key={feature} className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-slate-300">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={handleConnect}
+                className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+              >
+                Get Started
+              </button>
+            </motion.div>
+
+            {/* Pro Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="relative bg-gradient-to-b from-purple-900/40 to-slate-800/50 backdrop-blur-sm border-2 border-purple-500/50 rounded-2xl p-8 transform scale-105"
+            >
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                Most Popular
+              </div>
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold text-white mb-2">Professional</h3>
+                <p className="text-slate-400">For growing companies</p>
+              </div>
+              <div className="mb-6">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-bold text-white">1%</span>
+                  <span className="text-slate-400">per transaction</span>
+                </div>
+              </div>
+              <ul className="space-y-4 mb-8">
+                {['Unlimited payments', 'Bulk CSV uploads', 'Priority support', 'Advanced analytics', 'API access', 'Custom integrations'].map((feature) => (
+                  <li key={feature} className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-slate-300">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={handleConnect}
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25"
+              >
+                Get Started
+              </button>
+            </motion.div>
+
+            {/* Enterprise Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8"
+            >
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold text-white mb-2">Enterprise</h3>
+                <p className="text-slate-400">For large organizations</p>
+              </div>
+              <div className="mb-6">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-5xl font-bold text-white">Custom</span>
+                </div>
+                <p className="text-slate-400 text-sm mt-2">Volume discounts available</p>
+              </div>
+              <ul className="space-y-4 mb-8">
+                {['Everything in Pro', 'Dedicated account manager', 'Custom contracts', 'White-label options', '24/7 phone support', 'SLA guarantees'].map((feature) => (
+                  <li key={feature} className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-slate-300">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <button className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all">
+                Contact Sales
+              </button>
+            </motion.div>
+          </div>
+
+          {/* Savings Calculator */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mt-20 bg-gradient-to-r from-emerald-900/30 to-teal-900/30 backdrop-blur-sm border border-emerald-500/30 rounded-2xl p-8 max-w-4xl mx-auto"
+          >
+            <div className="text-center mb-6">
+              <TrendingDown className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
+              <h3 className="text-2xl font-bold text-white mb-2">See Your Savings</h3>
+              <p className="text-slate-400">Compare Lume to traditional payment methods</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-slate-800/50 rounded-xl p-6 text-center">
+                <DollarSign className="w-8 h-8 text-red-400 mx-auto mb-3" />
+                <div className="text-sm text-slate-400 mb-2">Traditional Banks</div>
+                <div className="text-3xl font-bold text-red-400">5-7%</div>
+                <div className="text-xs text-slate-500 mt-2">+ 3-5 days delay</div>
+              </div>
+              <div className="bg-slate-800/50 rounded-xl p-6 text-center">
+                <DollarSign className="w-8 h-8 text-amber-400 mx-auto mb-3" />
+                <div className="text-sm text-slate-400 mb-2">Wire Transfers</div>
+                <div className="text-3xl font-bold text-amber-400">3-5%</div>
+                <div className="text-xs text-slate-500 mt-2">+ 1-2 days delay</div>
+              </div>
+              <div className="bg-gradient-to-br from-emerald-900/50 to-teal-900/50 rounded-xl p-6 text-center border-2 border-emerald-500/30">
+                <DollarSign className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
+                <div className="text-sm text-slate-400 mb-2">Lume</div>
+                <div className="text-3xl font-bold text-emerald-400">1%</div>
+                <div className="text-xs text-emerald-400 mt-2">Instant settlement</div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* About Section */}
+        <div id="about" className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              About Lume
+            </h2>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+              Revolutionizing global payroll with blockchain technology
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h3 className="text-3xl font-bold text-white mb-6">
+                Built on the Stellar Network
+              </h3>
+              <div className="space-y-4 text-slate-300 leading-relaxed">
+                <p>
+                  Lume leverages the power of Stellar's blockchain to provide fast, affordable, and reliable cross-border payments. Our mission is to make global payroll accessible to companies of all sizes.
+                </p>
+                <p>
+                  Traditional payment systems are slow, expensive, and complex. We believe that paying your international team shouldn't cost a fortune or take days to process. That's why we built Lume.
+                </p>
+                <p>
+                  With Stellar's path payment functionality, we automatically find the best exchange rates and routes for your payments, ensuring your team gets paid quickly and you save money on every transaction.
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="grid grid-cols-2 gap-6"
+            >
+              {[
+                { label: 'Countries Supported', value: '180+' },
+                { label: 'Average Settlement', value: '5 sec' },
+                { label: 'Transaction Fee', value: '1%' },
+                { label: 'Uptime', value: '99.9%' },
+              ].map((stat, idx) => (
+                <div key={idx} className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 text-center">
+                  <div className="text-3xl font-bold text-purple-400 mb-2">{stat.value}</div>
+                  <div className="text-slate-400 text-sm">{stat.label}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Why Choose Lume */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mt-20"
+          >
+            <h3 className="text-3xl font-bold text-white mb-10 text-center">Why Choose Lume?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                {
+                  title: 'Transparent Pricing',
+                  desc: 'No hidden fees. Just a flat 1% transaction fee with volume discounts for enterprises.',
+                  icon: DollarSign
+                },
+                {
+                  title: 'Lightning Fast',
+                  desc: 'Settlements in 5 seconds. Your team gets paid instantly, not in 3-5 business days.',
+                  icon: Zap
+                },
+                {
+                  title: 'Global Coverage',
+                  desc: 'Pay anyone, anywhere. Support for 180+ countries and multiple currencies.',
+                  icon: Globe
+                },
+                {
+                  title: 'Bank-Grade Security',
+                  desc: 'Built on Stellar, a proven blockchain network trusted by financial institutions worldwide.',
+                  icon: Shield
+                },
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-4 bg-slate-800/30 rounded-xl p-6 border border-slate-700/30">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                      <item.icon className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
+                    <p className="text-slate-400">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Contact Section */}
+        <div id="contact" className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              Get in Touch
+            </h2>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+              Have questions? We're here to help.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            {/* Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8"
+            >
+              <form className="space-y-6">
+                <div>
+                  <label className="block text-slate-300 text-sm font-medium mb-2">Name</label>
+                  <input
+                    type="text"
+                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 text-sm font-medium mb-2">Email</label>
+                  <input
+                    type="email"
+                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+                    placeholder="john@company.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-slate-300 text-sm font-medium mb-2">Message</label>
+                  <textarea
+                    rows={5}
+                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"
+                    placeholder="Tell us about your payroll needs..."
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25 flex items-center justify-center gap-2"
+                >
+                  <Send className="w-4 h-4" />
+                  Send Message
+                </button>
+              </form>
+            </motion.div>
+
+            {/* Contact Info */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-8"
+            >
+              <div>
+                <h3 className="text-2xl font-bold text-white mb-6">Contact Information</h3>
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-slate-800/50 border border-slate-700/50 flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <div>
+                      <div className="text-slate-400 text-sm mb-1">Email</div>
+                      <div className="text-white font-semibold">support@lume.pay</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-slate-800/50 border border-slate-700/50 flex items-center justify-center flex-shrink-0">
+                      <MessageSquare className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <div>
+                      <div className="text-slate-400 text-sm mb-1">Live Chat</div>
+                      <div className="text-white font-semibold">Available 24/7</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm border border-purple-500/30 rounded-xl p-6">
+                <h4 className="text-white font-semibold mb-3">Enterprise Inquiries</h4>
+                <p className="text-slate-400 text-sm mb-4">
+                  Looking to process high volumes? Contact our enterprise team for custom solutions and volume discounts.
+                </p>
+                <button className="text-purple-400 font-semibold text-sm hover:text-purple-300 transition-colors flex items-center gap-2">
+                  Schedule a Call
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-700/30 rounded-xl p-6">
+                <h4 className="text-white font-semibold mb-3">FAQs & Documentation</h4>
+                <p className="text-slate-400 text-sm mb-4">
+                  Check out our comprehensive documentation and frequently asked questions.
+                </p>
+                <button className="text-purple-400 font-semibold text-sm hover:text-purple-300 transition-colors flex items-center gap-2">
+                  View Docs
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Bottom CTA Section */}
