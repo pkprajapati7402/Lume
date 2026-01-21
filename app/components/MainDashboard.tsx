@@ -1,77 +1,83 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
+import { useState } from 'react';
 import { 
   Wallet, 
-  Users, 
-  TrendingUp, 
-  Clock, 
-  DollarSign,
+  LayoutDashboard,
   Send,
-  Download,
-  Settings,
-  LogOut
+  Upload,
+  Users,
+  LogOut,
+  Sparkles,
+  Menu,
+  X
 } from 'lucide-react';
+import OverviewSection from './dashboard/OverviewSection';
+import PayEmployeeSection from './dashboard/PayEmployeeSection';
+import BulkUploadSection from './dashboard/BulkUploadSection';
+import DirectorySection from './dashboard/DirectorySection';
+
+type Section = 'overview' | 'pay' | 'bulk' | 'directory';
 
 export default function MainDashboard() {
   const { publicKey, setGuest } = useAuthStore();
+  const [activeSection, setActiveSection] = useState<Section>('overview');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleDisconnect = () => {
     setGuest();
   };
 
-  const stats = [
-    {
-      icon: DollarSign,
-      label: 'Total Sent',
-      value: '$45,231',
-      change: '+12.5%',
-      color: 'from-purple-500 to-pink-500'
-    },
-    {
-      icon: Users,
-      label: 'Team Members',
-      value: '24',
-      change: '+3',
-      color: 'from-blue-500 to-cyan-500'
-    },
-    {
-      icon: Clock,
-      label: 'Pending',
-      value: '5',
-      change: '-2',
-      color: 'from-emerald-500 to-teal-500'
-    },
-    {
-      icon: TrendingUp,
-      label: 'Savings',
-      value: '$4,052',
-      change: '90% fees',
-      color: 'from-orange-500 to-yellow-500'
-    },
+  const navItems = [
+    { id: 'overview' as Section, label: 'Overview', icon: LayoutDashboard },
+    { id: 'pay' as Section, label: 'Pay Employee', icon: Send },
+    { id: 'bulk' as Section, label: 'Bulk Upload', icon: Upload },
+    { id: 'directory' as Section, label: 'Directory', icon: Users },
   ];
 
-  const recentTransactions = [
-    { id: 1, recipient: 'John Doe', amount: '$1,250', status: 'Completed', time: '2 hours ago' },
-    { id: 2, recipient: 'Jane Smith', amount: '$890', status: 'Completed', time: '5 hours ago' },
-    { id: 3, recipient: 'Mike Johnson', amount: '$2,100', status: 'Pending', time: '1 day ago' },
-  ];
+  const renderSection = () => {
+    switch (activeSection) {
+      case 'overview':
+        return <OverviewSection />;
+      case 'pay':
+        return <PayEmployeeSection />;
+      case 'bulk':
+        return <BulkUploadSection />;
+      case 'directory':
+        return <DirectorySection />;
+      default:
+        return <OverviewSection />;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/50">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-16 flex items-center justify-between">
+      {/* Top Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/50">
+        <div className="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          {/* Logo & Mobile Menu */}
           <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-              Dashboard
-            </h1>
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="lg:hidden p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400"
+            >
+              {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+            
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-6 h-6 text-indigo-400" />
+              <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                Lume
+              </span>
+            </div>
           </div>
           
-          <div className="flex items-center gap-4">
+          {/* Wallet Info & Disconnect */}
+          <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-lg border border-slate-700/50">
-              <Wallet className="w-4 h-4 text-purple-400" />
+              <Wallet className="w-4 h-4 text-indigo-400" />
               <span className="text-slate-300 text-sm font-mono">
                 {publicKey?.slice(0, 4)}...{publicKey?.slice(-4)}
               </span>
@@ -87,115 +93,62 @@ export default function MainDashboard() {
         </div>
       </header>
 
+      {/* Sidebar */}
+      <aside
+        className={`fixed left-0 top-16 bottom-0 z-40 w-64 bg-slate-900/95 backdrop-blur-md border-r border-slate-800/50 transition-transform duration-300 lg:translate-x-0 ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        <nav className="p-4 space-y-2">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => {
+                setActiveSection(item.id);
+                setIsSidebarOpen(false);
+              }}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
+                activeSection === item.id
+                  ? 'bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-500/25'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+              }`}
+            >
+              <item.icon className="w-5 h-5" />
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </nav>
+
+        {/* Sidebar Footer */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-800/50">
+          <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-lg p-4">
+            <p className="text-indigo-300 text-sm font-medium mb-1">Need Help?</p>
+            <p className="text-slate-400 text-xs">Check our documentation or contact support</p>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div
+          onClick={() => setIsSidebarOpen(false)}
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+        />
+      )}
+
       {/* Main Content */}
-      <main className="pt-24 pb-12 px-6 sm:px-8 lg:px-12 max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {/* Welcome Section */}
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-white mb-2">
-              Welcome back! 👋
-            </h2>
-            <p className="text-slate-400">
-              Here's what's happening with your global payroll today.
-            </p>
-          </div>
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/80 transition-all"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className={`p-3 rounded-lg bg-gradient-to-br ${stat.color}`}>
-                    <stat.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="text-emerald-400 text-sm font-semibold">
-                    {stat.change}
-                  </span>
-                </div>
-                <p className="text-slate-400 text-sm mb-1">{stat.label}</p>
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Quick Actions */}
+      <main className="lg:ml-64 pt-20 pb-8 px-4 sm:px-6 lg:px-8">
+        <AnimatePresence mode="wait">
           <motion.div
+            key={activeSection}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
           >
-            <button className="group bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded-xl p-6 transition-all duration-300 hover:scale-105 shadow-lg shadow-purple-500/25">
-              <Send className="w-8 h-8 text-white mb-3" />
-              <h3 className="text-lg font-semibold text-white mb-1">Send Payment</h3>
-              <p className="text-purple-100 text-sm">Pay a team member instantly</p>
-            </button>
-
-            <button className="group bg-slate-800/50 hover:bg-slate-800/80 border border-slate-700/50 hover:border-slate-600 rounded-xl p-6 transition-all duration-300 hover:scale-105">
-              <Download className="w-8 h-8 text-blue-400 mb-3" />
-              <h3 className="text-lg font-semibold text-white mb-1">Bulk Upload</h3>
-              <p className="text-slate-400 text-sm">Upload CSV for mass payments</p>
-            </button>
-
-            <button className="group bg-slate-800/50 hover:bg-slate-800/80 border border-slate-700/50 hover:border-slate-600 rounded-xl p-6 transition-all duration-300 hover:scale-105">
-              <Settings className="w-8 h-8 text-emerald-400 mb-3" />
-              <h3 className="text-lg font-semibold text-white mb-1">Settings</h3>
-              <p className="text-slate-400 text-sm">Manage your preferences</p>
-            </button>
+            {renderSection()}
           </motion.div>
-
-          {/* Recent Transactions */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6"
-          >
-            <h3 className="text-xl font-bold text-white mb-6">Recent Transactions</h3>
-            <div className="space-y-4">
-              {recentTransactions.map((transaction) => (
-                <div
-                  key={transaction.id}
-                  className="flex items-center justify-between p-4 bg-slate-900/50 rounded-lg hover:bg-slate-900/80 transition-colors"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
-                      <span className="text-white font-semibold text-sm">
-                        {transaction.recipient.charAt(0)}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-white font-medium">{transaction.recipient}</p>
-                      <p className="text-slate-400 text-sm">{transaction.time}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-white font-semibold">{transaction.amount}</p>
-                    <span
-                      className={`text-sm ${
-                        transaction.status === 'Completed'
-                          ? 'text-emerald-400'
-                          : 'text-yellow-400'
-                      }`}
-                    >
-                      {transaction.status}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
+        </AnimatePresence>
       </main>
     </div>
   );

@@ -21,26 +21,43 @@ export default function Navbar() {
   const handleConnect = async () => {
     setIsConnecting(true);
     try {
+      // Check if Freighter is installed
       const connected = await freighter.isConnected();
       
       if (!connected) {
-        alert('Please install Freighter wallet extension to continue.');
+        window.open('https://www.freighter.app/', '_blank');
+        alert('Freighter wallet is not installed. Please install it from freighter.app and refresh the page.');
         setIsConnecting(false);
         return;
       }
 
-      const allowed = await freighter.isAllowed();
-      if (!allowed) {
-        await freighter.setAllowed();
+      // Request access to the wallet
+      const accessResult = await freighter.requestAccess();
+      
+      if (accessResult.error) {
+        console.error('Access denied:', accessResult.error);
+        alert('Access to Freighter wallet was denied. Please try again and approve the request.');
+        setIsConnecting(false);
+        return;
       }
 
-      const result = await freighter.getAddress();
-      if (result && result.address) {
-        setAuthorized(result.address);
+      // Get the wallet address
+      const addressResult = await freighter.getAddress();
+      
+      if (addressResult.error) {
+        console.error('Failed to get address:', addressResult.error);
+        alert('Failed to retrieve wallet address. Please try again.');
+        setIsConnecting(false);
+        return;
+      }
+
+      if (addressResult.address) {
+        console.log('Connected to wallet:', addressResult.address);
+        setAuthorized(addressResult.address);
       }
     } catch (error) {
       console.error('Failed to connect wallet:', error);
-      alert('Failed to connect wallet. Please try again.');
+      alert(`Failed to connect wallet: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsConnecting(false);
     }
