@@ -22,12 +22,16 @@ import DirectorySection from './dashboard/DirectorySection';
 type Section = 'overview' | 'pay' | 'bulk' | 'directory';
 
 export default function MainDashboard() {
-  const { publicKey, setGuest } = useAuthStore();
+  const { publicKey, setGuest, network, setNetwork } = useAuthStore();
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleDisconnect = () => {
     setGuest();
+  };
+
+  const handleNetworkToggle = () => {
+    setNetwork(network === 'testnet' ? 'mainnet' : 'testnet');
   };
 
   const navItems = [
@@ -76,6 +80,18 @@ export default function MainDashboard() {
           
           {/* Wallet Info & Disconnect */}
           <div className="flex items-center gap-3">
+            {/* Network Toggle */}
+            <button
+              onClick={handleNetworkToggle}
+              className="flex items-center gap-2 px-3 py-1.5 bg-slate-800/50 hover:bg-slate-800 rounded-lg border border-slate-700/50 transition-colors group"
+              title={`Switch to ${network === 'testnet' ? 'mainnet' : 'testnet'}`}
+            >
+              <div className={`w-2 h-2 rounded-full ${network === 'testnet' ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse`} />
+              <span className="text-slate-300 text-sm font-medium capitalize">
+                {network}
+              </span>
+            </button>
+
             <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-lg border border-slate-700/50">
               <Wallet className="w-4 h-4 text-indigo-400" />
               <span className="text-slate-300 text-sm font-mono">

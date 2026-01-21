@@ -15,6 +15,9 @@ import {
   Zap
 } from 'lucide-react';
 import { useStellarNetworkStats } from '../../hooks/useStellarNetworkStats';
+import LiquidityMonitor from './LiquidityMonitor';
+import SavingsCalculator from './SavingsCalculator';
+import AccountBalance from './AccountBalance';
 
 interface StatsCardProps {
   icon: React.ElementType;
@@ -136,77 +139,54 @@ export default function OverviewSection() {
 
   return (
     <div className="space-y-8">
-      {/* Network Stats Header */}
+      {/* Header: Network Speed & Node Status (Small) */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/30 rounded-xl p-4"
+        className="bg-slate-800/30 border border-slate-700/30 rounded-lg px-4 py-2"
       >
-        <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-indigo-400" />
-            <span className="text-sm font-medium text-slate-300">Stellar Network Status</span>
+            <Activity className="w-4 h-4 text-indigo-400" />
+            <span className="text-xs font-medium text-slate-400">Network Status</span>
           </div>
           
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex items-center gap-4">
             {/* Network Speed */}
             <div className="flex items-center gap-2">
-              <Zap className="w-4 h-4 text-emerald-400" />
-              <div className="text-right">
-                <div className="text-xs text-slate-500">Ledger Close Time</div>
-                <div className="text-sm font-semibold text-white">
-                  {isLoading ? (
-                    <span className="text-slate-500">Loading...</span>
-                  ) : error ? (
-                    <span className="text-red-400">Error</span>
-                  ) : (
-                    <span className="text-emerald-400">{networkSpeed}s</span>
-                  )}
-                </div>
+              <Zap className="w-3.5 h-3.5 text-emerald-400" />
+              <div>
+                <span className="text-xs text-slate-500">Speed: </span>
+                <span className="text-xs font-semibold text-emerald-400">
+                  {isLoading ? '...' : error ? 'Error' : `${networkSpeed}s`}
+                </span>
               </div>
             </div>
 
-            {/* Base Fee */}
-            <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-indigo-400" />
-              <div className="text-right">
-                <div className="text-xs text-slate-500">Base Fee</div>
-                <div className="text-sm font-semibold text-white">
-                  {isLoading ? (
-                    <span className="text-slate-500">Loading...</span>
-                  ) : error ? (
-                    <span className="text-red-400">Error</span>
-                  ) : (
-                    <span className="text-indigo-400">{baseFee} stroops</span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Last Updated */}
             {lastUpdated && (
-              <div className="text-right">
-                <div className="text-xs text-slate-500">Updated</div>
-                <div className="text-sm font-semibold text-slate-400">
-                  {lastUpdated.toLocaleTimeString()}
-                </div>
-              </div>
+              <span className="text-xs text-slate-500">
+                {lastUpdated.toLocaleTimeString()}
+              </span>
             )}
           </div>
         </div>
-
-        {error && (
-          <div className="mt-3 text-xs text-red-400 flex items-center gap-2">
-            <span>⚠️</span>
-            <span>Unable to fetch live network data: {error}</span>
-          </div>
-        )}
       </motion.div>
 
+      {/* Main Dashboard Cards - Horizontal Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Account Balance Display */}
+        <AccountBalance />
+
+        {/* Savings Calculator */}
+        <SavingsCalculator />
+
+        {/* Live FX Rate & Liquidity Badge */}
+        <LiquidityMonitor />
+      </div>
+
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {stats.map((stat, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{stats.map((stat, index) => (
           <StatsCard key={index} {...stat} />
         ))}
       </div>
@@ -290,6 +270,33 @@ export default function OverviewSection() {
             View all transactions
             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
+        </div>
+      </motion.div>
+
+      {/* Sidebar/Bottom: Base Fee (Small) */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="bg-slate-800/30 border border-slate-700/30 rounded-lg px-4 py-3"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <DollarSign className="w-4 h-4 text-indigo-400" />
+            <span className="text-xs text-slate-400">Current Base Fee</span>
+          </div>
+          <div className="text-right">
+            <span className="text-sm font-semibold text-indigo-400">
+              {isLoading ? (
+                <span className="text-slate-500">Loading...</span>
+              ) : error ? (
+                <span className="text-red-400">Error</span>
+              ) : (
+                `${baseFee} stroops`
+              )}
+            </span>
+            <span className="text-xs text-slate-500 ml-2">(~$0.00001)</span>
+          </div>
         </div>
       </motion.div>
     </div>
