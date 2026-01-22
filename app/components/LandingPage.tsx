@@ -152,6 +152,7 @@ export default function LandingPage() {
                   onClick={handleConnect}
                   disabled={isConnecting}
                   className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  suppressHydrationWarning
                 >
                   <Wallet className="w-5 h-5" />
                   {isConnecting ? 'Connecting...' : 'Get Started'}

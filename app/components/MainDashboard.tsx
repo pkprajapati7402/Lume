@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Wallet, 
   LayoutDashboard,
@@ -18,6 +18,8 @@ import OverviewSection from './dashboard/OverviewSection';
 import PayEmployeeSection from './dashboard/PayEmployeeSection';
 import BulkUploadSection from './dashboard/BulkUploadSection';
 import DirectorySection from './dashboard/DirectorySection';
+import { getEmployees } from '../actions/employees';
+import type { Employee } from '@/types/database';
 
 type Section = 'overview' | 'pay' | 'bulk' | 'directory';
 
@@ -25,6 +27,23 @@ export default function MainDashboard() {
   const { publicKey, setGuest, network, setNetwork } = useAuthStore();
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [isLoadingEmployees, setIsLoadingEmployees] = useState(false);
+
+  useEffect(() => {
+    if (activeSection === 'directory') {
+      loadEmployees();
+    }
+  }, [activeSection]);
+
+  const loadEmployees = async () => {
+    setIsLoadingEmployees(true);
+    const result = await getEmployees();
+    if (result.data) {
+      setEmployees(result.data);
+    }
+    setIsLoadingEmployees(false);
+  };
 
   const handleDisconnect = () => {
     setGuest();
@@ -50,7 +69,7 @@ export default function MainDashboard() {
       case 'bulk':
         return <BulkUploadSection />;
       case 'directory':
-        return <DirectorySection />;
+        return <DirectorySection initialEmployees={employees} />;
       default:
         return <OverviewSection />;
     }

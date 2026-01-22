@@ -1,82 +1,74 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { Search, Plus, Edit2, Trash2, Mail, Globe } from 'lucide-react';
+import { useState, useEffect, useTransition } from 'react';
+import { Search, Plus, Trash2, Wallet, X } from 'lucide-react';
+import { addEmployee, deleteEmployee } from '@/app/actions/employees';
+import type { Employee } from '@/types/database';
 
-interface Employee {
-  id: string;
-  name: string;
-  email: string;
-  country: string;
-  address: string;
-  preferredAsset: string;
-  totalPaid: string;
+interface DirectorySectionProps {
+  initialEmployees: Employee[];
 }
 
-export default function DirectorySection() {
+export default function DirectorySection({ initialEmployees }: DirectorySectionProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
-  const employees: Employee[] = [
-    {
-      id: '1',
-      name: 'John Doe',
-      email: 'john@company.com',
-      country: 'United States',
-      address: 'GAXXX...XXX',
-      preferredAsset: 'USDC',
-      totalPaid: '$15,250'
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      email: 'jane@company.com',
-      country: 'Germany',
-      address: 'GBYYY...YYY',
-      preferredAsset: 'EURT',
-      totalPaid: '$12,890'
-    },
-    {
-      id: '3',
-      name: 'Mike Johnson',
-      email: 'mike@company.com',
-      country: 'Nigeria',
-      address: 'GCZZZ...ZZZ',
-      preferredAsset: 'NGNT',
-      totalPaid: '$21,100'
-    },
-    {
-      id: '4',
-      name: 'Sarah Williams',
-      email: 'sarah@company.com',
-      country: 'Brazil',
-      address: 'GDAAA...AAA',
-      preferredAsset: 'BRLT',
-      totalPaid: '$8,750'
-    },
-    {
-      id: '5',
-      name: 'David Brown',
-      email: 'david@company.com',
-      country: 'United Kingdom',
-      address: 'GEBBB...BBB',
-      preferredAsset: 'EURT',
-      totalPaid: '$18,500'
-    },
-  ];
+  useEffect(() => {
+    setEmployees(initialEmployees);
+  }, [initialEmployees]);
+
+  const refreshEmployees = async () => {
+    const { getEmployees } = await import('@/app/actions/employees');
+    const result = await getEmployees();
+    if (result.data) {
+      setEmployees(result.data);
+    }
+  };
 
   const filteredEmployees = employees.filter(emp =>
-    emp.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    emp.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    emp.country.toLowerCase().includes(searchQuery.toLowerCase())
+    emp.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    emp.wallet_address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    emp.department.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const countryFlags: Record<string, string> = {
-    'United States': '🇺🇸',
-    'Germany': '🇩🇪',
-    'Nigeria': '🇳🇬',
-    'Brazil': '🇧🇷',
-    'United Kingdom': '🇬🇧',
+  const handleAddEmployee = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    startTransition(async () => {
+      const result = await addEmployee(formData);
+      
+      if (result.error) {
+        setError(result.error);
+      } else {
+        setShowAddModal(false);
+        form.reset();
+        await refreshEmployees();
+      }
+    });
+  };
+
+  const handleDeleteEmployee = async (employeeId: string) => {
+    if (!confirm('Are you sure you want to delete this employee?')) {
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await deleteEmployee(employeeId);
+      
+      if (result.error) {
+        alert(`Error: ${result.error}`);
+      } else {
+        await refreshEmployees();
+      }
+    });
   };
 
   return (
@@ -91,7 +83,11 @@ export default function DirectorySection() {
           <h2 className="text-2xl font-bold text-white mb-2">Employee Directory</h2>
           <p className="text-slate-400">Manage your team members and payment preferences</p>
         </div>
-        <button className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-500/25">
+        <button 
+          onClick={() => setShowAddModal(true)}
+          className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-500/25"
+          suppressHydrationWarning
+        >
           <Plus className="w-5 h-5" />
           Add Employee
         </button>
@@ -134,40 +130,38 @@ export default function DirectorySection() {
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                   <span className="text-white font-semibold text-lg">
-                    {employee.name.split(' ').map(n => n[0]).join('')}
+                    {employee.full_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                   </span>
                 </div>
                 <div>
-                  <h3 className="text-white font-semibold">{employee.name}</h3>
+                  <h3 className="text-white font-semibold">{employee.full_name}</h3>
                   <div className="flex items-center gap-1 text-slate-400 text-sm">
-                    <span className="text-lg">{countryFlags[employee.country]}</span>
-                    <span>{employee.country}</span>
+                    <span>{employee.department}</span>
                   </div>
                 </div>
               </div>
               
-              {/* Action Buttons */}
-              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
-                  <Edit2 className="w-4 h-4 text-slate-400 hover:text-indigo-400" />
-                </button>
-                <button className="p-2 hover:bg-slate-700 rounded-lg transition-colors">
-                  <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-400" />
-                </button>
-              </div>
+              {/* Delete Button */}
+              <button 
+                onClick={() => handleDeleteEmployee(employee.id)}
+                disabled={isPending}
+                className="p-2 hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
+              >
+                <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-400" />
+              </button>
             </div>
 
             {/* Details */}
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-sm">
-                <Mail className="w-4 h-4 text-slate-500" />
-                <span className="text-slate-300">{employee.email}</span>
+                <Wallet className="w-4 h-4 text-slate-500" />
+                <span className="text-slate-400 text-xs">{employee.role}</span>
               </div>
               
               <div>
                 <div className="text-xs text-slate-500 mb-1">Wallet Address</div>
-                <div className="font-mono text-sm text-slate-300 bg-slate-900/50 px-3 py-2 rounded border border-slate-700">
-                  {employee.address}
+                <div className="font-mono text-xs text-slate-300 bg-slate-900/50 px-3 py-2 rounded border border-slate-700 break-all">
+                  {employee.wallet_address}
                 </div>
               </div>
 
@@ -175,12 +169,8 @@ export default function DirectorySection() {
                 <div>
                   <div className="text-xs text-slate-500 mb-1">Preferred Asset</div>
                   <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                    {employee.preferredAsset}
+                    {employee.preferred_asset}
                   </span>
-                </div>
-                <div className="text-right">
-                  <div className="text-xs text-slate-500 mb-1">Total Paid</div>
-                  <div className="text-white font-semibold">{employee.totalPaid}</div>
                 </div>
               </div>
             </div>
@@ -195,7 +185,131 @@ export default function DirectorySection() {
 
       {filteredEmployees.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-slate-400">No employees found matching your search.</p>
+          <p className="text-slate-400">
+            {employees.length === 0 ? 'No employees yet. Add your first team member!' : 'No employees found matching your search.'}
+          </p>
+        </div>
+      )}
+
+      {/* Add Employee Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-slate-800 border border-slate-700 rounded-xl p-6 max-w-md w-full"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-bold text-white">Add New Employee</h3>
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {error && (
+              <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-300 text-sm">
+                {error}
+              </div>
+            )}
+
+            <form onSubmit={handleAddEmployee} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="John Doe"
+                  suppressHydrationWarning
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Stellar Wallet Address *
+                </label>
+                <input
+                  type="text"
+                  name="walletAddress"
+                  required
+                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
+                  placeholder="GXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                  suppressHydrationWarning
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Role
+                </label>
+                <input
+                  type="text"
+                  name="role"
+                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Software Engineer"
+                  defaultValue="Employee"
+                  suppressHydrationWarning
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Department
+                </label>
+                <input
+                  type="text"
+                  name="department"
+                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Engineering"
+                  defaultValue="General"
+                  suppressHydrationWarning
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Preferred Asset
+                </label>
+                <select
+                  name="preferredAsset"
+                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  defaultValue="USDC"
+                  suppressHydrationWarning
+                >
+                  <option value="USDC">USDC</option>
+                  <option value="EURT">EURT</option>
+                  <option value="BRLT">BRLT</option>
+                  <option value="NGNT">NGNT</option>
+                  <option value="XLM">XLM</option>
+                </select>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition-colors"
+                  suppressHydrationWarning
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  suppressHydrationWarning
+                >
+                  {isPending ? 'Adding...' : 'Add Employee'}
+                </button>
+              </div>
+            </form>
+          </motion.div>
         </div>
       )}
     </div>
