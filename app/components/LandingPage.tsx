@@ -124,38 +124,54 @@ export default function LandingPage() {
             initial="initial"
             animate="animate"
             variants={staggerContainer}
-            className="text-center space-y-8"
+            className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
           >
-            {/* Hero Content */}
-            <motion.div variants={fadeInUp} className="space-y-4">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight">
-                Global Payroll at the{' '}
-                <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                  Speed of Light
-                </span>
-              </h1>
-            </motion.div>
+            {/* Left Column - Hero Content */}
+            <div className="space-y-8">
+              <motion.div variants={fadeInUp} className="space-y-4">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight">
+                  Global Payroll at the{' '}
+                  <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                    Speed of Light
+                  </span>
+                </h1>
+              </motion.div>
 
-            <motion.p
-              variants={fadeInUp}
-              className="text-xl sm:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed"
-            >
-              Pay your international team in seconds with{' '}
-              <span className="text-purple-400 font-semibold">90% lower fees</span>{' '}
-              using Stellar Path Payments.
-            </motion.p>
-
-            {/* CTA Button */}
-            <motion.div variants={fadeInUp} className="pt-4">
-              <button
-                onClick={handleConnect}
-                disabled={isConnecting}
-                className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              <motion.p
+                variants={fadeInUp}
+                className="text-xl sm:text-2xl text-slate-300 leading-relaxed"
               >
-                <Wallet className="w-5 h-5" />
-                {isConnecting ? 'Connecting...' : 'Get Started'}
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+                Pay your international team in seconds with{' '}
+                <span className="text-purple-400 font-semibold">90% lower fees</span>{' '}
+                using Stellar Path Payments.
+              </motion.p>
+
+              {/* CTA Button */}
+              <motion.div variants={fadeInUp} className="pt-4">
+                <button
+                  onClick={handleConnect}
+                  disabled={isConnecting}
+                  className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Wallet className="w-5 h-5" />
+                  {isConnecting ? 'Connecting...' : 'Get Started'}
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </motion.div>
+            </div>
+
+            {/* Right Column - Illustration */}
+            <motion.div
+              variants={fadeInUp}
+              className="relative"
+            >
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/20">
+                <img
+                  src="/payment-illustration.png"
+                  alt="Global payment illustration"
+                  className="w-full h-auto"
+                />
+              </div>
             </motion.div>
           </motion.div>
         </div>
