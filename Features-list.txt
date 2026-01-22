@@ -1,0 +1,229 @@
+================================================================================
+                    LUME - PROJECT SUMMARY & FEATURES LIST
+================================================================================
+
+PROJECT OVERVIEW:
+-----------------
+Lume is a global payroll platform built on the Stellar blockchain network that 
+enables businesses to pay international teams with 90% lower fees compared to 
+traditional methods like SWIFT and wire transfers. The platform provides instant 
+cross-border payments with 5-second transaction finality.
+
+TECH STACK:
+-----------
+• Frontend: Next.js 16 (React 19), TypeScript
+• Styling: Tailwind CSS 4
+• Animations: Framer Motion
+• Blockchain: Stellar SDK, Freighter Wallet API
+• Database: Supabase (PostgreSQL)
+• State Management: Zustand
+• Icons: Lucide React
+
+================================================================================
+                           FRONTEND FEATURES
+================================================================================
+
+FUNCTIONAL FEATURES (Currently Working):
+-----------------------------------------
+
+1. AUTHENTICATION & WALLET CONNECTION
+   • Freighter Wallet integration for connecting Stellar accounts
+   • Auto-detection of Freighter wallet installation
+   • Public key retrieval and session management
+   • Wallet disconnect functionality
+   • Guest/authorized state management with Zustand
+
+2. NETWORK MANAGEMENT
+   • Toggle between Stellar testnet and mainnet
+   • Network-aware API calls to appropriate Horizon servers
+   • Network indicator in UI showing current active network
+
+3. ACCOUNT BALANCE DISPLAY
+   • Real-time balance fetching from Stellar network
+   • Display all assets in connected wallet (XLM and custom assets)
+   • Auto-refresh every 30 seconds
+   • Manual refresh button
+   • Network-specific balance display
+   • Handles unfunded account states gracefully
+
+4. LIQUIDITY MONITOR (FX RATES)
+   • Live orderbook data from Stellar DEX
+   • Real-time FX rates between asset pairs (USDC/NGNT default)
+   • Bid/Ask price display
+   • Spread calculation and percentage display
+   • Liquidity stability indicator
+   • Auto-refresh functionality
+   • Error handling for non-existent trading pairs
+
+5. SAVINGS CALCULATOR
+   • Tracks last 30 days of USDC transactions
+   • Calculates savings vs traditional bank wire transfers (5% fee)
+   • Animated counter display for savings amount
+   • Transaction count tracking
+   • Auto-refresh every 60 seconds
+   • Handles accounts with no transaction history
+
+6. NETWORK STATISTICS
+   • Live Stellar network stats using custom hook
+   • Network speed/latency monitoring
+   • Base fee display (in stroops and XLM)
+   • Auto-refresh every 30 seconds
+
+7. EMPLOYEE DIRECTORY (Full CRUD)
+   • View all employees in searchable table format
+   • Add new employees with form (name, wallet, role, department, asset)
+   • Delete employees with confirmation
+   • Search/filter by name, wallet address, or department
+   • Real-time data sync with Supabase
+   • Displays employee count and details
+   • Supabase integration for data persistence
+
+8. BULK EMPLOYEE UPLOAD
+   • CSV file drag-and-drop upload interface
+   • CSV parsing and validation
+   • Preview parsed data before submission
+   • Batch insert to Supabase database
+   • Template CSV download functionality
+   • Error handling for invalid CSV formats
+   • Support for columns: Full_Name, Wallet_Address, Role, Department, Preferred_Asset
+
+9. LANDING PAGE
+   • Hero section with animated gradient text
+   • Feature showcase with icons and descriptions
+   • Pricing information display
+   • Call-to-action buttons
+   • Responsive navigation bar
+   • Footer with links and information
+   • Smooth scroll animations with Framer Motion
+   • Wallet connection from landing page
+
+10. RESPONSIVE DASHBOARD LAYOUT
+    • Mobile-responsive sidebar navigation
+    • Collapsible mobile menu
+    • Section-based navigation (Overview, Pay Employee, Bulk Upload, Directory)
+    • Header with network toggle and wallet info
+    • Logout functionality
+    • Smooth transitions between sections
+
+11. CUSTOM 404 PAGE
+    • Branded error page with gradient styling
+    • "Return to Homepage" navigation button
+    • Consistent design with application theme
+
+12. DATABASE SCHEMA
+    • Complete PostgreSQL schema for Supabase
+    • Tables: employees, payouts, settings
+    • UUID primary keys and proper indexes
+    • Timestamp tracking (created_at, updated_at)
+    • Proper foreign key relationships
+
+
+NON-FUNCTIONAL FEATURES (UI Only - Not Fully Implemented):
+-----------------------------------------------------------
+
+1. INDIVIDUAL PAYMENT FORM (Pay Employee Section)
+   • Currency/asset selection dropdowns (USDC, EURT, NGNT, BRLT, ARST)
+   • Amount input field
+   • Recipient wallet address input
+   • Memo field for transaction notes
+   • Asset swap functionality
+   • Mock FX rate calculation and display
+   • Transaction summary card
+   • Form validation
+   ⚠️ NOT CONNECTED: Does not actually submit Stellar transactions
+
+2. BULK PAYMENT PROCESSING
+   • CSV upload and parsing ✓ (Working)
+   • Employee data preview ✓ (Working)
+   ⚠️ NOT IMPLEMENTED: Actual batch Stellar payment transaction execution
+   ⚠️ NOT IMPLEMENTED: Progress tracking for multiple payments
+   ⚠️ NOT IMPLEMENTED: Success/failure reporting per transaction
+
+3. MONEYGRAM INTEGRATION
+   • Mentioned in landing page features
+   ⚠️ NOT IMPLEMENTED: No MoneyGram API integration
+   ⚠️ NOT IMPLEMENTED: Cash pickup functionality
+
+4. TRANSACTION HISTORY
+   • Mentioned in dashboard features
+   ⚠️ NOT IMPLEMENTED: No dedicated transaction history view
+   ⚠️ NOT IMPLEMENTED: No transaction detail pages
+   ⚠️ Savings Calculator shows transaction data but limited to calculations
+
+5. PAYROLL LOGIC (Partial)
+   • recordPayout function exists in lib/payroll-logic.ts
+   • Database insert functionality for completed transactions
+   ⚠️ NOT CONNECTED: No actual Stellar payment submission workflow
+   ⚠️ NOT CONNECTED: No integration with payment forms
+
+6. DETAILED ANALYTICS DASHBOARD
+   • Basic overview section exists
+   ⚠️ NOT IMPLEMENTED: No charts or graphs
+   ⚠️ NOT IMPLEMENTED: No spending trends or analytics
+   ⚠️ NOT IMPLEMENTED: No employee payment history visualization
+
+7. NOTIFICATION SYSTEM
+   ⚠️ NOT IMPLEMENTED: No notification/alert system for transactions
+   ⚠️ Using browser alerts for errors instead of toast notifications
+
+8. EMPLOYEE PAYMENT PREFERENCES
+   • Preferred asset stored in database ✓
+   ⚠️ NOT IMPLEMENTED: No automatic asset conversion based on preference
+   ⚠️ NOT IMPLEMENTED: No employee-facing portal or preferences UI
+
+9. MULTI-SIGNATURE SUPPORT
+   ⚠️ NOT IMPLEMENTED: No multi-sig wallet support for approvals
+
+10. COMPLIANCE & REPORTING
+    ⚠️ NOT IMPLEMENTED: No export functionality for tax/accounting
+    ⚠️ NOT IMPLEMENTED: No compliance reporting tools
+
+
+UI/UX FEATURES (Design & Experience):
+--------------------------------------
+• Dark theme with gradient accents (purple/pink/indigo)
+• Smooth animations and transitions with Framer Motion
+• Glass morphism effects (backdrop blur)
+• Hover states and interactive feedback
+• Loading states and spinners
+• Error state displays with helpful messages
+• Responsive design for mobile, tablet, and desktop
+• Icon usage throughout for visual clarity
+• Consistent spacing and typography
+• Gradient buttons with hover effects
+• Card-based layout for sections
+
+================================================================================
+                              DEPLOYMENT NOTES
+================================================================================
+
+Environment Variables Required:
+• NEXT_PUBLIC_SUPABASE_URL - Supabase project URL (public)
+• NEXT_PUBLIC_SUPABASE_ANON_KEY - Supabase anonymous key (public)
+• SUPABASE_SERVICE_ROLE_KEY - Supabase service role key (private, server-only)
+
+Current Status:
+• Frontend deployed on Vercel (or ready for deployment)
+• Database schema deployed on Supabase
+• Testnet and mainnet support enabled
+• Git repository: https://github.com/pkprajapati7402/Lume
+
+================================================================================
+                           KEY MISSING FEATURES
+================================================================================
+
+For Production Readiness:
+1. Actual Stellar payment transaction submission (critical)
+2. Batch payment processing implementation (critical)
+3. Transaction history and detail pages (important)
+4. Comprehensive error handling and user feedback (important)
+5. MoneyGram or other off-ramp integrations (nice-to-have)
+6. Analytics dashboard with charts (nice-to-have)
+7. Email/SMS notifications for payments (nice-to-have)
+8. Export functionality for accounting (important)
+9. Employee-facing portal (future enhancement)
+10. Multi-signature approval workflow (future enhancement)
+
+================================================================================
+Last Updated: January 22, 2026
+================================================================================

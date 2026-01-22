@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
  
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://lume.pay'
+  const baseUrl = 'https://lume-livid.vercel.app'
   
   return [
     {
