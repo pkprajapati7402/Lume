@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import AnimatedBackground from './AnimatedBackground';
 import { useAuthStore } from '../store/authStore';
 import * as freighter from '@stellar/freighter-api';
 import { useState } from 'react';
@@ -113,11 +114,8 @@ export default function LandingPage() {
       
       {/* Hero Section */}
       <main className="relative overflow-hidden">
-        {/* Background gradient effects */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl" />
-          <div className="absolute top-60 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl" />
-        </div>
+        {/* Animated Background */}
+        <AnimatedBackground />
 
         <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-32 pb-32">
           <motion.div
