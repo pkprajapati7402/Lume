@@ -31,14 +31,16 @@ export default function MainDashboard() {
   const [isLoadingEmployees, setIsLoadingEmployees] = useState(false);
 
   useEffect(() => {
-    if (activeSection === 'directory') {
+    if (activeSection === 'directory' && publicKey) {
       loadEmployees();
     }
-  }, [activeSection]);
+  }, [activeSection, publicKey]);
 
   const loadEmployees = async () => {
+    if (!publicKey) return;
+    
     setIsLoadingEmployees(true);
-    const result = await getEmployees();
+    const result = await getEmployees(publicKey);
     if (result.data) {
       setEmployees(result.data);
     }

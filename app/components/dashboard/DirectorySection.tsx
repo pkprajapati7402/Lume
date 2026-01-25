@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect, useTransition } from 'react';
 import { Search, Plus, Trash2, Wallet, X } from 'lucide-react';
 import { addEmployee, deleteEmployee } from '@/app/actions/employees';
+import { useAuthStore } from '@/app/store/authStore';
 import type { Employee } from '@/types/database';
 
 interface DirectorySectionProps {
@@ -11,6 +12,7 @@ interface DirectorySectionProps {
 }
 
 export default function DirectorySection({ initialEmployees }: DirectorySectionProps) {
+  const { publicKey } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -22,8 +24,10 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
   }, [initialEmployees]);
 
   const refreshEmployees = async () => {
+    if (!publicKey) return;
+    
     const { getEmployees } = await import('@/app/actions/employees');
-    const result = await getEmployees();
+    const result = await getEmployees(publicKey);
     if (result.data) {
       setEmployees(result.data);
     }
@@ -39,8 +43,14 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
     e.preventDefault();
     setError(null);
     
+    if (!publicKey) {
+      setError('Wallet not connected');
+      return;
+    }
+    
     const form = e.currentTarget;
     const formData = new FormData(form);
+    formData.append('ownerWallet', publicKey);
     
     startTransition(async () => {
       const result = await addEmployee(formData);
@@ -60,8 +70,13 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
       return;
     }
 
+    if (!publicKey) {
+      alert('Wallet not connected');
+      return;
+    }
+
     startTransition(async () => {
-      const result = await deleteEmployee(employeeId);
+      const result = await deleteEmployee(employeeId, publicKey);
       
       if (result.error) {
         alert(`Error: ${result.error}`);

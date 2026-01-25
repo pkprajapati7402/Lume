@@ -10,15 +10,17 @@ export async function addEmployee(formData: FormData) {
   const role = formData.get('role') as string
   const preferredAsset = formData.get('preferredAsset') as string
   const department = formData.get('department') as string
+  const ownerWallet = formData.get('ownerWallet') as string
 
-  if (!name || !walletAddress) {
-    return { error: 'Name and wallet address are required' }
+  if (!name || !walletAddress || !ownerWallet) {
+    return { error: 'Name, wallet address, and owner wallet are required' }
   }
 
   try {
     const supabase = await createServerSupabaseClient()
 
     const newEmployee: EmployeeInsert = {
+      owner_wallet_address: ownerWallet,
       full_name: name,
       wallet_address: walletAddress,
       role: role || 'Employee',
@@ -45,7 +47,7 @@ export async function addEmployee(formData: FormData) {
   }
 }
 
-export async function deleteEmployee(employeeId: string) {
+export async function deleteEmployee(employeeId: string, ownerWallet: string) {
   try {
     const supabase = await createServerSupabaseClient()
 
@@ -53,6 +55,7 @@ export async function deleteEmployee(employeeId: string) {
       .from('employees')
       .delete()
       .eq('id', employeeId)
+      .eq('owner_wallet_address', ownerWallet)
 
     if (error) {
       console.error('Error deleting employee:', error)
@@ -67,13 +70,14 @@ export async function deleteEmployee(employeeId: string) {
   }
 }
 
-export async function getEmployees() {
+export async function getEmployees(ownerWallet: string) {
   try {
     const supabase = await createServerSupabaseClient()
 
     const { data, error } = await supabase
       .from('employees')
       .select('*')
+      .eq('owner_wallet_address', ownerWallet)
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -88,17 +92,21 @@ export async function getEmployees() {
   }
 }
 
-export async function bulkAddEmployees(employees: Array<{
-  name: string
-  walletAddress: string
-  role?: string
-  department?: string
-  preferredAsset?: string
-}>) {
+export async function bulkAddEmployees(
+  employees: Array<{
+    name: string
+    walletAddress: string
+    role?: string
+    department?: string
+    preferredAsset?: string
+  }>,
+  ownerWallet: string
+) {
   try {
     const supabase = await createServerSupabaseClient()
 
     const employeeData = employees.map(emp => ({
+      owner_wallet_address: ownerWallet,
       full_name: emp.name,
       wallet_address: emp.walletAddress,
       role: emp.role || 'Employee',

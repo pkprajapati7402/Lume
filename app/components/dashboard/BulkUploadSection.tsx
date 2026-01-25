@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useState, useTransition } from 'react';
 import { Upload as UploadIcon, FileSpreadsheet, Download, CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { bulkAddEmployees } from '@/app/actions/employees';
+import { useAuthStore } from '@/app/store/authStore';
 
 interface ParsedEmployee {
   name: string;
@@ -14,6 +15,7 @@ interface ParsedEmployee {
 }
 
 export default function BulkUploadSection() {
+  const { publicKey } = useAuthStore();
   const [isDragging, setIsDragging] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [parsedData, setParsedData] = useState<ParsedEmployee[]>([]);
@@ -110,8 +112,13 @@ export default function BulkUploadSection() {
   const handleUpload = () => {
     if (parsedData.length === 0) return;
 
+    if (!publicKey) {
+      setError('Wallet not connected');
+      return;
+    }
+
     startTransition(async () => {
-      const result = await bulkAddEmployees(parsedData);
+      const result = await bulkAddEmployees(parsedData, publicKey);
 
       if (result.error) {
         setError(result.error);

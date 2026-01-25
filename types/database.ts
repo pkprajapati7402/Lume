@@ -14,6 +14,7 @@ export interface Database {
       employees: {
         Row: {
           id: string
+          owner_wallet_address: string
           full_name: string
           wallet_address: string
           role: string
@@ -23,6 +24,7 @@ export interface Database {
         }
         Insert: {
           id?: string
+          owner_wallet_address: string
           full_name: string
           wallet_address: string
           role: string
@@ -32,6 +34,7 @@ export interface Database {
         }
         Update: {
           id?: string
+          owner_wallet_address?: string
           full_name?: string
           wallet_address?: string
           role?: string
@@ -43,6 +46,7 @@ export interface Database {
       payouts: {
         Row: {
           id: string
+          owner_wallet_address: string
           employee_id: string
           amount: number
           asset_code: string
@@ -53,6 +57,7 @@ export interface Database {
         }
         Insert: {
           id?: string
+          owner_wallet_address: string
           employee_id: string
           amount: number
           asset_code: string
@@ -63,6 +68,7 @@ export interface Database {
         }
         Update: {
           id?: string
+          owner_wallet_address?: string
           employee_id?: string
           amount?: number
           asset_code?: string
@@ -75,18 +81,21 @@ export interface Database {
       batches: {
         Row: {
           id: string
+          owner_wallet_address: string
           name: string
           total_usd: number
           created_at: string
         }
         Insert: {
           id?: string
+          owner_wallet_address: string
           name: string
           total_usd: number
           created_at?: string
         }
         Update: {
           id?: string
+          owner_wallet_address?: string
           name?: string
           total_usd?: number
           created_at?: string

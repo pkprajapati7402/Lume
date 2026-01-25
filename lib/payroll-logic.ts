@@ -10,6 +10,7 @@ interface TransactionResult {
 interface RecordPayoutParams {
   transactionResult: TransactionResult
   recipientWalletAddress: string
+  ownerWalletAddress: string
   batchId?: string | null
 }
 
@@ -24,16 +25,18 @@ interface RecordPayoutParams {
 export async function recordPayout({
   transactionResult,
   recipientWalletAddress,
+  ownerWalletAddress,
   batchId = null,
 }: RecordPayoutParams): Promise<{ success: boolean; employeeId?: string; error?: string }> {
   try {
     const supabase = await createServerSupabaseClient()
 
-    // Step 1: Look up the employee by wallet address
+    // Step 1: Look up the employee by wallet address AND owner wallet
     const { data: employee, error: lookupError } = await supabase
       .from('employees')
       .select('id')
       .eq('wallet_address', recipientWalletAddress)
+      .eq('owner_wallet_address', ownerWalletAddress)
       .single()
 
     if (lookupError || !employee) {
@@ -44,6 +47,7 @@ export async function recordPayout({
 
     // Step 2: Insert the payout record
     const payoutData: PayoutInsert = {
+      owner_wallet_address: ownerWalletAddress,
       employee_id: employee.id,
       amount: transactionResult.amount,
       asset_code: transactionResult.asset,
@@ -83,11 +87,13 @@ export async function recordPayout({
  */
 export async function recordFailedPayout({
   recipientWalletAddress,
+  ownerWalletAddress,
   amount,
   asset,
   batchId = null,
 }: {
   recipientWalletAddress: string
+  ownerWalletAddress: string
   amount: number
   asset: string
   batchId?: string | null
@@ -95,11 +101,12 @@ export async function recordFailedPayout({
   try {
     const supabase = await createServerSupabaseClient()
 
-    // Look up the employee by wallet address
+    // Look up the employee by wallet address AND owner wallet
     const { data: employee, error: lookupError } = await supabase
       .from('employees')
       .select('id')
       .eq('wallet_address', recipientWalletAddress)
+      .eq('owner_wallet_address', ownerWalletAddress)
       .single()
 
     if (lookupError || !employee) {
@@ -109,6 +116,7 @@ export async function recordFailedPayout({
 
     // Insert the failed payout record
     const payoutData: PayoutInsert = {
+      owner_wallet_address: ownerWalletAddress,
       employee_id: employee.id,
       amount: amount,
       asset_code: asset,
@@ -145,7 +153,8 @@ export async function recordFailedPayout({
  */
 export async function createPayoutBatch(
   name: string,
-  totalUsd: number
+  totalUsd: number,
+  ownerWalletAddress: string
 ): Promise<{ batchId: string | null; error?: string }> {
   try {
     const supabase = await createServerSupabaseClient()
@@ -153,6 +162,7 @@ export async function createPayoutBatch(
     const { data, error } = await supabase
       .from('batches')
       .insert({
+        owner_wallet_address: ownerWalletAddress,
         name,
         total_usd: totalUsd,
       })

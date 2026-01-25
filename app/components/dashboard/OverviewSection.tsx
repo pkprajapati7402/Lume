@@ -18,6 +18,7 @@ import { useStellarNetworkStats } from '../../hooks/useStellarNetworkStats';
 import LiquidityMonitor from './LiquidityMonitor';
 import SavingsCalculator from './SavingsCalculator';
 import AccountBalance from './AccountBalance';
+import XLMPriceChart from './XLMPriceChart';
 
 interface StatsCardProps {
   icon: React.ElementType;
@@ -190,6 +191,9 @@ export default function OverviewSection() {
           <StatsCard key={index} {...stat} />
         ))}
       </div>
+
+      {/* XLM Price Chart */}
+      <XLMPriceChart />
 
       {/* Recent Payments Table */}
       <motion.div
