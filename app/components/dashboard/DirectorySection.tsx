@@ -2,21 +2,23 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect, useTransition } from 'react';
-import { Search, Plus, Trash2, Wallet, X } from 'lucide-react';
+import { Search, Plus, Trash2, Wallet, X, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import { addEmployee, deleteEmployee } from '@/app/actions/employees';
 import { useAuthStore } from '@/app/store/authStore';
 import type { Employee } from '@/types/database';
+import EmployeeDetailModal from './EmployeeDetailModal';
 
 interface DirectorySectionProps {
   initialEmployees: Employee[];
 }
 
 export default function DirectorySection({ initialEmployees }: DirectorySectionProps) {
-  const { publicKey } = useAuthStore();
+  const { publicKey, network } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -206,10 +208,19 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
               </div>
             </div>
 
-            {/* Quick Pay Button */}
-            <button className="w-full mt-4 bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-4 py-2 rounded-lg font-medium transition-all">
-              Quick Pay
-            </button>
+            {/* Action Buttons */}
+            <div className="grid grid-cols-2 gap-2 mt-4">
+              <button 
+                onClick={() => setSelectedEmployee(employee)}
+                className="bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 px-4 py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2"
+              >
+                <Eye className="w-4 h-4" />
+                View History
+              </button>
+              <button className="bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-4 py-2 rounded-lg font-medium transition-all">
+                Quick Pay
+              </button>
+            </div>
           </motion.div>
         ))}
       </motion.div>
@@ -342,6 +353,15 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
             </form>
           </motion.div>
         </div>
+      )}
+
+      {/* Employee Detail Modal */}
+      {selectedEmployee && (
+        <EmployeeDetailModal
+          employee={selectedEmployee}
+          network={network}
+          onClose={() => setSelectedEmployee(null)}
+        />
       )}
     </div>
   );
