@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Sparkles, Menu, X, Wallet } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { useAuthStore } from '../store/authStore';
 import * as freighter from '@stellar/freighter-api';
 
@@ -26,7 +27,10 @@ export default function Navbar() {
       
       if (!connected) {
         window.open('https://www.freighter.app/', '_blank');
-        alert('Freighter wallet is not installed. Please install it from freighter.app and refresh the page.');
+        toast.error('Freighter Wallet Not Found', {
+          description: 'Please install Freighter from freighter.app and refresh the page.',
+          duration: 6000,
+        });
         setIsConnecting(false);
         return;
       }
@@ -36,7 +40,10 @@ export default function Navbar() {
       
       if (accessResult.error) {
         console.error('Access denied:', accessResult.error);
-        alert('Access to Freighter wallet was denied. Please try again and approve the request.');
+        toast.error('Access Denied', {
+          description: 'Please approve the Freighter wallet connection request.',
+          duration: 5000,
+        });
         setIsConnecting(false);
         return;
       }
@@ -46,7 +53,9 @@ export default function Navbar() {
       
       if (addressResult.error) {
         console.error('Failed to get address:', addressResult.error);
-        alert('Failed to retrieve wallet address. Please try again.');
+        toast.error('Connection Failed', {
+          description: 'Failed to retrieve wallet address. Please try again.',
+        });
         setIsConnecting(false);
         return;
       }
@@ -54,10 +63,15 @@ export default function Navbar() {
       if (addressResult.address) {
         console.log('Connected to wallet:', addressResult.address);
         setAuthorized(addressResult.address);
+        toast.success('Wallet Connected', {
+          description: `Connected to ${addressResult.address.slice(0, 8)}...${addressResult.address.slice(-8)}`,
+        });
       }
     } catch (error) {
       console.error('Failed to connect wallet:', error);
-      alert(`Failed to connect wallet: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      toast.error('Connection Error', {
+        description: error instanceof Error ? error.message : 'Failed to connect wallet',
+      });
     } finally {
       setIsConnecting(false);
     }

@@ -2,7 +2,7 @@
 
 import { createServerSupabaseClient } from '@/lib/supabase'
 import { revalidatePath } from 'next/cache'
-import type { EmployeeInsert } from '@/types/database'
+import type { EmployeeInsert, PayoutInsert } from '@/types/database'
 
 export async function addEmployee(formData: FormData) {
   const name = formData.get('name') as string
@@ -131,3 +131,114 @@ export async function bulkAddEmployees(
     return { error: 'Failed to bulk add employees', count: 0 }
   }
 }
+
+/**
+ * Server action to record a successful payout after Stellar transaction completes
+ */
+export async function recordPayoutAction(params: {
+  transactionHash: string
+  amount: number
+  assetCode: string
+  recipientWalletAddress: string
+  ownerWalletAddress: string
+  batchId?: string | null
+}) {
+  try {
+    const supabase = await createServerSupabaseClient()
+
+    // Look up the employee by wallet address AND owner wallet
+    const { data: employee, error: lookupError } = await supabase
+      .from('employees')
+      .select('id')
+      .eq('wallet_address', params.recipientWalletAddress)
+      .eq('owner_wallet_address', params.ownerWalletAddress)
+      .single()
+
+    if (lookupError || !employee) {
+      const errorMsg = `Employee not found for wallet ${params.recipientWalletAddress}`
+      console.error('Payout recording error:', errorMsg, lookupError)
+      return { success: false, error: errorMsg }
+    }
+
+    // Insert the payout record
+    const payoutData: PayoutInsert = {
+      owner_wallet_address: params.ownerWalletAddress,
+      employee_id: employee.id,
+      amount: params.amount,
+      asset_code: params.assetCode,
+      transaction_hash: params.transactionHash,
+      status: 'success',
+      batch_id: params.batchId || null,
+    }
+
+    const { data: payout, error: insertError } = await supabase
+      .from('payouts')
+      .insert(payoutData)
+      .select()
+      .single()
+
+    if (insertError) {
+      console.error('Error inserting payout:', insertError)
+      return { success: false, error: insertError.message, employeeId: employee.id }
+    }
+
+    console.log('✅ Payout recorded successfully:', payout.id)
+    revalidatePath('/dashboard')
+    return { success: true, employeeId: employee.id, payoutId: payout.id }
+
+  } catch (error) {
+    console.error('Unexpected error recording payout:', error)
+    return { success: false, error: 'Unexpected error occurred' }
+  }
+}
+
+/**
+ * Fetch payouts with employee information for transaction history
+ */
+export async function getPayoutHistory(ownerWallet: string, limit: number = 50) {
+  try {
+    const supabase = await createServerSupabaseClient()
+
+    const { data, error } = await supabase
+      .from('payouts')
+      .select(`
+        id,
+        transaction_hash,
+        amount,
+        asset_code,
+        status,
+        created_at,
+        employee_id,
+        employees!inner (
+          full_name,
+          wallet_address
+        )
+      `)
+      .eq('owner_wallet_address', ownerWallet)
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    if (error) {
+      console.error('Error fetching payout history:', error)
+      return { data: [], error: error.message }
+    }
+
+    // Transform the data to flatten employee info
+    const transformedData = data.map((payout: any) => ({
+      id: payout.id,
+      transactionHash: payout.transaction_hash,
+      amount: payout.amount,
+      assetCode: payout.asset_code,
+      status: payout.status,
+      createdAt: payout.created_at,
+      employeeName: payout.employees?.full_name || 'Unknown',
+      walletAddress: payout.employees?.wallet_address || '',
+    }))
+
+    return { data: transformedData, error: null }
+  } catch (error) {
+    console.error('Unexpected error fetching payout history:', error)
+    return { data: [], error: 'Unexpected error occurred' }
+  }
+}
+

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useTransition } from 'react';
 import { Search, Plus, Trash2, Wallet, X } from 'lucide-react';
+import { toast } from 'sonner';
 import { addEmployee, deleteEmployee } from '@/app/actions/employees';
 import { useAuthStore } from '@/app/store/authStore';
 import type { Employee } from '@/types/database';
@@ -44,7 +45,9 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
     setError(null);
     
     if (!publicKey) {
-      setError('Wallet not connected');
+      toast.error('Wallet Not Connected', {
+        description: 'Please connect your wallet to add employees',
+      });
       return;
     }
     
@@ -56,8 +59,14 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
       const result = await addEmployee(formData);
       
       if (result.error) {
-        setError(result.error);
+        toast.error('Failed to Add Employee', {
+          description: result.error,
+        });
       } else {
+        const employeeName = formData.get('name') as string;
+        toast.success('Employee Added', {
+          description: `${employeeName} has been added to the directory`,
+        });
         setShowAddModal(false);
         form.reset();
         await refreshEmployees();
@@ -71,7 +80,9 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
     }
 
     if (!publicKey) {
-      alert('Wallet not connected');
+      toast.error('Wallet Not Connected', {
+        description: 'Please connect your wallet first',
+      });
       return;
     }
 
@@ -79,8 +90,13 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
       const result = await deleteEmployee(employeeId, publicKey);
       
       if (result.error) {
-        alert(`Error: ${result.error}`);
+        toast.error('Failed to Delete Employee', {
+          description: result.error,
+        });
       } else {
+        toast.success('Employee Deleted', {
+          description: 'Employee has been removed from the directory',
+        });
         await refreshEmployees();
       }
     });

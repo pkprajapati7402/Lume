@@ -12,16 +12,18 @@ import {
   LogOut,
   Sparkles,
   Menu,
-  X
+  X,
+  History
 } from 'lucide-react';
 import OverviewSection from './dashboard/OverviewSection';
 import PayEmployeeSection from './dashboard/PayEmployeeSection';
 import BulkUploadSection from './dashboard/BulkUploadSection';
 import DirectorySection from './dashboard/DirectorySection';
+import HistoryTable from './dashboard/HistoryTable';
 import { getEmployees } from '../actions/employees';
 import type { Employee } from '@/types/database';
 
-type Section = 'overview' | 'pay' | 'bulk' | 'directory';
+type Section = 'overview' | 'pay' | 'bulk' | 'directory' | 'history';
 
 export default function MainDashboard() {
   const { publicKey, setGuest, network, setNetwork } = useAuthStore();
@@ -60,6 +62,7 @@ export default function MainDashboard() {
     { id: 'pay' as Section, label: 'Pay Employee', icon: Send },
     { id: 'bulk' as Section, label: 'Bulk Upload', icon: Upload },
     { id: 'directory' as Section, label: 'Directory', icon: Users },
+    { id: 'history' as Section, label: 'Transaction History', icon: History },
   ];
 
   const renderSection = () => {
@@ -72,6 +75,8 @@ export default function MainDashboard() {
         return <BulkUploadSection />;
       case 'directory':
         return <DirectorySection initialEmployees={employees} />;
+      case 'history':
+        return <HistoryTable />;
       default:
         return <OverviewSection />;
     }

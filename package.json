@@ -36,11 +36,14 @@
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.91.0",
     "framer-motion": "^12.28.1",
+    "json-2-csv": "^5.5.10",
+    "json2csv": "^6.0.0-alpha.2",
     "lucide-react": "^0.562.0",
     "next": "16.1.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "recharts": "^3.7.0",
+    "sonner": "^2.0.7",
     "zustand": "^5.0.10"
   },
   "devDependencies": {
