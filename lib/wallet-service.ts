@@ -37,6 +37,34 @@ export function initWalletKit(network: NetworkType): StellarWalletsKit {
 }
 
 /**
+ * Get list of available (installed) wallets
+ */
+export async function getAvailableWallets(network: NetworkType): Promise<any[]> {
+  const kit = getWalletKit(network);
+  
+  // Get the supported wallets from the kit
+  const supportedWallets = await kit.getSupportedWallets();
+  
+  // Filter to only show installed/available wallets
+  const availableWallets = supportedWallets.filter((wallet: any) => {
+    // Check if wallet is actually installed
+    if (wallet.id === FREIGHTER_ID) {
+      return !!(window as any).freighter;
+    }
+    if (wallet.id === XBULL_ID) {
+      return !!(window as any).xBullSDK;
+    }
+    // WalletConnect and Albedo are always available (web-based)
+    if (wallet.id === 'walletconnect' || wallet.id === 'albedo') {
+      return true;
+    }
+    return wallet.isAvailable;
+  });
+  
+  return availableWallets;
+}
+
+/**
  * Get or initialize the wallet kit instance
  */
 export function getWalletKit(network: NetworkType): StellarWalletsKit {
@@ -70,18 +98,42 @@ export async function connectWallet(network: NetworkType): Promise<{
     const kit = getWalletKit(network);
     const isMobile = isMobileDevice();
 
-    // On mobile, prefer WalletConnect flow which deep-links to mobile apps
+    // Get available wallets first
+    const availableWallets = await getAvailableWallets(network);
+    
+    if (availableWallets.length === 0) {
+      return {
+        success: false,
+        error: 'No wallet detected. Please install a Stellar wallet (Freighter recommended).',
+      };
+    }
+
+    // On mobile, always open the modal to let user choose WalletConnect
+    // This enables deep-linking to mobile wallet apps like Freighter
     if (isMobile) {
-      // Open wallet selection modal
-      // This will show WalletConnect option which opens Freighter mobile app
+      // The openModal will show only available wallet options
       await kit.openModal({
         onWalletSelected: async (option) => {
           kit.setWallet(option.id);
-        }
+        },
+        modalTitle: 'Connect Wallet',
+        notAvailableText: 'Not installed',
       });
     } else {
-      // On desktop, try to auto-select Freighter extension
-      kit.setWallet(FREIGHTER_ID);
+      // On desktop, check if only one wallet is available
+      if (availableWallets.length === 1) {
+        // Auto-select the only available wallet
+        kit.setWallet(availableWallets[0].id);
+      } else {
+        // Multiple wallets available, let user choose
+        await kit.openModal({
+          onWalletSelected: async (option) => {
+            kit.setWallet(option.id);
+          },
+          modalTitle: 'Connect Wallet',
+          notAvailableText: 'Not installed',
+        });
+      }
     }
 
     // Get public key from connected wallet
@@ -102,10 +154,26 @@ export async function connectWallet(network: NetworkType): Promise<{
     console.error('Wallet connection error:', error);
     
     // Handle user rejection
-    if (error.message?.includes('User rejected') || error.message?.includes('closed')) {
+    if (error.message?.includes('User rejected') || error.message?.includes('closed') || error.message?.includes('cancelled')) {
       return {
         success: false,
         error: 'Connection cancelled by user',
+      };
+    }
+
+    // Handle network errors
+    if (error.message?.includes('Network Error') || error.message?.includes('NetworkError') || error.message?.includes('Failed to fetch')) {
+      return {
+        success: false,
+        error: 'Network connection failed. Please check your internet connection and try again.',
+      };
+    }
+
+    // Handle timeout errors
+    if (error.message?.includes('timeout') || error.message?.includes('Timeout')) {
+      return {
+        success: false,
+        error: 'Connection timeout. The network may be slow or unavailable.',
       };
     }
 
@@ -148,10 +216,26 @@ export async function signTransactionWithKit(
     console.error('Transaction signing error:', error);
 
     // Handle user rejection
-    if (error.message?.includes('User rejected') || error.message?.includes('User cancelled')) {
+    if (error.message?.includes('User rejected') || error.message?.includes('User cancelled') || error.message?.includes('cancelled')) {
       return {
         success: false,
         error: 'Transaction rejected by user',
+      };
+    }
+
+    // Handle network errors
+    if (error.message?.includes('Network Error') || error.message?.includes('NetworkError') || error.message?.includes('Failed to fetch')) {
+      return {
+        success: false,
+        error: 'Network error during signing. Please check your connection and try again.',
+      };
+    }
+
+    // Handle timeout errors
+    if (error.message?.includes('timeout') || error.message?.includes('Timeout')) {
+      return {
+        success: false,
+        error: 'Transaction signing timeout. Please try again.',
       };
     }
 

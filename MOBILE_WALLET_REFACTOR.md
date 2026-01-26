@@ -1,5 +1,27 @@
 # Mobile Wallet Support Refactoring
 
+## 🔧 Latest Updates (January 26, 2026)
+
+### Mobile Detection Fix
+Fixed the mobile wallet connection issue where the Freighter app was showing as "unavailable" even when installed:
+
+**Problem**: The custom `WalletConnectionModal` was interfering with the stellar-wallets-kit's native modal, preventing proper wallet detection and connection on mobile devices.
+
+**Solution**: 
+1. Removed custom `WalletConnectionModal` component from connection flow
+2. Let `stellar-wallets-kit` handle its own modal presentation
+3. Updated `connectWallet()` to always call `openModal()` on mobile devices
+4. The kit's modal properly handles WalletConnect deep-linking to installed mobile apps
+
+**Changes Made**:
+- **wallet-service.ts**: Updated `connectWallet()` to check for Freighter extension on desktop before auto-selecting
+- **LandingPage.tsx**: Removed `WalletConnectionModal`, `isMobile` state, and `handleConnectClick` wrapper
+- **Navbar.tsx**: Removed `WalletConnectionModal`, `isMobile` state, and `handleConnectClick` wrapper
+
+**Result**: Mobile users can now properly connect to Freighter and other wallet apps via WalletConnect protocol.
+
+---
+
 ## Overview
 
 Successfully refactored the Lume wallet connection system to support **mobile wallets** using `@creit.tech/stellar-wallets-kit`. The application now supports multiple wallet providers with automatic device detection and optimized connection flows.

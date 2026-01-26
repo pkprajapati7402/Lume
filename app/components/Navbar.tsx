@@ -2,22 +2,15 @@
 
 import Link from 'next/link';
 import { Sparkles, Menu, X, Wallet } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/authStore';
-import WalletConnectionModal from './WalletConnectionModal';
-import { connectWallet, isMobileDevice } from '@/lib/wallet-service';
+import { connectWallet } from '@/lib/wallet-service';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
-  const [showWalletModal, setShowWalletModal] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const { setAuthorized, network } = useAuthStore();
-
-  useEffect(() => {
-    setIsMobile(isMobileDevice());
-  }, []);
 
   const navLinks = [
     { name: 'Features', href: '#features' },
@@ -25,10 +18,6 @@ export default function Navbar() {
     { name: 'About', href: '#about' },
     { name: 'Contact', href: '#contact' },
   ];
-
-  const handleConnectClick = () => {
-    setShowWalletModal(true);
-  };
 
   const handleConnect = async () => {
     setIsConnecting(true);
@@ -48,7 +37,6 @@ export default function Navbar() {
           });
         }
         setIsConnecting(false);
-        setShowWalletModal(false);
         return;
       }
 
@@ -58,7 +46,6 @@ export default function Navbar() {
         toast.success('Wallet Connected', {
           description: `Connected to ${result.publicKey.slice(0, 8)}...${result.publicKey.slice(-8)}`,
         });
-        setShowWalletModal(false);
       }
     } catch (error) {
       console.error('Failed to connect wallet:', error);
@@ -101,7 +88,7 @@ export default function Navbar() {
           {/* Desktop CTA Button */}
           <div className="hidden md:block">
             <button
-              onClick={handleConnectClick}
+              onClick={handleConnect}
               disabled={isConnecting}
               className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
               suppressHydrationWarning
@@ -136,7 +123,7 @@ export default function Navbar() {
               </a>
             ))}
             <button
-              onClick={handleConnectClick}
+              onClick={handleConnect}
               disabled={isConnecting}
               className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -146,15 +133,6 @@ export default function Navbar() {
           </div>
         </div>
       )}
-      
-      {/* Wallet Connection Modal */}
-      <WalletConnectionModal
-        isOpen={showWalletModal}
-        onClose={() => setShowWalletModal(false)}
-        onConnect={handleConnect}
-        isConnecting={isConnecting}
-        isMobile={isMobile}
-      />
     </nav>
   );
 }

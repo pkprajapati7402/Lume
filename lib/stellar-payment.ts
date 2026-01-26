@@ -25,7 +25,43 @@ function getHorizonServer(network: NetworkType): StellarSdk.Horizon.Server {
   const url = network === 'mainnet'
     ? 'https://horizon.stellar.org'
     : 'https://horizon-testnet.stellar.org';
-  return new StellarSdk.Horizon.Server(url);
+  
+  // Configure with timeout and retry settings
+  const server = new StellarSdk.Horizon.Server(url, {
+    allowHttp: false,
+  });
+  
+  return server;
+}
+
+// Helper function to retry network requests
+async function retryNetworkRequest<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  delayMs: number = 1000
+): Promise<T> {
+  let lastError: any;
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error: any) {
+      lastError = error;
+      
+      // Don't retry on validation errors
+      if (error.response?.status === 400 || error.response?.status === 404) {
+        throw error;
+      }
+      
+      // Retry on network errors or 5xx errors
+      if (i < maxRetries - 1) {
+        console.log(`Network request failed, retrying... (${i + 1}/${maxRetries})`);
+        await new Promise(resolve => setTimeout(resolve, delayMs * (i + 1)));
+      }
+    }
+  }
+  
+  throw lastError;
 }
 
 // Get the network passphrase
@@ -124,8 +160,12 @@ export async function handlePayment(params: PaymentParams): Promise<PaymentResul
     const server = getHorizonServer(network);
     const networkPassphrase = getNetworkPassphrase(network);
 
-    // Load source account
-    const sourceAccount = await server.loadAccount(sourcePublicKey);
+    // Load source account with retry logic
+    const sourceAccount = await retryNetworkRequest(
+      () => server.loadAccount(sourcePublicKey),
+      3,
+      1000
+    );
 
     // Create transaction builder
     const transactionBuilder = new StellarSdk.TransactionBuilder(sourceAccount, {
@@ -226,12 +266,26 @@ export async function handlePayment(params: PaymentParams): Promise<PaymentResul
       networkPassphrase
     ) as StellarSdk.Transaction;
 
-    // Submit to network
+    // Submit to network with retry logic
     let response: StellarSdk.Horizon.HorizonApi.SubmitTransactionResponse;
     try {
-      response = await server.submitTransaction(signedTransaction);
+      response = await retryNetworkRequest(
+        () => server.submitTransaction(signedTransaction),
+        3,
+        1500
+      );
     } catch (submitError: any) {
       console.error('Transaction submission error:', submitError);
+      
+      // Handle network errors specifically
+      if (submitError.message?.includes('Network Error') || submitError.message?.includes('Failed to fetch')) {
+        return {
+          success: false,
+          amount: parseFloat(sendAmount),
+          assetCode: sendAssetCode,
+          error: 'Network connection failed. Please check your internet and try again.',
+        };
+      }
       
       // Parse Stellar error
       let errorMessage = 'Transaction submission failed';
@@ -264,6 +318,27 @@ export async function handlePayment(params: PaymentParams): Promise<PaymentResul
 
   } catch (error: any) {
     console.error('Payment handler error:', error);
+    
+    // Handle network errors
+    if (error.message?.includes('Network Error') || error.message?.includes('Failed to fetch')) {
+      return {
+        success: false,
+        amount: parseFloat(sendAmount) || 0,
+        assetCode: sendAssetCode,
+        error: 'Network connection failed. Please check your internet connection and try again.',
+      };
+    }
+    
+    // Handle timeout errors
+    if (error.message?.includes('timeout')) {
+      return {
+        success: false,
+        amount: parseFloat(sendAmount) || 0,
+        assetCode: sendAssetCode,
+        error: 'Request timed out. The network may be slow or unavailable.',
+      };
+    }
+    
     return {
       success: false,
       amount: parseFloat(sendAmount) || 0,
@@ -283,7 +358,13 @@ export async function checkDestinationAccount(
 ): Promise<{ exists: boolean; hasTrustline: boolean; error?: string }> {
   try {
     const server = getHorizonServer(network);
-    const account = await server.loadAccount(destinationAddress);
+    
+    // Load account with retry logic
+    const account = await retryNetworkRequest(
+      () => server.loadAccount(destinationAddress),
+      3,
+      1000
+    );
 
     // XLM doesn't require trustline
     if (assetCode === 'XLM') {

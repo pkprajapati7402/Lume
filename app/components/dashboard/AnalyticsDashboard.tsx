@@ -37,15 +37,25 @@ interface AnalyticsProps {
 
 interface PayoutRecord {
   id: string;
-  sender_wallet: string;
-  recipient_wallet: string;
-  recipient_name: string | null;
+  owner_wallet_address: string;
+  employee_id: string;
   amount: string;
   asset_code: string;
   status: string;
-  transaction_hash: string;
+  transaction_hash: string | null;
   created_at: string;
+  batch_id?: string | null;
+  tax_withheld?: string | null;
+  net_amount?: string | null;
+  employees?: {
+    full_name: string;
+    wallet_address: string;
+    department: string;
+  };
+  // Mapped fields (added during processing)
   department?: string;
+  recipient_name?: string;
+  recipient_wallet?: string;
 }
 
 interface SpendingByAsset {
@@ -104,8 +114,15 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
 
       const { data: payoutData, error: payoutError } = await supabase
         .from('payouts')
-        .select('*')
-        .eq('sender_wallet', publicKey)
+        .select(`
+          *,
+          employees (
+            full_name,
+            wallet_address,
+            department
+          )
+        `)
+        .eq('owner_wallet_address', publicKey)
         .eq('status', 'success')
         .gte('created_at', ninetyDaysAgo.toISOString())
         .order('created_at', { ascending: false });
@@ -115,25 +132,13 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
         throw payoutError;
       }
 
-      // Fetch employees to get department info
-      const { data: employeesData, error: employeesError } = await supabase
-        .from('employees')
-        .select('wallet_address, department')
-        .eq('owner_wallet_address', publicKey);
-
-      if (employeesError) {
-        console.error('Error fetching employees:', employeesError);
-      }
-
-      // Create a map of wallet addresses to departments
-      const employeeDepartments = new Map(
-        (employeesData || []).map((emp: any) => [emp.wallet_address, emp.department])
-      );
-
-      // Merge payout data with department info
+      // The payouts already include employee data from the join
+      // Add department from embedded employees data
       const payoutsWithDept = (payoutData || []).map((p: any) => ({
         ...p,
-        department: employeeDepartments.get(p.recipient_wallet) || 'Unknown',
+        department: p.employees?.department || 'Unknown',
+        recipient_name: p.employees?.full_name || 'Unknown',
+        recipient_wallet: p.employees?.wallet_address || 'Unknown',
       }));
 
       setPayouts(payoutsWithDept);
@@ -249,7 +254,7 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
       { name: string; total: number; payments: number; department: string }
     >();
     data.forEach((p) => {
-      const key = p.recipient_wallet;
+      const key = p.recipient_wallet || 'unknown';
       const current = employeeMap.get(key) || {
         name: p.recipient_name || 'Unknown',
         total: 0,

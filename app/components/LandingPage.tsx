@@ -20,16 +20,13 @@ import {
 import Navbar from './Navbar';
 import Footer from './Footer';
 import AnimatedBackground from './AnimatedBackground';
-import WalletConnectionModal from './WalletConnectionModal';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/authStore';
-import { connectWallet, isMobileDevice } from '@/lib/wallet-service';
+import { connectWallet } from '@/lib/wallet-service';
 import { useState, useRef, useEffect } from 'react';
 
 export default function LandingPage() {
   const [isConnecting, setIsConnecting] = useState(false);
-  const [showWalletModal, setShowWalletModal] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -39,17 +36,10 @@ export default function LandingPage() {
   const isMountedRef = useRef(true);
 
   useEffect(() => {
-    // Detect mobile device
-    setIsMobile(isMobileDevice());
-    
     return () => {
       isMountedRef.current = false;
     };
   }, []);
-
-  const handleConnectClick = () => {
-    setShowWalletModal(true);
-  };
 
   const handleConnect = async () => {
     if (!isMountedRef.current) return;
@@ -71,7 +61,6 @@ export default function LandingPage() {
         }
         if (isMountedRef.current) {
           setIsConnecting(false);
-          setShowWalletModal(false);
         }
         return;
       }
@@ -170,7 +159,7 @@ export default function LandingPage() {
               {/* CTA Button */}
               <motion.div variants={fadeInUp} className="pt-4">
                 <button
-                  onClick={handleConnectClick}
+                  onClick={handleConnect}
                   disabled={isConnecting}
                   className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                   suppressHydrationWarning
@@ -318,10 +307,11 @@ export default function LandingPage() {
                 ))}
               </ul>
               <button
-                onClick={handleConnectClick}
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                onClick={handleConnect}
+                disabled={isConnecting}
+                className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Get Started
+                {isConnecting ? 'Connecting...' : 'Get Started'}
               </button>
             </motion.div>
 
@@ -355,10 +345,11 @@ export default function LandingPage() {
                 ))}
               </ul>
               <button
-                onClick={handleConnectClick}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25"
+                onClick={handleConnect}
+                disabled={isConnecting}
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Get Started
+                {isConnecting ? 'Connecting...' : 'Get Started'}
               </button>
             </motion.div>
 
@@ -683,7 +674,7 @@ export default function LandingPage() {
                 Join thousands of companies using Stellar Payroll to pay their global teams faster and cheaper.
               </p>
               <button
-                onClick={handleConnectClick}
+                onClick={handleConnect}
                 disabled={isConnecting}
                 className="inline-flex items-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-slate-100 transition-all duration-300 hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -697,15 +688,6 @@ export default function LandingPage() {
       </main>
 
       <Footer />
-      
-      {/* Wallet Connection Modal */}
-      <WalletConnectionModal
-        isOpen={showWalletModal}
-        onClose={() => setShowWalletModal(false)}
-        onConnect={handleConnect}
-        isConnecting={isConnecting}
-        isMobile={isMobile}
-      />
     </div>
   );
 }

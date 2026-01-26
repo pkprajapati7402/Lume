@@ -18,7 +18,42 @@ function getHorizonServer(network: NetworkType): StellarSdk.Horizon.Server {
   const url = network === 'mainnet'
     ? 'https://horizon.stellar.org'
     : 'https://horizon-testnet.stellar.org';
-  return new StellarSdk.Horizon.Server(url);
+  
+  const server = new StellarSdk.Horizon.Server(url, {
+    allowHttp: false,
+  });
+  
+  return server;
+}
+
+// Helper function to retry network requests
+async function retryNetworkRequest<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  delayMs: number = 1000
+): Promise<T> {
+  let lastError: any;
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (error: any) {
+      lastError = error;
+      
+      // Don't retry on validation errors
+      if (error.response?.status === 400 || error.response?.status === 404) {
+        throw error;
+      }
+      
+      // Retry on network errors or 5xx errors
+      if (i < maxRetries - 1) {
+        console.log(`Network request failed, retrying... (${i + 1}/${maxRetries})`);
+        await new Promise(resolve => setTimeout(resolve, delayMs * (i + 1)));
+      }
+    }
+  }
+  
+  throw lastError;
 }
 
 function getNetworkPassphrase(network: NetworkType): string {
@@ -91,8 +126,12 @@ async function buildBatchTransaction(
   const server = getHorizonServer(network);
   const networkPassphrase = getNetworkPassphrase(network);
   
-  // Load source account
-  const sourceAccount = await server.loadAccount(sourcePublicKey);
+  // Load source account with retry logic
+  const sourceAccount = await retryNetworkRequest(
+    () => server.loadAccount(sourcePublicKey),
+    3,
+    1000
+  );
   
   // Create transaction builder
   const transactionBuilder = new StellarSdk.TransactionBuilder(sourceAccount, {
@@ -155,7 +194,13 @@ async function processBatch(
     ) as StellarSdk.Transaction;
     
     const server = getHorizonServer(network);
-    const response = await server.submitTransaction(signedTransaction);
+    
+    // Submit with retry logic
+    const response = await retryNetworkRequest(
+      () => server.submitTransaction(signedTransaction),
+      3,
+      1500
+    );
     
     return {
       success: true,
@@ -165,6 +210,16 @@ async function processBatch(
     
   } catch (error: any) {
     console.error('Batch processing error:', error);
+    
+    // Handle network errors specifically
+    if (error.message?.includes('Network Error') || error.message?.includes('Failed to fetch')) {
+      return {
+        success: false,
+        recipients,
+        error: 'Network connection failed. Please check your internet and try again.',
+        failedRecipients: recipients,
+      };
+    }
     
     let errorMessage = 'Transaction submission failed';
     if (error.response?.data?.extras?.result_codes) {
