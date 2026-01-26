@@ -1,5 +1,5 @@
 import * as StellarSdk from '@stellar/stellar-sdk';
-import { isConnected, requestAccess, signTransaction } from '@stellar/freighter-api';
+import { signTransactionWithKit } from '@/lib/wallet-service';
 import type { NetworkType } from '@/app/store/authStore';
 
 // Asset issuers on Stellar (these are well-known anchors)
@@ -120,20 +120,6 @@ export async function handlePayment(params: PaymentParams): Promise<PaymentResul
       };
     }
 
-    // Check Freighter connection
-    const connected = await isConnected();
-    if (!connected) {
-      const accessGranted = await requestAccess();
-      if (!accessGranted) {
-        return {
-          success: false,
-          amount: parseFloat(sendAmount),
-          assetCode: sendAssetCode,
-          error: 'Freighter wallet access denied',
-        };
-      }
-    }
-
     // Get Horizon server
     const server = getHorizonServer(network);
     const networkPassphrase = getNetworkPassphrase(network);
@@ -218,36 +204,25 @@ export async function handlePayment(params: PaymentParams): Promise<PaymentResul
     transactionBuilder.setTimeout(180); // 3 minutes
     const transaction = transactionBuilder.build();
 
-    // Convert to XDR for Freighter
+    // Convert to XDR for signing
     const xdr = transaction.toXDR();
 
-    // Sign with Freighter
-    let signedXdr: string;
-    try {
-      const signResult = await signTransaction(xdr, {
-        networkPassphrase,
-      });
-      
-      // Freighter returns an object with signedTxXdr property
-      if (typeof signResult === 'string') {
-        signedXdr = signResult;
-      } else if (signResult && 'signedTxXdr' in signResult) {
-        signedXdr = signResult.signedTxXdr;
-      } else {
-        throw new Error('Invalid response from Freighter');
-      }
-    } catch (signError: any) {
-      console.error('Freighter signing error:', signError);
+    // Sign with connected wallet
+    const signResult = await signTransactionWithKit(xdr, network);
+    
+    if (!signResult.success || !signResult.signedXdr) {
+      console.error('Wallet signing error:', signResult.error);
       return {
         success: false,
         amount: parseFloat(sendAmount),
         assetCode: sendAssetCode,
-        error: `Transaction signing failed: ${signError.message || 'User rejected'}`,
+        error: `Transaction signing failed: ${signResult.error || 'User rejected'}`,
       };
     }
 
     // Reconstruct transaction from signed XDR
     const signedTransaction = StellarSdk.TransactionBuilder.fromXDR(
+      signResult.signedXdr,
       signedXdr,
       networkPassphrase
     ) as StellarSdk.Transaction;

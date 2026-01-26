@@ -15,7 +15,8 @@ TECH STACK:
 • Styling: Tailwind CSS 4
 • Animations: Framer Motion
 • Charts & Visualization: Recharts
-• Blockchain: Stellar SDK (@stellar/stellar-sdk v13.3.0), Freighter Wallet API (@stellar/freighter-api v6.0.1)
+• Blockchain: Stellar SDK (@stellar/stellar-sdk v13.3.0), Stellar Wallets Kit (@creit.tech/stellar-wallets-kit)
+• Wallet Support: Multi-wallet (Freighter Desktop/Mobile, Albedo, xBull, WalletConnect)
 • Database: Supabase (PostgreSQL) with SSR support
 • State Management: Zustand
 • Icons: Lucide React
@@ -31,11 +32,18 @@ FUNCTIONAL FEATURES (Currently Working):
 -----------------------------------------
 
 1. AUTHENTICATION & WALLET CONNECTION
-   • Freighter Wallet integration for connecting Stellar accounts
+   • Multi-wallet support via Stellar Wallets Kit
+   • Supported wallets: Freighter (Desktop & Mobile), Albedo, xBull, WalletConnect
+   • Automatic device detection (mobile vs desktop)
+   • Desktop: Auto-selects Freighter browser extension
+   • Mobile: WalletConnect deep-linking to mobile wallet apps
+   • Professional wallet connection modal with loading states
+   • Mobile help section with 4-step setup guide
    • Auto-detection of Freighter wallet installation
    • Public key retrieval and session management
    • Wallet disconnect functionality
    • Guest/authorized state management with Zustand
+   • Network-aware wallet connection (mainnet/testnet)
 
 2. NETWORK MANAGEMENT
    • Toggle between Stellar testnet and mainnet

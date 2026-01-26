@@ -2,15 +2,22 @@
 
 import Link from 'next/link';
 import { Sparkles, Menu, X, Wallet } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/authStore';
-import * as freighter from '@stellar/freighter-api';
+import WalletConnectionModal from './WalletConnectionModal';
+import { connectWallet, isMobileDevice } from '@/lib/wallet-service';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
-  const { setAuthorized } = useAuthStore();
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const { setAuthorized, network } = useAuthStore();
+
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
 
   const navLinks = [
     { name: 'Features', href: '#features' },
@@ -19,53 +26,39 @@ export default function Navbar() {
     { name: 'Contact', href: '#contact' },
   ];
 
+  const handleConnectClick = () => {
+    setShowWalletModal(true);
+  };
+
   const handleConnect = async () => {
     setIsConnecting(true);
+    
     try {
-      // Check if Freighter is installed
-      const connected = await freighter.isConnected();
+      const result = await connectWallet(network);
       
-      if (!connected) {
-        window.open('https://www.freighter.app/', '_blank');
-        toast.error('Freighter Wallet Not Found', {
-          description: 'Please install Freighter from freighter.app and refresh the page.',
-          duration: 6000,
-        });
+      if (!result.success) {
+        if (result.error?.includes('cancelled')) {
+          toast.info('Connection Cancelled', {
+            description: 'Wallet connection was cancelled',
+          });
+        } else {
+          toast.error('Connection Failed', {
+            description: result.error || 'Failed to connect wallet',
+            duration: 5000,
+          });
+        }
         setIsConnecting(false);
+        setShowWalletModal(false);
         return;
       }
 
-      // Request access to the wallet
-      const accessResult = await freighter.requestAccess();
-      
-      if (accessResult.error) {
-        console.error('Access denied:', accessResult.error);
-        toast.error('Access Denied', {
-          description: 'Please approve the Freighter wallet connection request.',
-          duration: 5000,
-        });
-        setIsConnecting(false);
-        return;
-      }
-
-      // Get the wallet address
-      const addressResult = await freighter.getAddress();
-      
-      if (addressResult.error) {
-        console.error('Failed to get address:', addressResult.error);
-        toast.error('Connection Failed', {
-          description: 'Failed to retrieve wallet address. Please try again.',
-        });
-        setIsConnecting(false);
-        return;
-      }
-
-      if (addressResult.address) {
-        console.log('Connected to wallet:', addressResult.address);
-        setAuthorized(addressResult.address);
+      if (result.publicKey) {
+        console.log('Connected to wallet:', result.publicKey);
+        setAuthorized(result.publicKey);
         toast.success('Wallet Connected', {
-          description: `Connected to ${addressResult.address.slice(0, 8)}...${addressResult.address.slice(-8)}`,
+          description: `Connected to ${result.publicKey.slice(0, 8)}...${result.publicKey.slice(-8)}`,
         });
+        setShowWalletModal(false);
       }
     } catch (error) {
       console.error('Failed to connect wallet:', error);
@@ -108,7 +101,7 @@ export default function Navbar() {
           {/* Desktop CTA Button */}
           <div className="hidden md:block">
             <button
-              onClick={handleConnect}
+              onClick={handleConnectClick}
               disabled={isConnecting}
               className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
               suppressHydrationWarning
@@ -143,7 +136,7 @@ export default function Navbar() {
               </a>
             ))}
             <button
-              onClick={handleConnect}
+              onClick={handleConnectClick}
               disabled={isConnecting}
               className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -153,6 +146,15 @@ export default function Navbar() {
           </div>
         </div>
       )}
+      
+      {/* Wallet Connection Modal */}
+      <WalletConnectionModal
+        isOpen={showWalletModal}
+        onClose={() => setShowWalletModal(false)}
+        onConnect={handleConnect}
+        isConnecting={isConnecting}
+        isMobile={isMobile}
+      />
     </nav>
   );
 }

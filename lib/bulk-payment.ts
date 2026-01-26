@@ -1,5 +1,5 @@
 import * as StellarSdk from '@stellar/stellar-sdk';
-import { signTransaction } from '@stellar/freighter-api';
+import { signTransactionWithKit } from '@/lib/wallet-service';
 import type { NetworkType } from '@/app/store/authStore';
 
 // Maximum operations per transaction (Stellar supports up to 100)
@@ -136,30 +136,21 @@ async function processBatch(
     const xdr = transaction.toXDR();
     const networkPassphrase = getNetworkPassphrase(network);
     
-    // Sign with Freighter
-    let signedXdr: string;
-    try {
-      const signResult = await signTransaction(xdr, { networkPassphrase });
-      
-      if (typeof signResult === 'string') {
-        signedXdr = signResult;
-      } else if (signResult && 'signedTxXdr' in signResult) {
-        signedXdr = signResult.signedTxXdr;
-      } else {
-        throw new Error('Invalid response from Freighter');
-      }
-    } catch (signError: any) {
+    // Sign with connected wallet
+    const signResult = await signTransactionWithKit(xdr, network);
+    
+    if (!signResult.success || !signResult.signedXdr) {
       return {
         success: false,
         recipients,
-        error: `Transaction signing failed: ${signError.message || 'User rejected'}`,
+        error: `Transaction signing failed: ${signResult.error || 'User rejected'}`,
         failedRecipients: recipients,
       };
     }
     
     // Reconstruct and submit
     const signedTransaction = StellarSdk.TransactionBuilder.fromXDR(
-      signedXdr,
+      signResult.signedXdr,
       networkPassphrase
     ) as StellarSdk.Transaction;
     

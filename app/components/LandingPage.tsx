@@ -20,75 +20,71 @@ import {
 import Navbar from './Navbar';
 import Footer from './Footer';
 import AnimatedBackground from './AnimatedBackground';
+import WalletConnectionModal from './WalletConnectionModal';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/authStore';
-import * as freighter from '@stellar/freighter-api';
+import { connectWallet, isMobileDevice } from '@/lib/wallet-service';
 import { useState, useRef, useEffect } from 'react';
 
 export default function LandingPage() {
   const [isConnecting, setIsConnecting] = useState(false);
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: ''
   });
-  const { setAuthorized } = useAuthStore();
+  const { setAuthorized, network } = useAuthStore();
   const isMountedRef = useRef(true);
 
   useEffect(() => {
+    // Detect mobile device
+    setIsMobile(isMobileDevice());
+    
     return () => {
       isMountedRef.current = false;
     };
   }, []);
 
+  const handleConnectClick = () => {
+    setShowWalletModal(true);
+  };
+
   const handleConnect = async () => {
     if (!isMountedRef.current) return;
     setIsConnecting(true);
+    
     try {
-      // Check if Freighter is installed
-      const connected = await freighter.isConnected();
+      const result = await connectWallet(network);
       
-      if (!connected) {
-        window.open('https://www.freighter.app/', '_blank');
-        toast.error('Freighter Wallet Not Found', {
-          description: 'Please install Freighter from freighter.app and refresh the page.',
-          duration: 6000,
-        });
-        if (isMountedRef.current) setIsConnecting(false);
+      if (!result.success) {
+        if (result.error?.includes('cancelled')) {
+          toast.info('Connection Cancelled', {
+            description: 'Wallet connection was cancelled',
+          });
+        } else {
+          toast.error('Connection Failed', {
+            description: result.error || 'Failed to connect wallet',
+            duration: 5000,
+          });
+        }
+        if (isMountedRef.current) {
+          setIsConnecting(false);
+          setShowWalletModal(false);
+        }
         return;
       }
 
-      // Request access to the wallet
-      const accessResult = await freighter.requestAccess();
-      
-      if (accessResult.error) {
-        console.error('Access denied:', accessResult.error);
-        toast.error('Access Denied', {
-          description: 'Please approve the Freighter wallet connection request.',
-          duration: 5000,
-        });
-        if (isMountedRef.current) setIsConnecting(false);
-        return;
-      }
-
-      // Get the wallet address
-      const addressResult = await freighter.getAddress();
-      
-      if (addressResult.error) {
-        console.error('Failed to get address:', addressResult.error);
-        toast.error('Connection Failed', {
-          description: 'Failed to retrieve wallet address. Please try again.',
-        });
-        if (isMountedRef.current) setIsConnecting(false);
-        return;
-      }
-
-      if (addressResult.address) {
-        console.log('Connected to wallet:', addressResult.address);
-        setAuthorized(addressResult.address);
+      if (result.publicKey) {
+        console.log('Connected to wallet:', result.publicKey);
+        setAuthorized(result.publicKey);
         toast.success('Wallet Connected', {
-          description: `Connected to ${addressResult.address.slice(0, 8)}...${addressResult.address.slice(-8)}`,
+          description: `Connected to ${result.publicKey.slice(0, 8)}...${result.publicKey.slice(-8)}`,
         });
+        if (isMountedRef.current) {
+          setShowWalletModal(false);
+        }
       }
     } catch (error) {
       console.error('Failed to connect wallet:', error);
@@ -174,7 +170,7 @@ export default function LandingPage() {
               {/* CTA Button */}
               <motion.div variants={fadeInUp} className="pt-4">
                 <button
-                  onClick={handleConnect}
+                  onClick={handleConnectClick}
                   disabled={isConnecting}
                   className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                   suppressHydrationWarning
@@ -322,7 +318,7 @@ export default function LandingPage() {
                 ))}
               </ul>
               <button
-                onClick={handleConnect}
+                onClick={handleConnectClick}
                 className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
               >
                 Get Started
@@ -359,7 +355,7 @@ export default function LandingPage() {
                 ))}
               </ul>
               <button
-                onClick={handleConnect}
+                onClick={handleConnectClick}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25"
               >
                 Get Started
@@ -687,7 +683,7 @@ export default function LandingPage() {
                 Join thousands of companies using Stellar Payroll to pay their global teams faster and cheaper.
               </p>
               <button
-                onClick={handleConnect}
+                onClick={handleConnectClick}
                 disabled={isConnecting}
                 className="inline-flex items-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-slate-100 transition-all duration-300 hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -701,6 +697,15 @@ export default function LandingPage() {
       </main>
 
       <Footer />
+      
+      {/* Wallet Connection Modal */}
+      <WalletConnectionModal
+        isOpen={showWalletModal}
+        onClose={() => setShowWalletModal(false)}
+        onConnect={handleConnect}
+        isConnecting={isConnecting}
+        isMobile={isMobile}
+      />
     </div>
   );
 }
