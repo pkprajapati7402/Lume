@@ -1,4 +1,4 @@
-import { createServerSupabaseClient } from './supabase'
+import { createServerSupabaseClient } from './supabase-server'
 import type { PayoutInsert } from '@/types/database'
 
 interface TransactionResult {
