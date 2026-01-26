@@ -3,12 +3,21 @@ import { isConnected, requestAccess, signTransaction } from '@stellar/freighter-
 import type { NetworkType } from '@/app/store/authStore';
 
 // Asset issuers on Stellar (these are well-known anchors)
-const ASSET_ISSUERS = {
+const MAINNET_ASSET_ISSUERS = {
   USDC: 'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN', // Circle on Stellar
   EURT: 'GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S', // Tempo on Stellar
   NGNT: 'GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3XQAQEU6XFKFJF7CSCN', // Cowrie on Stellar
   BRLT: 'GDVKY2GU2DRXWTBEYJJWSFXIGBZV6AZNBVVSUHEPZI54LIS6BA7DVVSP', // BRLTZ
   ARST: 'GCYE7C77EB5AWAA25R5XMWNI2EDOKTTFTTPZKM2SR5DI4B4WFD52DARS', // Anclap
+};
+
+// Testnet asset issuers (using Stellar testnet anchors)
+const TESTNET_ASSET_ISSUERS = {
+  USDC: 'GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5', // Testnet USDC
+  EURT: 'GAKNDFRRWA3RPWNLTI3G4EBSD3RGNZZOY5WKWYMQ6CQTG3KIEKPYWAYC', // Testnet EURT
+  NGNT: 'GAKNDFRRWA3RPWNLTI3G4EBSD3RGNZZOY5WKWYMQ6CQTG3KIEKPYWAYC', // Testnet token
+  BRLT: 'GAKNDFRRWA3RPWNLTI3G4EBSD3RGNZZOY5WKWYMQ6CQTG3KIEKPYWAYC', // Testnet token
+  ARST: 'GAKNDFRRWA3RPWNLTI3G4EBSD3RGNZZOY5WKWYMQ6CQTG3KIEKPYWAYC', // Testnet token
 };
 
 // Get the Horizon server based on network
@@ -32,9 +41,11 @@ function createAsset(assetCode: string, network: NetworkType): StellarSdk.Asset 
     return StellarSdk.Asset.native();
   }
 
-  const issuer = ASSET_ISSUERS[assetCode as keyof typeof ASSET_ISSUERS];
+  const issuers = network === 'mainnet' ? MAINNET_ASSET_ISSUERS : TESTNET_ASSET_ISSUERS;
+  const issuer = issuers[assetCode as keyof typeof issuers];
+  
   if (!issuer) {
-    throw new Error(`Unknown asset: ${assetCode}`);
+    throw new Error(`Unknown asset: ${assetCode} on ${network}`);
   }
 
   return new StellarSdk.Asset(assetCode, issuer);
