@@ -151,16 +151,49 @@ export async function handlePayment(params: PaymentParams): Promise<PaymentResul
     const sendAsset = createAsset(sendAssetCode, network);
     const receiveAsset = createAsset(receiveAssetCode, network);
 
-    // Add operation based on whether assets match
+    // Check if destination account exists (only for non-XLM or if receiving different asset)
+    let accountExists = true;
+    if (sendAssetCode !== 'XLM' || receiveAssetCode !== 'XLM') {
+      try {
+        await server.loadAccount(destinationAddress);
+      } catch (error: any) {
+        if (error.response?.status === 404) {
+          accountExists = false;
+        }
+      }
+    }
+
+    // Add operation based on whether assets match and account exists
     if (sendAssetCode === receiveAssetCode) {
-      // Simple payment - same asset
-      transactionBuilder.addOperation(
-        StellarSdk.Operation.payment({
-          destination: destinationAddress,
-          asset: sendAsset,
-          amount: sendAmount,
-        })
-      );
+      // Check if this is XLM payment to non-existent account
+      if (sendAssetCode === 'XLM' && !accountExists) {
+        // Use createAccount operation for new accounts (requires minimum 1 XLM)
+        const amount = parseFloat(sendAmount);
+        if (amount < 1) {
+          return {
+            success: false,
+            amount: parseFloat(sendAmount),
+            assetCode: sendAssetCode,
+            error: 'Account does not exist. Minimum 1 XLM required to create new account.',
+          };
+        }
+        
+        transactionBuilder.addOperation(
+          StellarSdk.Operation.createAccount({
+            destination: destinationAddress,
+            startingBalance: sendAmount,
+          })
+        );
+      } else {
+        // Simple payment - same asset
+        transactionBuilder.addOperation(
+          StellarSdk.Operation.payment({
+            destination: destinationAddress,
+            asset: sendAsset,
+            amount: sendAmount,
+          })
+        );
+      }
     } else {
       // Path payment - different assets (automatic DEX conversion)
       // Using pathPaymentStrictSend to ensure exact send amount
@@ -284,7 +317,8 @@ export async function checkDestinationAccount(
     }
 
     // Check if account has trustline for the asset
-    const issuer = ASSET_ISSUERS[assetCode as keyof typeof ASSET_ISSUERS];
+    const issuers = network === 'mainnet' ? MAINNET_ASSET_ISSUERS : TESTNET_ASSET_ISSUERS;
+    const issuer = issuers[assetCode as keyof typeof issuers];
     const hasTrustline = account.balances.some(
       (balance: any) =>
         balance.asset_code === assetCode &&
@@ -294,6 +328,14 @@ export async function checkDestinationAccount(
     return { exists: true, hasTrustline };
   } catch (error: any) {
     if (error.response?.status === 404) {
+      // For XLM, non-existent accounts can be created with payment
+      if (assetCode === 'XLM') {
+        return { 
+          exists: false, 
+          hasTrustline: true, // XLM doesn't need trustline
+          error: 'Account will be created (requires minimum 1 XLM)' 
+        };
+      }
       return { exists: false, hasTrustline: false, error: 'Account does not exist' };
     }
     return { exists: false, hasTrustline: false, error: error.message };

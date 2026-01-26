@@ -23,9 +23,9 @@ interface Asset {
 export default function PayEmployeeSection() {
   const { publicKey, network } = useAuthStore();
   
-  const [fromAsset, setFromAsset] = useState<Asset>({ code: 'USDC', name: 'USD Coin', icon: '💵' });
-  const [toAsset, setToAsset] = useState<Asset>({ code: 'NGNT', name: 'Nigerian Naira', icon: '🇳🇬' });
-  const [amount, setAmount] = useState('1000');
+  const [fromAsset, setFromAsset] = useState<Asset>({ code: 'XLM', name: 'Stellar Lumens', icon: '⭐' });
+  const [toAsset, setToAsset] = useState<Asset>({ code: 'XLM', name: 'Stellar Lumens', icon: '⭐' });
+  const [amount, setAmount] = useState('');
   const [recipientAddress, setRecipientAddress] = useState('');
   const [memo, setMemo] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,6 +34,7 @@ export default function PayEmployeeSection() {
   const [validationError, setValidationError] = useState<string>('');
 
   const assets: Asset[] = [
+    { code: 'XLM', name: 'Stellar Lumens', icon: '⭐' },
     { code: 'USDC', name: 'USD Coin', icon: '💵' },
     { code: 'EURT', name: 'Euro Token', icon: '🇪🇺' },
     { code: 'NGNT', name: 'Nigerian Naira', icon: '🇳🇬' },
@@ -155,7 +156,24 @@ export default function PayEmployeeSection() {
         network
       );
 
-      if (!accountCheck.exists) {
+      // Special handling for XLM to non-existent accounts
+      if (!accountCheck.exists && toAsset.code === 'XLM') {
+        const xlmAmount = parseFloat(amount);
+        if (xlmAmount < 1) {
+          toast.error('Insufficient Amount for Account Creation', {
+            description: 'Minimum 1 XLM required to create a new account on Stellar network',
+            id: toastId,
+          });
+          setIsSubmitting(false);
+          return;
+        }
+        // Continue with payment - it will create the account
+        toast.loading('Creating new account and sending payment...', {
+          description: 'This will create a new Stellar account',
+          id: toastId,
+        });
+      } else if (!accountCheck.exists) {
+        // Non-XLM asset to non-existent account
         toast.error('Account Not Found', {
           description: 'Recipient account does not exist on the Stellar network',
           id: toastId,

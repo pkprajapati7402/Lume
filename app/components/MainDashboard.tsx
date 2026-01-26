@@ -13,17 +13,19 @@ import {
   Sparkles,
   Menu,
   X,
-  History
+  History,
+  BarChart3
 } from 'lucide-react';
 import OverviewSection from './dashboard/OverviewSection';
 import PayEmployeeSection from './dashboard/PayEmployeeSection';
 import BulkUploadSection from './dashboard/BulkUploadSection';
 import DirectorySection from './dashboard/DirectorySection';
 import HistoryTable from './dashboard/HistoryTable';
+import AnalyticsDashboard from './dashboard/AnalyticsDashboard';
 import { getEmployees } from '../actions/employees';
 import type { Employee } from '@/types/database';
 
-type Section = 'overview' | 'pay' | 'bulk' | 'directory' | 'history';
+type Section = 'overview' | 'pay' | 'bulk' | 'directory' | 'history' | 'analytics';
 
 export default function MainDashboard() {
   const { publicKey, setGuest, network, setNetwork } = useAuthStore();
@@ -63,6 +65,7 @@ export default function MainDashboard() {
     { id: 'bulk' as Section, label: 'Bulk Upload', icon: Upload },
     { id: 'directory' as Section, label: 'Directory', icon: Users },
     { id: 'history' as Section, label: 'Transaction History', icon: History },
+    { id: 'analytics' as Section, label: 'Analytics', icon: BarChart3 },
   ];
 
   const renderSection = () => {
@@ -77,6 +80,8 @@ export default function MainDashboard() {
         return <DirectorySection initialEmployees={employees} />;
       case 'history':
         return <HistoryTable />;
+      case 'analytics':
+        return <AnalyticsDashboard publicKey={publicKey || ''} network={network} />;
       default:
         return <OverviewSection />;
     }

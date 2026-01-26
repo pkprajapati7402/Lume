@@ -23,13 +23,26 @@ import AnimatedBackground from './AnimatedBackground';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/authStore';
 import * as freighter from '@stellar/freighter-api';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function LandingPage() {
   const [isConnecting, setIsConnecting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
   const { setAuthorized } = useAuthStore();
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const handleConnect = async () => {
+    if (!isMountedRef.current) return;
     setIsConnecting(true);
     try {
       // Check if Freighter is installed
@@ -41,7 +54,7 @@ export default function LandingPage() {
           description: 'Please install Freighter from freighter.app and refresh the page.',
           duration: 6000,
         });
-        setIsConnecting(false);
+        if (isMountedRef.current) setIsConnecting(false);
         return;
       }
 
@@ -54,7 +67,7 @@ export default function LandingPage() {
           description: 'Please approve the Freighter wallet connection request.',
           duration: 5000,
         });
-        setIsConnecting(false);
+        if (isMountedRef.current) setIsConnecting(false);
         return;
       }
 
@@ -66,7 +79,7 @@ export default function LandingPage() {
         toast.error('Connection Failed', {
           description: 'Failed to retrieve wallet address. Please try again.',
         });
-        setIsConnecting(false);
+        if (isMountedRef.current) setIsConnecting(false);
         return;
       }
 
@@ -83,7 +96,7 @@ export default function LandingPage() {
         description: error instanceof Error ? error.message : 'Failed to connect wallet',
       });
     } finally {
-      setIsConnecting(false);
+      if (isMountedRef.current) setIsConnecting(false);
     }
   };
 
@@ -556,11 +569,13 @@ export default function LandingPage() {
               transition={{ duration: 0.6 }}
               className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8"
             >
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
                 <div>
                   <label className="block text-slate-300 text-sm font-medium mb-2">Name</label>
                   <input
                     type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
                     placeholder="John Doe"
                   />
@@ -569,6 +584,8 @@ export default function LandingPage() {
                   <label className="block text-slate-300 text-sm font-medium mb-2">Email</label>
                   <input
                     type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
                     placeholder="john@company.com"
                   />
@@ -577,6 +594,8 @@ export default function LandingPage() {
                   <label className="block text-slate-300 text-sm font-medium mb-2">Message</label>
                   <textarea
                     rows={5}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"
                     placeholder="Tell us about your payroll needs..."
                   />

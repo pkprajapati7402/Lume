@@ -3,41 +3,122 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
+interface Star {
+  id: number;
+  size: number;
+  left: string;
+  top: string;
+  delay: number;
+  duration: number;
+  opacity: number;
+}
+
+interface Particle {
+  id: number;
+  size: number;
+  left: string;
+  top: string;
+  delay: number;
+  duration: number;
+}
+
+interface ShootingStar {
+  id: number;
+  delay: number;
+  duration: number;
+  left: string;
+  top: string;
+}
+
 export default function AnimatedBackground() {
-  const [shootingStars, setShootingStars] = useState<Array<{ id: number; delay: number; duration: number; left: string; top: string }>>([]);
+  const [shootingStars, setShootingStars] = useState<ShootingStar[]>([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const [stars, setStars] = useState<Star[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     // Generate shooting stars
-    const stars = Array.from({ length: 8 }, (_, i) => ({
+    const shootingStarsData = Array.from({ length: 8 }, (_, i) => ({
       id: i,
       delay: Math.random() * 10,
       duration: 1 + Math.random() * 2,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 60}%`
     }));
-    setShootingStars(stars);
+    setShootingStars(shootingStarsData);
+
+    // Generate floating particles
+    const particlesData = Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      size: 2 + Math.random() * 3,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      delay: Math.random() * 5,
+      duration: 3 + Math.random() * 4
+    }));
+    setParticles(particlesData);
+
+    // Generate starfield
+    const starsData = Array.from({ length: 150 }, (_, i) => ({
+      id: i,
+      size: Math.random() < 0.7 ? 1 : Math.random() < 0.9 ? 2 : 3,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      delay: Math.random() * 10,
+      duration: 2 + Math.random() * 6,
+      opacity: 0.3 + Math.random() * 0.7
+    }));
+    setStars(starsData);
+
+    setIsMounted(true);
   }, []);
 
-  // Floating particles
-  const particles = Array.from({ length: 20 }, (_, i) => ({
-    id: i,
-    size: 2 + Math.random() * 3,
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    delay: Math.random() * 5,
-    duration: 3 + Math.random() * 4
-  }));
-
-  // Starfield - lots of blinking stars
-  const stars = Array.from({ length: 150 }, (_, i) => ({
-    id: i,
-    size: Math.random() < 0.7 ? 1 : Math.random() < 0.9 ? 2 : 3, // Most stars are small
-    left: `${Math.random() * 100}%`,
-    top: `${Math.random() * 100}%`,
-    delay: Math.random() * 10,
-    duration: 2 + Math.random() * 6,
-    opacity: 0.3 + Math.random() * 0.7
-  }));
+  // Don't render animated elements until mounted to prevent hydration errors
+  if (!isMounted) {
+    return (
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Gradient Orbs - static elements are safe */}
+        <motion.div
+          className="absolute -top-40 -right-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute top-60 -left-40 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-1/3 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.4, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
