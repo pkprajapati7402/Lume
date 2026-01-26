@@ -223,7 +223,6 @@ export async function handlePayment(params: PaymentParams): Promise<PaymentResul
     // Reconstruct transaction from signed XDR
     const signedTransaction = StellarSdk.TransactionBuilder.fromXDR(
       signResult.signedXdr,
-      signedXdr,
       networkPassphrase
     ) as StellarSdk.Transaction;
 
