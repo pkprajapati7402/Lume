@@ -20,6 +20,8 @@ export interface Database {
           role: string
           preferred_asset: string
           department: string
+          employee_type: 'employee' | 'contractor'
+          tax_rate: number
           created_at: string
         }
         Insert: {
@@ -30,6 +32,8 @@ export interface Database {
           role: string
           preferred_asset: string
           department: string
+          employee_type?: 'employee' | 'contractor'
+          tax_rate?: number
           created_at?: string
         }
         Update: {
@@ -40,6 +44,8 @@ export interface Database {
           role?: string
           preferred_asset?: string
           department?: string
+          employee_type?: 'employee' | 'contractor'
+          tax_rate?: number
           created_at?: string
         }
       }
@@ -53,6 +59,8 @@ export interface Database {
           status: 'pending' | 'success' | 'failed'
           transaction_hash: string | null
           batch_id: string | null
+          tax_withheld: number
+          net_amount: number
           created_at: string
         }
         Insert: {
@@ -64,6 +72,8 @@ export interface Database {
           status?: 'pending' | 'success' | 'failed'
           transaction_hash?: string | null
           batch_id?: string | null
+          tax_withheld?: number
+          net_amount?: number
           created_at?: string
         }
         Update: {
@@ -75,6 +85,8 @@ export interface Database {
           status?: 'pending' | 'success' | 'failed'
           transaction_hash?: string | null
           batch_id?: string | null
+          tax_withheld?: number
+          net_amount?: number
           created_at?: string
         }
       }

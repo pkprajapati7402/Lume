@@ -14,7 +14,8 @@ import {
   Menu,
   X,
   History,
-  BarChart3
+  BarChart3,
+  FileText
 } from 'lucide-react';
 import OverviewSection from './dashboard/OverviewSection';
 import PayEmployeeSection from './dashboard/PayEmployeeSection';
@@ -22,10 +23,11 @@ import BulkUploadSection from './dashboard/BulkUploadSection';
 import DirectorySection from './dashboard/DirectorySection';
 import HistoryTable from './dashboard/HistoryTable';
 import AnalyticsDashboard from './dashboard/AnalyticsDashboard';
+import ComplianceSection from './dashboard/ComplianceSection';
 import { getEmployees } from '../actions/employees';
 import type { Employee } from '@/types/database';
 
-type Section = 'overview' | 'pay' | 'bulk' | 'directory' | 'history' | 'analytics';
+type Section = 'overview' | 'pay' | 'bulk' | 'directory' | 'history' | 'analytics' | 'compliance';
 
 export default function MainDashboard() {
   const { publicKey, setGuest, network, setNetwork } = useAuthStore();
@@ -66,6 +68,7 @@ export default function MainDashboard() {
     { id: 'directory' as Section, label: 'Directory', icon: Users },
     { id: 'history' as Section, label: 'Transaction History', icon: History },
     { id: 'analytics' as Section, label: 'Analytics', icon: BarChart3 },
+    { id: 'compliance' as Section, label: 'Compliance', icon: FileText },
   ];
 
   const renderSection = () => {
@@ -82,6 +85,8 @@ export default function MainDashboard() {
         return <HistoryTable />;
       case 'analytics':
         return <AnalyticsDashboard publicKey={publicKey || ''} network={network} />;
+      case 'compliance':
+        return <ComplianceSection publicKey={publicKey || ''} network={network} />;
       default:
         return <OverviewSection />;
     }

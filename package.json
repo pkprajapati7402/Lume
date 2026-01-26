@@ -38,6 +38,7 @@
     "framer-motion": "^12.28.1",
     "json-2-csv": "^5.5.10",
     "json2csv": "^6.0.0-alpha.2",
+    "jspdf": "^4.0.0",
     "lucide-react": "^0.562.0",
     "next": "16.1.4",
     "react": "19.2.3",
