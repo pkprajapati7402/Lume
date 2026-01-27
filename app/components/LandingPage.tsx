@@ -565,6 +565,7 @@ export default function LandingPage() {
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
                     placeholder="John Doe"
+                    autoComplete="name"
                   />
                 </div>
                 <div>
@@ -575,6 +576,7 @@ export default function LandingPage() {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
                     placeholder="john@company.com"
+                    autoComplete="email"
                   />
                 </div>
                 <div>
@@ -585,6 +587,7 @@ export default function LandingPage() {
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"
                     placeholder="Tell us about your payroll needs..."
+                    autoComplete="off"
                   />
                 </div>
                 <button
