@@ -57,5 +57,11 @@
     "eslint-config-next": "16.1.4",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "valtio": {
+      "use-sync-external-store": "^1.2.0",
+      "react": "$react"
+    }
   }
 }

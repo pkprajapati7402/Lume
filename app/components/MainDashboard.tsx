@@ -83,10 +83,14 @@ export default function MainDashboard() {
     setActiveSection('pay');
   };
 
+  const handleNavigate = (section: string) => {
+    setActiveSection(section as Section);
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'overview':
-        return <OverviewSection onNavigate={setActiveSection} />;
+        return <OverviewSection onNavigate={handleNavigate} />;
       case 'pay':
         return <PayEmployeeSection prefilledData={prefilledPaymentData} />;
       case 'bulk':
