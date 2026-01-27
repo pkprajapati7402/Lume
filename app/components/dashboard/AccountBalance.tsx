@@ -61,11 +61,13 @@ export default function AccountBalance() {
       setLastUpdated(new Date());
     } catch (err: any) {
       if (err?.response?.status === 404) {
-        setError('Account not funded yet. Fund your testnet account to see balances.');
+        const networkName = network === 'testnet' ? 'Testnet' : 'Mainnet';
+        setError(`Account not found on ${networkName}. Your wallet may not be funded on this network yet.`);
+        // Don't log 404 errors to console - they're expected when switching networks
       } else {
         setError(err instanceof Error ? err.message : 'Failed to fetch balances');
+        console.error('Balance fetch error:', err);
       }
-      console.error('Balance fetch error:', err);
     } finally {
       setIsLoading(false);
     }

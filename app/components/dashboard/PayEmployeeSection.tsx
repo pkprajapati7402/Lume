@@ -20,14 +20,22 @@ interface Asset {
   icon: string;
 }
 
-export default function PayEmployeeSection() {
+interface PayEmployeeSectionProps {
+  prefilledData?: {
+    recipientAddress?: string;
+    recipientName?: string;
+    preferredAsset?: string;
+  };
+}
+
+export default function PayEmployeeSection({ prefilledData }: PayEmployeeSectionProps = {}) {
   const { publicKey, network } = useAuthStore();
   
   const [fromAsset, setFromAsset] = useState<Asset>({ code: 'XLM', name: 'Stellar Lumens', icon: '⭐' });
   const [toAsset, setToAsset] = useState<Asset>({ code: 'XLM', name: 'Stellar Lumens', icon: '⭐' });
   const [amount, setAmount] = useState('');
-  const [recipientAddress, setRecipientAddress] = useState('');
-  const [memo, setMemo] = useState('');
+  const [recipientAddress, setRecipientAddress] = useState(prefilledData?.recipientAddress || '');
+  const [memo, setMemo] = useState(prefilledData?.recipientName ? `Payment to ${prefilledData.recipientName}` : '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [estimatedReceiveAmount, setEstimatedReceiveAmount] = useState<string>('');
   const [estimateLoading, setEstimateLoading] = useState(false);
@@ -41,6 +49,16 @@ export default function PayEmployeeSection() {
     { code: 'BRLT', name: 'Brazilian Real', icon: '🇧🇷' },
     { code: 'ARST', name: 'Argentine Peso', icon: '🇦🇷' },
   ];
+
+  // Set preferred asset if provided
+  useEffect(() => {
+    if (prefilledData?.preferredAsset) {
+      const asset = assets.find(a => a.code === prefilledData.preferredAsset);
+      if (asset) {
+        setToAsset(asset);
+      }
+    }
+  }, [prefilledData]);
 
   // Update estimated receive amount when parameters change
   useEffect(() => {

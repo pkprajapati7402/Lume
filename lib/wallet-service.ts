@@ -198,6 +198,22 @@ export async function signTransactionWithKit(
   try {
     const kit = getWalletKit(network);
     
+    if (!kit) {
+      console.error('Wallet kit is not initialized');
+      return {
+        success: false,
+        error: 'Wallet is not connected. Please reconnect your wallet.',
+      };
+    }
+    
+    if (!xdr) {
+      console.error('No XDR provided for signing');
+      return {
+        success: false,
+        error: 'Invalid transaction data',
+      };
+    }
+    
     // Sign the transaction
     const { signedTxXdr } = await kit.signTransaction(xdr);
 
@@ -213,10 +229,18 @@ export async function signTransactionWithKit(
       signedXdr: signedTxXdr,
     };
   } catch (error: any) {
-    console.error('Transaction signing error:', error);
+    // Enhanced error logging to capture all error details
+    console.error('Transaction signing error:', {
+      message: error?.message,
+      name: error?.name,
+      stack: error?.stack,
+      error: error,
+      errorString: String(error),
+      errorJSON: JSON.stringify(error, Object.getOwnPropertyNames(error))
+    });
 
     // Handle user rejection
-    if (error.message?.includes('User rejected') || error.message?.includes('User cancelled') || error.message?.includes('cancelled')) {
+    if (error?.message?.includes('User rejected') || error?.message?.includes('User cancelled') || error?.message?.includes('cancelled')) {
       return {
         success: false,
         error: 'Transaction rejected by user',
@@ -224,7 +248,7 @@ export async function signTransactionWithKit(
     }
 
     // Handle network errors
-    if (error.message?.includes('Network Error') || error.message?.includes('NetworkError') || error.message?.includes('Failed to fetch')) {
+    if (error?.message?.includes('Network Error') || error?.message?.includes('NetworkError') || error?.message?.includes('Failed to fetch')) {
       return {
         success: false,
         error: 'Network error during signing. Please check your connection and try again.',
@@ -232,7 +256,7 @@ export async function signTransactionWithKit(
     }
 
     // Handle timeout errors
-    if (error.message?.includes('timeout') || error.message?.includes('Timeout')) {
+    if (error?.message?.includes('timeout') || error?.message?.includes('Timeout')) {
       return {
         success: false,
         error: 'Transaction signing timeout. Please try again.',
@@ -241,7 +265,7 @@ export async function signTransactionWithKit(
 
     return {
       success: false,
-      error: error.message || 'Failed to sign transaction',
+      error: error?.message || error?.toString() || 'Failed to sign transaction',
     };
   }
 }

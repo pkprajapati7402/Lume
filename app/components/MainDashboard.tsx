@@ -29,12 +29,19 @@ import type { Employee } from '@/types/database';
 
 type Section = 'overview' | 'pay' | 'bulk' | 'directory' | 'history' | 'analytics' | 'compliance';
 
+interface PrefilledPaymentData {
+  recipientAddress?: string;
+  recipientName?: string;
+  preferredAsset?: string;
+}
+
 export default function MainDashboard() {
   const { publicKey, setGuest, network, setNetwork } = useAuthStore();
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [isLoadingEmployees, setIsLoadingEmployees] = useState(false);
+  const [prefilledPaymentData, setPrefilledPaymentData] = useState<PrefilledPaymentData | undefined>(undefined);
 
   useEffect(() => {
     if (activeSection === 'directory' && publicKey) {
@@ -71,16 +78,21 @@ export default function MainDashboard() {
     { id: 'compliance' as Section, label: 'Compliance', icon: FileText },
   ];
 
+  const handleQuickPay = (employeeData: PrefilledPaymentData) => {
+    setPrefilledPaymentData(employeeData);
+    setActiveSection('pay');
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'overview':
         return <OverviewSection />;
       case 'pay':
-        return <PayEmployeeSection />;
+        return <PayEmployeeSection prefilledData={prefilledPaymentData} />;
       case 'bulk':
         return <BulkUploadSection />;
       case 'directory':
-        return <DirectorySection initialEmployees={employees} />;
+        return <DirectorySection initialEmployees={employees} onQuickPay={handleQuickPay} />;
       case 'history':
         return <HistoryTable />;
       case 'analytics':

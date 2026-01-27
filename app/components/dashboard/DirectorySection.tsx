@@ -11,9 +11,14 @@ import EmployeeDetailModal from './EmployeeDetailModal';
 
 interface DirectorySectionProps {
   initialEmployees: Employee[];
+  onQuickPay?: (employeeData: {
+    recipientAddress: string;
+    recipientName: string;
+    preferredAsset: string;
+  }) => void;
 }
 
-export default function DirectorySection({ initialEmployees }: DirectorySectionProps) {
+export default function DirectorySection({ initialEmployees, onQuickPay }: DirectorySectionProps) {
   const { publicKey, network } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
@@ -217,7 +222,14 @@ export default function DirectorySection({ initialEmployees }: DirectorySectionP
                 <Eye className="w-4 h-4" />
                 View History
               </button>
-              <button className="bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-4 py-2 rounded-lg font-medium transition-all">
+              <button 
+                onClick={() => onQuickPay?.({
+                  recipientAddress: employee.wallet_address,
+                  recipientName: employee.full_name,
+                  preferredAsset: employee.preferred_asset
+                })}
+                className="bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-4 py-2 rounded-lg font-medium transition-all hover:scale-[1.02]"
+              >
                 Quick Pay
               </button>
             </div>

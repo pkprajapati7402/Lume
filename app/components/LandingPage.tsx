@@ -307,6 +307,7 @@ export default function LandingPage() {
                 onClick={handleConnect}
                 disabled={isConnecting}
                 className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                suppressHydrationWarning
               >
                 {isConnecting ? 'Connecting...' : 'Get Started'}
               </button>
@@ -345,6 +346,7 @@ export default function LandingPage() {
                 onClick={handleConnect}
                 disabled={isConnecting}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                suppressHydrationWarning
               >
                 {isConnecting ? 'Connecting...' : 'Get Started'}
               </button>
@@ -376,7 +378,10 @@ export default function LandingPage() {
                   </li>
                 ))}
               </ul>
-              <button className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all">
+              <button 
+                className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                suppressHydrationWarning
+              >
                 Contact Sales
               </button>
             </motion.div>
@@ -563,6 +568,7 @@ export default function LandingPage() {
                     className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
                     placeholder="John Doe"
                     autoComplete="name"
+                    suppressHydrationWarning
                   />
                 </div>
                 <div>
@@ -574,6 +580,7 @@ export default function LandingPage() {
                     className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
                     placeholder="john@company.com"
                     autoComplete="email"
+                    suppressHydrationWarning
                   />
                 </div>
                 <div>
@@ -585,6 +592,7 @@ export default function LandingPage() {
                     className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"
                     placeholder="Tell us about your payroll needs..."
                     autoComplete="off"
+                    suppressHydrationWarning
                   />
                 </div>
                 <button

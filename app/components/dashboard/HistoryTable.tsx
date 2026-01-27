@@ -78,12 +78,24 @@ export default function HistoryTable() {
       const server = new StellarSdk.Horizon.Server(horizonUrl);
       
       // Get transactions for the account
-      const txResponse = await server
-        .transactions()
-        .forAccount(publicKey)
-        .order('desc')
-        .limit(50)
-        .call();
+      let txResponse;
+      try {
+        txResponse = await server
+          .transactions()
+          .forAccount(publicKey)
+          .order('desc')
+          .limit(50)
+          .call();
+      } catch (txError: any) {
+        if (txError?.response?.status === 404) {
+          // Account not found or no transactions yet
+          const networkName = network === 'testnet' ? 'Testnet' : 'Mainnet';
+          setError(`Account not found on ${networkName}. Your wallet may not be funded on this network yet.`);
+          setIsLoading(false);
+          return;
+        }
+        throw txError;
+      }
 
       const stellarTxs: StellarTransaction[] = txResponse.records.map((tx: any) => ({
         id: tx.id,
@@ -125,8 +137,14 @@ export default function HistoryTable() {
 
       setTransactions(enriched);
     } catch (err: any) {
-      console.error('Failed to fetch transaction history:', err);
-      setError(err.message || 'Failed to load transaction history');
+      // Don't log 404 errors to console - they're expected when switching networks
+      if (err?.response?.status !== 404) {
+        console.error('Failed to fetch transaction history:', err);
+      }
+      const networkName = network === 'testnet' ? 'Testnet' : 'Mainnet';
+      setError(err?.response?.status === 404 
+        ? `No transaction history found on ${networkName}. Your account may not have any transactions yet.`
+        : (err.message || 'Failed to load transaction history'));
     } finally {
       setIsLoading(false);
     }

@@ -161,11 +161,25 @@ export async function handlePayment(params: PaymentParams): Promise<PaymentResul
     const networkPassphrase = getNetworkPassphrase(network);
 
     // Load source account with retry logic
-    const sourceAccount = await retryNetworkRequest(
-      () => server.loadAccount(sourcePublicKey),
-      3,
-      1000
-    );
+    let sourceAccount;
+    try {
+      sourceAccount = await retryNetworkRequest(
+        () => server.loadAccount(sourcePublicKey),
+        3,
+        1000
+      );
+    } catch (error: any) {
+      if (error?.response?.status === 404) {
+        const networkName = network === 'testnet' ? 'Testnet' : 'Mainnet';
+        return {
+          success: false,
+          amount: parseFloat(sendAmount),
+          assetCode: sendAssetCode,
+          error: `Your account is not funded on ${networkName}. Please fund your account first or switch to a different network.`,
+        };
+      }
+      throw error;
+    }
 
     // Create transaction builder
     const transactionBuilder = new StellarSdk.TransactionBuilder(sourceAccount, {

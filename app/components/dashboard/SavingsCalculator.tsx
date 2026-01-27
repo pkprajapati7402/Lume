@@ -77,10 +77,13 @@ export default function SavingsCalculator() {
       } catch (accountError: any) {
         if (accountError?.response?.status === 404) {
           // Account not found - not yet funded
-          setError('Account not funded yet. Fund your account to start tracking savings.');
+          const networkName = network === 'testnet' ? 'Testnet' : 'Mainnet';
+          setError(`Account not found on ${networkName}. Your wallet may not be funded on this network yet.`);
           setIsLoading(false);
           return;
         }
+        // Only log non-404 errors
+        console.error('Account load error:', accountError);
         throw accountError;
       }
 
