@@ -12,13 +12,18 @@ import {
   ExternalLink,
   ChevronRight,
   Activity,
-  Zap
+  Zap,
+  TrendingUp
 } from 'lucide-react';
 import { useStellarNetworkStats } from '../../hooks/useStellarNetworkStats';
 import LiquidityMonitor from './LiquidityMonitor';
 import SavingsCalculator from './SavingsCalculator';
 import AccountBalance from './AccountBalance';
 import XLMPriceChart from './XLMPriceChart';
+import { useAuthStore } from '../../store/authStore';
+import { useState, useEffect } from 'react';
+import { getDashboardStats } from '@/app/actions/dashboard-stats';
+import { getRecentPayments } from '@/app/actions/recent-payments';
 
 interface StatsCardProps {
   icon: React.ElementType;
@@ -27,31 +32,50 @@ interface StatsCardProps {
   subtitle: string;
   trend?: string;
   color: string;
+  isLoading?: boolean;
 }
 
-const StatsCard = ({ icon: Icon, label, value, subtitle, trend, color }: StatsCardProps) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-    className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/80 transition-all"
-  >
-    <div className="flex items-start justify-between mb-4">
-      <div className={`p-3 rounded-lg bg-gradient-to-br ${color}`}>
-        <Icon className="w-6 h-6 text-white" />
+interface OverviewSectionProps {
+  onNavigate?: (section: string) => void;
+}
+
+const StatsCard = ({ icon: Icon, label, value, subtitle, trend, color, isLoading }: StatsCardProps) => {
+  const isPositive = trend && parseFloat(trend) >= 0;
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/80 transition-all"
+    >
+      <div className="flex items-start justify-between mb-4">
+        <div className={`p-3 rounded-lg bg-gradient-to-br ${color}`}>
+          <Icon className="w-6 h-6 text-white" />
+        </div>
+        {trend && !isLoading && (
+          <span className={`${isPositive ? 'text-emerald-400' : 'text-red-400'} text-sm font-semibold flex items-center gap-1`}>
+            {isPositive ? (
+              <TrendingUp className="w-4 h-4" />
+            ) : (
+              <TrendingDown className="w-4 h-4" />
+            )}
+            {trend}
+          </span>
+        )}
       </div>
-      {trend && (
-        <span className="text-emerald-400 text-sm font-semibold flex items-center gap-1">
-          <TrendingDown className="w-4 h-4 rotate-180" />
-          {trend}
-        </span>
+      <h3 className="text-slate-400 text-sm mb-1">{label}</h3>
+      {isLoading ? (
+        <div className="h-10 bg-slate-700/50 animate-pulse rounded"></div>
+      ) : (
+        <>
+          <p className="text-3xl font-bold text-white mb-1">{value}</p>
+          <p className="text-slate-500 text-xs">{subtitle}</p>
+        </>
       )}
-    </div>
-    <h3 className="text-slate-400 text-sm mb-1">{label}</h3>
-    <p className="text-3xl font-bold text-white mb-1">{value}</p>
-    <p className="text-slate-500 text-xs">{subtitle}</p>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 interface RecentPayment {
   id: string;
@@ -60,87 +84,126 @@ interface RecentPayment {
   asset: string;
   date: string;
   txHash: string;
+  timeAgo: string;
 }
 
-export default function OverviewSection() {
+export default function OverviewSection({ onNavigate }: OverviewSectionProps = {}) {
+  const { publicKey, network } = useAuthStore();
   const { networkSpeed, baseFee, isLoading, error, lastUpdated } = useStellarNetworkStats(30000);
+  const [stats, setStats] = useState({
+    totalPaid: 0,
+    totalSaved: 0,
+    activeEmployees: 0,
+    totalPaidTrend: 0,
+    totalSavedTrend: 0,
+    thisMonthTotal: 0,
+    lastMonthTotal: 0,
+  });
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [recentPayments, setRecentPayments] = useState<RecentPayment[]>([]);
+  const [isLoadingPayments, setIsLoadingPayments] = useState(true);
 
-  const stats = [
+  useEffect(() => {
+    const fetchStats = async () => {
+      if (!publicKey) {
+        setIsLoadingStats(false);
+        return;
+      }
+      
+      setIsLoadingStats(true);
+      const result = await getDashboardStats(publicKey);
+      
+      if (result.data) {
+        setStats(result.data);
+      }
+      setIsLoadingStats(false);
+    };
+
+    fetchStats();
+    
+    // Refresh stats every 60 seconds
+    const interval = setInterval(fetchStats, 60000);
+    return () => clearInterval(interval);
+  }, [publicKey]);
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      if (!publicKey) {
+        setIsLoadingPayments(false);
+        setRecentPayments([]);
+        return;
+      }
+      
+      setIsLoadingPayments(true);
+      const result = await getRecentPayments(publicKey);
+      
+      if (result.success && result.data) {
+        setRecentPayments(result.data);
+      }
+      setIsLoadingPayments(false);
+    };
+
+    fetchPayments();
+    
+    // Refresh payments every 60 seconds
+    const interval = setInterval(fetchPayments, 60000);
+    return () => clearInterval(interval);
+  }, [publicKey]);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  };
+
+  const formatTrend = (value: number) => {
+    const sign = value >= 0 ? '+' : '';
+    return `${sign}${value.toFixed(1)}%`;
+  };
+
+  const statsCards = [
     {
       icon: DollarSign,
       label: 'Total Paid',
-      value: '$128,450',
+      value: formatCurrency(stats.totalPaid),
       subtitle: 'Last 30 days',
-      trend: '+12.5%',
+      trend: formatTrend(stats.totalPaidTrend),
       color: 'from-indigo-500 to-indigo-600'
     },
     {
       icon: TrendingDown,
       label: 'Total Saved (vs SWIFT)',
-      value: '$11,560',
-      subtitle: '90% lower fees',
-      trend: '+15.2%',
+      value: formatCurrency(stats.totalSaved),
+      subtitle: stats.totalSaved > 0 ? '~90% lower fees' : 'No savings yet',
+      trend: formatTrend(stats.totalSavedTrend),
       color: 'from-emerald-500 to-emerald-600'
     },
     {
       icon: UserCheck,
       label: 'Active Employees',
-      value: '48',
-      subtitle: 'Across 12 countries',
+      value: stats.activeEmployees.toString(),
+      subtitle: stats.activeEmployees === 1 ? '1 team member' : `${stats.activeEmployees} team members`,
       color: 'from-indigo-500 to-purple-600'
     }
   ];
 
-  const recentPayments: RecentPayment[] = [
-    {
-      id: '1',
-      recipient: 'John Doe',
-      amount: '1,250.00',
-      asset: 'USDC',
-      date: '2h ago',
-      txHash: 'abc123def456'
-    },
-    {
-      id: '2',
-      recipient: 'Jane Smith',
-      amount: '890.50',
-      asset: 'EURT',
-      date: '5h ago',
-      txHash: 'def789ghi012'
-    },
-    {
-      id: '3',
-      recipient: 'Mike Johnson',
-      amount: '2,100.00',
-      asset: 'USDC',
-      date: '1d ago',
-      txHash: 'ghi345jkl678'
-    },
-    {
-      id: '4',
-      recipient: 'Sarah Williams',
-      amount: '750.25',
-      asset: 'NGNT',
-      date: '1d ago',
-      txHash: 'jkl901mno234'
-    },
-    {
-      id: '5',
-      recipient: 'David Brown',
-      amount: '1,500.00',
-      asset: 'USDC',
-      date: '2d ago',
-      txHash: 'mno567pqr890'
-    }
-  ];
-
   const handleViewOnLedger = (txHash: string) => {
-    window.open(`https://stellar.expert/explorer/public/tx/${txHash}`, '_blank');
+    const explorerNetwork = network === 'testnet' ? 'testnet' : 'public';
+    window.open(`https://stellar.expert/explorer/${explorerNetwork}/tx/${txHash}`, '_blank');
+  };
+
+  const handleViewAllTransactions = () => {
+    if (onNavigate) {
+      onNavigate('history');
+    }
   };
 
   return (
     <div className="space-y-8">
-      {/* Header: Network Speed & Node Status (Small) */}
+      {/* Network Status (Small) */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -187,8 +250,9 @@ export default function OverviewSection() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">{stats.map((stat, index) => (
-          <StatsCard key={index} {...stat} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {statsCards.map((stat, index) => (
+          <StatsCard key={index} {...stat} isLoading={isLoadingStats} />
         ))}
       </div>
 
@@ -209,72 +273,90 @@ export default function OverviewSection() {
 
         {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-slate-900/50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Recipient
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Amount
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Asset
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Time
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-700/50">
-              {recentPayments.map((payment) => (
-                <tr key={payment.id} className="hover:bg-slate-900/30 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                        <span className="text-white font-semibold text-sm">
-                          {payment.recipient.charAt(0)}
-                        </span>
-                      </div>
-                      <span className="text-white font-medium">{payment.recipient}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-white font-semibold">${payment.amount}</span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                      {payment.asset}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-slate-400 text-sm">
-                    {payment.date}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <button
-                      onClick={() => handleViewOnLedger(payment.txHash)}
-                      className="inline-flex items-center gap-1.5 text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors group"
-                    >
-                      View on Ledger
-                      <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </button>
-                  </td>
+          {isLoadingPayments ? (
+            <div className="px-6 py-12 text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+              <p className="text-slate-400 mt-3">Loading recent payments...</p>
+            </div>
+          ) : recentPayments.length === 0 ? (
+            <div className="px-6 py-12 text-center">
+              <Send className="w-12 h-12 text-slate-600 mx-auto mb-3" />
+              <p className="text-slate-400">No payments yet</p>
+              <p className="text-slate-500 text-sm mt-1">Your recent transactions will appear here</p>
+            </div>
+          ) : (
+            <table className="w-full">
+              <thead className="bg-slate-900/50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Recipient
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Amount
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Asset
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Time
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                    Action
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-700/50">
+                {recentPayments.map((payment) => (
+                  <tr key={payment.id} className="hover:bg-slate-900/30 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                          <span className="text-white font-semibold text-sm">
+                            {payment.recipient.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <span className="text-white font-medium">{payment.recipient}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-white font-semibold">${payment.amount}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                        {payment.asset}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-slate-400 text-sm">
+                      {payment.timeAgo}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <button
+                        onClick={() => handleViewOnLedger(payment.txHash)}
+                        className="inline-flex items-center gap-1.5 text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors group"
+                      >
+                        View on Ledger
+                        <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
 
         {/* View All Link */}
-        <div className="px-6 py-4 bg-slate-900/30 border-t border-slate-700/50">
-          <button className="text-indigo-400 hover:text-indigo-300 text-sm font-medium flex items-center gap-2 transition-colors group">
-            View all transactions
-            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
+        {recentPayments.length > 0 && (
+          <div className="px-6 py-4 bg-slate-900/30 border-t border-slate-700/50">
+            <button 
+              onClick={handleViewAllTransactions}
+              className="text-indigo-400 hover:text-indigo-300 text-sm font-medium flex items-center gap-2 transition-colors group"
+            >
+              View all transactions
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        )}
       </motion.div>
 
       {/* Sidebar/Bottom: Base Fee (Small) */}

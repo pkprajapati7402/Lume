@@ -32,6 +32,7 @@ export default function LandingPage() {
     email: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { setAuthorized, network } = useAuthStore();
   const isMountedRef = useRef(true);
 
@@ -79,6 +80,54 @@ export default function LandingPage() {
       });
     } finally {
       if (isMountedRef.current) setIsConnecting(false);
+    }
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
+    setIsSubmitting(true);
+    const toastId = toast.loading('Sending message...');
+
+    try {
+      const form = new FormData();
+      form.append('access_key', 'acb0f8e7-8363-45af-89e6-4ee071c64258');
+      form.append('name', formData.name);
+      form.append('email', formData.email);
+      form.append('message', formData.message);
+      form.append('subject', 'New Contact Form Submission - Lume');
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: form
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Message Sent!', {
+          id: toastId,
+          description: 'Thank you for contacting us. We\'ll get back to you soon.',
+          duration: 5000,
+        });
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        throw new Error(data.message || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast.error('Failed to Send', {
+        id: toastId,
+        description: error instanceof Error ? error.message : 'Please try again later',
+        duration: 5000,
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -558,7 +607,7 @@ export default function LandingPage() {
               transition={{ duration: 0.6 }}
               className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8"
             >
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-6" onSubmit={handleContactSubmit}>
                 <div>
                   <label className="block text-slate-300 text-sm font-medium mb-2">Name</label>
                   <input
@@ -569,6 +618,8 @@ export default function LandingPage() {
                     placeholder="John Doe"
                     autoComplete="name"
                     suppressHydrationWarning
+                    required
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div>
@@ -581,6 +632,8 @@ export default function LandingPage() {
                     placeholder="john@company.com"
                     autoComplete="email"
                     suppressHydrationWarning
+                    required
+                    disabled={isSubmitting}
                   />
                 </div>
                 <div>
@@ -593,14 +646,27 @@ export default function LandingPage() {
                     placeholder="Tell us about your payroll needs..."
                     autoComplete="off"
                     suppressHydrationWarning
+                    required
+                    disabled={isSubmitting}
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25 flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  suppressHydrationWarning
                 >
-                  <Send className="w-4 h-4" />
-                  Send Message
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Send Message
+                    </>
+                  )}
                 </button>
               </form>
             </motion.div>

@@ -86,7 +86,7 @@ export default function MainDashboard() {
   const renderSection = () => {
     switch (activeSection) {
       case 'overview':
-        return <OverviewSection />;
+        return <OverviewSection onNavigate={setActiveSection} />;
       case 'pay':
         return <PayEmployeeSection prefilledData={prefilledPaymentData} />;
       case 'bulk':
