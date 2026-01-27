@@ -71,9 +71,6 @@ export default function LandingPage() {
         toast.success('Wallet Connected', {
           description: `Connected to ${result.publicKey.slice(0, 8)}...${result.publicKey.slice(-8)}`,
         });
-        if (isMountedRef.current) {
-          setShowWalletModal(false);
-        }
       }
     } catch (error) {
       console.error('Failed to connect wallet:', error);
