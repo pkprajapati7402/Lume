@@ -4,9 +4,24 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import MainDashboard from './MainDashboard';
 import LandingPage from './LandingPage';
+import { useEffect, useState } from 'react';
 
 export default function AppLayout() {
-  const { isAuthorized } = useAuthStore();
+  const { isAuthorized, hasHydrated } = useAuthStore();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch by not rendering until client-side mount
+  if (!isMounted || !hasHydrated) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="animate-pulse text-slate-400">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <AnimatePresence mode="wait">
