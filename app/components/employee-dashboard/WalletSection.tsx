@@ -218,24 +218,24 @@ export default function WalletSection() {
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600/20 via-purple-600/10 to-cyan-600/20 border border-white/10"
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-600/10 via-neutral-900/50 to-orange-600/10 border border-neutral-800/50"
       >
         {/* Decorative Elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-violet-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl" />
         
         <div className="relative p-8">
           <div className="flex items-start justify-between mb-8">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-violet-500 to-cyan-500 rounded-2xl blur-lg opacity-50" />
-                <div className="relative p-4 rounded-2xl bg-gradient-to-br from-violet-500 to-cyan-500">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl blur-lg opacity-50" />
+                <div className="relative p-4 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500">
                   <Wallet className="w-8 h-8 text-white" />
                 </div>
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-white">My Wallet</h3>
-                <p className="text-gray-400 text-sm">Stellar {network === 'testnet' ? 'Testnet' : 'Mainnet'}</p>
+                <p className="text-neutral-400 text-sm">Stellar {network === 'testnet' ? 'Testnet' : 'Mainnet'}</p>
               </div>
             </div>
             
@@ -244,48 +244,48 @@ export default function WalletSection() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setHideBalances(!hideBalances)}
-                className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all"
+                className="p-3 rounded-xl bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700/50 transition-all"
               >
-                {hideBalances ? <EyeOff className="w-5 h-5 text-gray-400" /> : <Eye className="w-5 h-5 text-gray-400" />}
+                {hideBalances ? <EyeOff className="w-5 h-5 text-neutral-400" /> : <Eye className="w-5 h-5 text-neutral-400" />}
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={fetchBalances}
                 disabled={isLoading}
-                className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all"
+                className="p-3 rounded-xl bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700/50 transition-all"
               >
-                <RefreshCw className={`w-5 h-5 text-gray-400 ${isLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-5 h-5 text-neutral-400 ${isLoading ? 'animate-spin' : ''}`} />
               </motion.button>
             </div>
           </div>
 
           {/* Total Balance */}
           <div className="mb-8">
-            <p className="text-gray-400 text-sm mb-2">Total Balance</p>
+            <p className="text-neutral-400 text-sm mb-2">Total Balance</p>
             <div className="flex items-baseline gap-3">
               <motion.span 
-                className="text-5xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent"
+                className="text-5xl font-bold bg-gradient-to-r from-white via-neutral-100 to-neutral-300 bg-clip-text text-transparent"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 200 }}
               >
                 {hideBalances ? '••••••' : `$${totalUSDValue.toFixed(2)}`}
               </motion.span>
-              <span className="text-gray-500 text-lg">USD</span>
+              <span className="text-neutral-500 text-lg">USD</span>
             </div>
           </div>
 
           {/* Wallet Address Card */}
-          <div className="bg-black/30 backdrop-blur-xl rounded-2xl p-6 border border-white/5">
+          <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-neutral-800/50">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-gray-400 text-sm">Wallet Address</span>
+              <span className="text-neutral-400 text-sm">Wallet Address</span>
               <div className="flex items-center gap-2">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowFullAddress(!showFullAddress)}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-gray-400 transition-all"
+                  className="px-3 py-1.5 rounded-lg bg-neutral-800/50 hover:bg-neutral-700/50 text-xs text-neutral-400 transition-all"
                 >
                   {showFullAddress ? 'Hide' : 'Show Full'}
                 </motion.button>
@@ -293,7 +293,7 @@ export default function WalletSection() {
             </div>
             
             <div className="flex items-center gap-3">
-              <code className="flex-1 text-white font-mono text-sm sm:text-base break-all bg-white/5 px-4 py-3 rounded-xl">
+              <code className="flex-1 text-white font-mono text-sm sm:text-base break-all bg-neutral-800/50 px-4 py-3 rounded-xl">
                 {showFullAddress ? publicKey : truncateAddress(publicKey || '', 12, 12)}
               </code>
             </div>
@@ -303,7 +303,7 @@ export default function WalletSection() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={copyToClipboard}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium transition-all"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-medium transition-all"
               >
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 {copied ? 'Copied!' : 'Copy Address'}
@@ -313,7 +313,7 @@ export default function WalletSection() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setShowQRModal(true)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium transition-all"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700/50 text-white font-medium transition-all"
               >
                 <QrCode className="w-4 h-4" />
                 QR Code
@@ -325,9 +325,9 @@ export default function WalletSection() {
                 href={`https://stellar.expert/explorer/${network === 'testnet' ? 'testnet' : 'public'}/account/${publicKey}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all"
+                className="p-3 rounded-xl bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700/50 transition-all"
               >
-                <ExternalLink className="w-5 h-5 text-gray-400" />
+                <ExternalLink className="w-5 h-5 text-neutral-400" />
               </motion.a>
             </div>
           </div>
@@ -338,7 +338,7 @@ export default function WalletSection() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {isLoading ? (
           [...Array(3)].map((_, i) => (
-            <div key={i} className="h-32 rounded-2xl bg-white/5 animate-pulse" />
+            <div key={i} className="h-32 rounded-2xl bg-neutral-800/50 animate-pulse" />
           ))
         ) : balances.length > 0 ? (
           balances.map((balance, index) => (
@@ -347,21 +347,21 @@ export default function WalletSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 p-5 hover:border-white/20 transition-all"
+              className="group relative overflow-hidden rounded-2xl bg-neutral-900/50 border border-neutral-800/50 p-5 hover:border-amber-500/30 transition-all"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-violet-500/10 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-amber-500/10 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
               
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{getAssetIcon(balance.assetCode)}</span>
                   <div>
                     <p className="font-semibold text-white">{balance.assetCode}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-neutral-500">
                       {balance.assetType === 'native' ? 'Native' : 'Token'}
                     </p>
                   </div>
                 </div>
-                <Sparkles className="w-4 h-4 text-violet-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Sparkles className="w-4 h-4 text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
               
               <p className="text-2xl font-bold text-white">
@@ -370,7 +370,7 @@ export default function WalletSection() {
             </motion.div>
           ))
         ) : (
-          <div className="col-span-full text-center py-12 text-gray-500">
+          <div className="col-span-full text-center py-12 text-neutral-500">
             <Wallet className="w-12 h-12 mx-auto mb-4 opacity-50" />
             <p>No assets found in this wallet</p>
           </div>
@@ -382,13 +382,13 @@ export default function WalletSection() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 overflow-hidden"
+        className="rounded-2xl bg-neutral-900/50 border border-neutral-800/50 overflow-hidden"
       >
-        <div className="p-6 border-b border-white/5">
+        <div className="p-6 border-b border-neutral-800/50">
           <h3 className="text-lg font-semibold text-white">Recent Activity</h3>
         </div>
         
-        <div className="divide-y divide-white/5">
+        <div className="divide-y divide-neutral-800/50">
           {transactions.length > 0 ? (
             transactions.slice(0, 5).map((tx, index) => (
               <motion.div
@@ -396,7 +396,7 @@ export default function WalletSection() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
+                className="flex items-center justify-between p-4 hover:bg-neutral-800/30 transition-colors"
               >
                 <div className="flex items-center gap-4">
                   <div className={`p-2.5 rounded-xl ${
@@ -414,7 +414,7 @@ export default function WalletSection() {
                     <p className="font-medium text-white">
                       {tx.type === 'received' ? 'Received' : 'Sent'}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-neutral-500">
                       {tx.type === 'received' ? 'From: ' : 'To: '}
                       {truncateAddress(tx.address, 6, 6)}
                     </p>
@@ -426,14 +426,14 @@ export default function WalletSection() {
                   }`}>
                     {tx.type === 'received' ? '+' : '-'}{tx.amount} {tx.asset}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-neutral-500">
                     {tx.date.toLocaleDateString()}
                   </p>
                 </div>
               </motion.div>
             ))
           ) : (
-            <div className="p-12 text-center text-gray-500">
+            <div className="p-12 text-center text-neutral-500">
               <p>No recent transactions</p>
             </div>
           )}
@@ -455,15 +455,15 @@ export default function WalletSection() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#0d0d14] rounded-3xl p-8 border border-white/10 max-w-md w-full"
+              className="bg-black rounded-3xl p-8 border border-neutral-800/50 max-w-md w-full"
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-white">Wallet QR Code</h3>
                 <button
                   onClick={() => setShowQRModal(false)}
-                  className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+                  className="p-2 hover:bg-neutral-800/50 rounded-lg transition-colors"
                 >
-                  <X className="w-5 h-5 text-gray-400" />
+                  <X className="w-5 h-5 text-neutral-400" />
                 </button>
               </div>
               
@@ -472,7 +472,7 @@ export default function WalletSection() {
                   <canvas ref={qrCanvasRef} className="w-48 h-48" />
                 </div>
                 
-                <p className="text-center text-gray-400 text-sm mb-4 break-all px-4">
+                <p className="text-center text-neutral-400 text-sm mb-4 break-all px-4">
                   {publicKey}
                 </p>
                 
@@ -481,7 +481,7 @@ export default function WalletSection() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={copyToClipboard}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium transition-all"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700/50 text-white font-medium transition-all"
                   >
                     <Copy className="w-4 h-4" />
                     Copy
@@ -490,7 +490,7 @@ export default function WalletSection() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={downloadQR}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium transition-all"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-medium transition-all"
                   >
                     <Download className="w-4 h-4" />
                     Download

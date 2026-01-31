@@ -232,7 +232,7 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
                 href={explorerUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-medium"
+                className="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-medium"
                 onClick={(e) => e.stopPropagation()}
               >
                 View on Stellar Expert <ExternalLink className="w-3 h-3" />
@@ -293,7 +293,7 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
         transition={{ duration: 0.5 }}
       >
         <h2 className="text-2xl font-bold text-white mb-2">Pay Employee</h2>
-        <p className="text-slate-400">Send payments instantly with automatic currency conversion</p>
+        <p className="text-neutral-400">Send payments instantly with automatic currency conversion</p>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -302,14 +302,14 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6"
+          className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6"
         >
           <h3 className="text-lg font-semibold text-white mb-6">Payment Details</h3>
           
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Recipient Address */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
                 Recipient Address
               </label>
               <input
@@ -317,8 +317,8 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
                 value={recipientAddress}
                 onChange={(e) => setRecipientAddress(e.target.value)}
                 placeholder="GXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-                className={`w-full px-4 py-3 bg-slate-900/50 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all ${
-                  validationError ? 'border-red-500' : 'border-slate-700'
+                className={`w-full px-4 py-3 bg-black/50 border rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all ${
+                  validationError ? 'border-red-500' : 'border-neutral-800'
                 }`}
                 required
                 disabled={isSubmitting}
@@ -333,7 +333,7 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
 
             {/* Amount & From Asset */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
                 Send Amount
               </label>
               <div className="flex gap-3">
@@ -344,14 +344,14 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
                   placeholder="1000"
                   step="0.01"
                   min="0"
-                  className="flex-1 px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  className="flex-1 px-4 py-3 bg-black/50 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                   required
                   disabled={isSubmitting}
                 />
                 <select
                   value={fromAsset.code}
                   onChange={(e) => setFromAsset(assets.find(a => a.code === e.target.value) || assets[0])}
-                  className="px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                  className="px-4 py-3 bg-black/50 border border-neutral-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                   disabled={isSubmitting}
                 >
                   {assets.map((asset) => (
@@ -365,13 +365,13 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
 
             {/* To Asset */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
                 Recipient Receives
               </label>
               <select
                 value={toAsset.code}
                 onChange={(e) => setToAsset(assets.find(a => a.code === e.target.value) || assets[0])}
-                className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-black/50 border border-neutral-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                 disabled={isSubmitting}
               >
                 {assets.map((asset) => (
@@ -381,7 +381,7 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
                 ))}
               </select>
               {fromAsset.code === toAsset.code && (
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-neutral-500">
                   Direct payment - no conversion needed
                 </p>
               )}
@@ -389,7 +389,7 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
 
             {/* Memo */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-neutral-300 mb-2">
                 Memo (Optional)
               </label>
               <input
@@ -398,17 +398,17 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
                 onChange={(e) => setMemo(e.target.value)}
                 placeholder="Salary - January 2026"
                 maxLength={28}
-                className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-black/50 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                 disabled={isSubmitting}
               />
-              <p className="mt-1 text-xs text-slate-500">Max 28 characters</p>
+              <p className="mt-1 text-xs text-neutral-500">Max 28 characters</p>
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting || !!validationError || !publicKey}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
               {isSubmitting ? (
                 <>
@@ -437,54 +437,54 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6"
+          className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6"
         >
           <h3 className="text-lg font-semibold text-white mb-6">Exchange Preview</h3>
 
           <div className="space-y-6">
             {/* From Asset Display */}
-            <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
+            <div className="bg-black/50 border border-neutral-800 rounded-xl p-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-slate-400 text-sm">You Send</span>
+                <span className="text-neutral-400 text-sm">You Send</span>
                 <button
                   type="button"
                   onClick={handleSwapAssets}
-                  className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
+                  className="p-2 hover:bg-neutral-800 rounded-lg transition-colors"
                   title="Swap assets"
                 >
-                  <RefreshCw className="w-4 h-4 text-indigo-400 hover:rotate-180 transition-transform duration-500" />
+                  <RefreshCw className="w-4 h-4 text-amber-400 hover:rotate-180 transition-transform duration-500" />
                 </button>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{fromAsset.icon}</span>
                 <div>
                   <div className="text-3xl font-bold text-white">{amount || '0'}</div>
-                  <div className="text-slate-400 text-sm">{fromAsset.code}</div>
+                  <div className="text-neutral-400 text-sm">{fromAsset.code}</div>
                 </div>
               </div>
             </div>
 
             {/* Exchange Rate */}
             <div className="flex items-center justify-center">
-              <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-lg px-4 py-2">
-                <div className="text-slate-400 text-xs mb-1 text-center">
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg px-4 py-2">
+                <div className="text-neutral-400 text-xs mb-1 text-center">
                   {fromAsset.code === toAsset.code ? 'Same Asset' : 'Exchange Rate'}
                 </div>
                 {fromAsset.code === toAsset.code ? (
-                  <div className="text-indigo-300 font-semibold text-center">
+                  <div className="text-amber-300 font-semibold text-center">
                     No conversion needed
                   </div>
                 ) : estimateLoading ? (
-                  <div className="text-indigo-300 font-semibold text-center flex items-center gap-2">
+                  <div className="text-amber-300 font-semibold text-center flex items-center gap-2">
                     <Loader2 className="w-3 h-3 animate-spin" />
                     Loading...
                   </div>
                 ) : estimatedReceiveAmount && parseFloat(amount) > 0 ? (
-                  <div className="text-indigo-300 font-semibold text-center">
+                  <div className="text-amber-300 font-semibold text-center">
                     1 {fromAsset.code} ≈ {(parseFloat(estimatedReceiveAmount) / parseFloat(amount)).toFixed(4)} {toAsset.code}
                   </div>
                 ) : (
-                  <div className="text-indigo-300 font-semibold text-center">
+                  <div className="text-amber-300 font-semibold text-center">
                     1 {fromAsset.code} = {fxRate.toFixed(4)} {toAsset.code}
                   </div>
                 )}
@@ -492,24 +492,24 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
             </div>
 
             {/* To Asset Display */}
-            <div className="bg-slate-900/50 border border-slate-700 rounded-xl p-6">
-              <div className="text-slate-400 text-sm mb-2">Recipient Gets</div>
+            <div className="bg-black/50 border border-neutral-800 rounded-xl p-6">
+              <div className="text-neutral-400 text-sm mb-2">Recipient Gets</div>
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{toAsset.icon}</span>
                 <div className="flex-1">
                   {estimateLoading ? (
                     <div className="flex items-center gap-2">
-                      <Loader2 className="w-5 h-5 animate-spin text-indigo-400" />
-                      <span className="text-slate-400">Calculating...</span>
+                      <Loader2 className="w-5 h-5 animate-spin text-amber-400" />
+                      <span className="text-neutral-400">Calculating...</span>
                     </div>
                   ) : (
                     <>
                       <div className="text-3xl font-bold text-white">
                         {convertedAmount.toFixed(2)}
                       </div>
-                      <div className="text-slate-400 text-sm">{toAsset.code}</div>
+                      <div className="text-neutral-400 text-sm">{toAsset.code}</div>
                       {fromAsset.code !== toAsset.code && estimatedReceiveAmount && (
-                        <div className="text-xs text-indigo-400 mt-1">
+                        <div className="text-xs text-amber-400 mt-1">
                           Live rate from Stellar DEX
                         </div>
                       )}
@@ -520,14 +520,14 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
             </div>
 
             {/* Fee Information */}
-            <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-lg p-4">
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
               <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-indigo-400 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <div className="text-indigo-300 font-medium text-sm mb-1">
+                  <div className="text-amber-300 font-medium text-sm mb-1">
                     Network Fee: ~0.00001 XLM
                   </div>
-                  <div className="text-slate-400 text-xs">
+                  <div className="text-neutral-400 text-xs">
                     Stellar's ultra-low fees save you 90% compared to traditional wire transfers
                   </div>
                 </div>
@@ -535,13 +535,13 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
             </div>
 
             {/* Path Payment Info */}
-            <div className="border-t border-slate-700 pt-4">
-              <div className="text-slate-400 text-xs mb-2">Payment Route</div>
+            <div className="border-t border-neutral-800 pt-4">
+              <div className="text-neutral-400 text-xs mb-2">Payment Route</div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-white font-medium">{fromAsset.code}</span>
-                <ArrowRight className="w-4 h-4 text-slate-600" />
-                <span className="text-slate-500">Stellar DEX</span>
-                <ArrowRight className="w-4 h-4 text-slate-600" />
+                <ArrowRight className="w-4 h-4 text-neutral-600" />
+                <span className="text-neutral-500">Stellar DEX</span>
+                <ArrowRight className="w-4 h-4 text-neutral-600" />
                 <span className="text-white font-medium">{toAsset.code}</span>
               </div>
             </div>

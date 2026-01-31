@@ -135,26 +135,26 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="bg-slate-900 border border-slate-700 rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+          className="bg-black border border-neutral-800 rounded-xl max-w-6xl w-full max-h-[90vh] overflow-hidden flex flex-col"
         >
           {/* Header */}
-          <div className="p-6 border-b border-slate-700">
+          <div className="p-6 border-b border-neutral-800">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <h2 className="text-2xl font-bold text-white mb-2">{employee.full_name}</h2>
-                <div className="flex items-center gap-4 text-sm text-slate-400">
+                <div className="flex items-center gap-4 text-sm text-neutral-400">
                   <span className="font-mono">{employee.wallet_address.slice(0, 8)}...{employee.wallet_address.slice(-8)}</span>
-                  <span className="px-2 py-1 bg-purple-600/20 text-purple-300 rounded border border-purple-500/30">
+                  <span className="px-2 py-1 bg-amber-600/20 text-amber-300 rounded border border-amber-500/30">
                     {employee.role}
                   </span>
-                  <span className="px-2 py-1 bg-cyan-600/20 text-cyan-300 rounded border border-cyan-500/30">
+                  <span className="px-2 py-1 bg-teal-600/20 text-teal-300 rounded border border-teal-500/30">
                     {employee.department}
                   </span>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-neutral-400 hover:text-white transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -162,24 +162,24 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
 
             {/* Stats Cards */}
             <div className="grid grid-cols-3 gap-4 mt-6">
-              <div className="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-amber-600/20 to-orange-800/20 border border-amber-500/30 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <DollarSign className="w-4 h-4 text-purple-400" />
-                  <span className="text-xs text-slate-400">Total Paid</span>
+                  <DollarSign className="w-4 h-4 text-amber-400" />
+                  <span className="text-xs text-neutral-400">Total Paid</span>
                 </div>
                 <p className="text-2xl font-bold text-white">${totalPaid.toFixed(2)}</p>
               </div>
-              <div className="bg-gradient-to-br from-pink-600/20 to-pink-800/20 border border-pink-500/30 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-teal-600/20 to-teal-800/20 border border-teal-500/30 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="w-4 h-4 text-pink-400" />
-                  <span className="text-xs text-slate-400">Transactions</span>
+                  <Calendar className="w-4 h-4 text-teal-400" />
+                  <span className="text-xs text-neutral-400">Transactions</span>
                 </div>
                 <p className="text-2xl font-bold text-white">{transactions.length}</p>
               </div>
-              <div className="bg-gradient-to-br from-cyan-600/20 to-cyan-800/20 border border-cyan-500/30 rounded-lg p-4">
+              <div className="bg-gradient-to-br from-sky-600/20 to-sky-800/20 border border-sky-500/30 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <DollarSign className="w-4 h-4 text-cyan-400" />
-                  <span className="text-xs text-slate-400">Average</span>
+                  <DollarSign className="w-4 h-4 text-sky-400" />
+                  <span className="text-xs text-neutral-400">Average</span>
                 </div>
                 <p className="text-2xl font-bold text-white">${averagePayment.toFixed(2)}</p>
               </div>
@@ -187,17 +187,17 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
           </div>
 
           {/* Filters and Controls */}
-          <div className="p-6 border-b border-slate-700 bg-slate-800/50">
+          <div className="p-6 border-b border-neutral-800 bg-neutral-900/50">
             <div className="flex flex-wrap items-center gap-3">
               {/* Search */}
               <div className="relative flex-1 min-w-[200px]">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-neutral-400" />
                 <input
                   type="text"
                   placeholder="Search transactions..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+                  className="w-full bg-black border border-neutral-800 rounded-lg pl-10 pr-4 py-2 text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500 transition-colors"
                 />
               </div>
 
@@ -205,7 +205,7 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as any)}
-                className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                className="bg-black border border-neutral-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-amber-500 transition-colors"
               >
                 <option value="all">All Status</option>
                 <option value="success">Success Only</option>
@@ -216,7 +216,7 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                className="bg-black border border-neutral-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-amber-500 transition-colors"
               >
                 <option value="date">Sort by Date</option>
                 <option value="amount">Sort by Amount</option>
@@ -225,7 +225,7 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
               {/* Sort Order */}
               <button
                 onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                className="bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-white hover:bg-slate-800 transition-colors"
+                className="bg-black border border-neutral-800 rounded-lg px-4 py-2 text-white hover:bg-neutral-900 transition-colors"
               >
                 {sortOrder === 'asc' ? '↑ Asc' : '↓ Desc'}
               </button>
@@ -234,7 +234,7 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
               <button
                 onClick={handleExport}
                 disabled={filteredTransactions.length === 0}
-                className="bg-purple-600 hover:bg-purple-700 disabled:bg-slate-700 disabled:text-slate-500 text-white rounded-lg px-4 py-2 flex items-center gap-2 transition-colors"
+                className="bg-amber-600 hover:bg-amber-700 disabled:bg-neutral-700 disabled:text-neutral-500 text-white rounded-lg px-4 py-2 flex items-center gap-2 transition-colors"
               >
                 <Download className="w-4 h-4" />
                 Export CSV
@@ -242,7 +242,7 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
             </div>
 
             {/* Results count */}
-            <div className="mt-3 text-sm text-slate-400">
+            <div className="mt-3 text-sm text-neutral-400">
               Showing {filteredTransactions.length} of {transactions.length} transactions
             </div>
           </div>
@@ -251,13 +251,13 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
           <div className="flex-1 overflow-y-auto p-6">
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
               </div>
             ) : filteredTransactions.length === 0 ? (
               <div className="text-center py-12">
-                <Calendar className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                <Calendar className="w-16 h-16 text-neutral-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-white mb-2">No Transactions Found</h3>
-                <p className="text-slate-400">
+                <p className="text-neutral-400">
                   {transactions.length === 0 
                     ? 'No payment history for this employee yet'
                     : 'No transactions match your filters'}
@@ -270,7 +270,7 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
                     key={tx.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-slate-800/50 border border-slate-700 rounded-lg p-4 hover:border-purple-500/50 transition-colors"
+                    className="bg-neutral-900/50 border border-neutral-800 rounded-lg p-4 hover:border-amber-500/50 transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -282,11 +282,11 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
                           }`}>
                             {tx.status}
                           </span>
-                          <span className="text-slate-400 text-sm">
+                          <span className="text-neutral-400 text-sm">
                             {new Date(tx.created_at).toLocaleString()}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2 text-slate-300">
+                        <div className="flex items-center gap-2 text-neutral-300">
                           <span className="font-mono text-xs">
                             {tx.transaction_hash.slice(0, 12)}...{tx.transaction_hash.slice(-12)}
                           </span>
@@ -294,7 +294,7 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
                             href={`https://stellar.expert/explorer/${network}/tx/${tx.transaction_hash}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-purple-400 hover:text-purple-300 transition-colors"
+                            className="text-amber-400 hover:text-amber-300 transition-colors"
                           >
                             <ExternalLink className="w-4 h-4" />
                           </a>
@@ -304,7 +304,7 @@ export default function EmployeeDetailModal({ employee, network, onClose }: Empl
                         <div className="text-2xl font-bold text-white">
                           ${tx.amount.toFixed(2)}
                         </div>
-                        <div className="text-sm text-slate-400">{tx.asset_code}</div>
+                        <div className="text-sm text-neutral-400">{tx.asset_code}</div>
                       </div>
                     </div>
                   </motion.div>

@@ -323,44 +323,44 @@ export default function TaxFormGenerator({ employee, year, publicKey, onClose }:
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+          className="bg-black border border-neutral-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-slate-700">
+          <div className="flex items-center justify-between p-6 border-b border-neutral-800">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-indigo-600/20 rounded-lg">
-                <FileText className="w-6 h-6 text-indigo-400" />
+              <div className="p-2 bg-amber-600/20 rounded-lg">
+                <FileText className="w-6 h-6 text-amber-400" />
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white">Generate Tax Form</h3>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-neutral-400">
                   {employee.employee_type === 'employee' ? 'W-2 Wage Statement' : '1099-NEC Nonemployee Compensation'}
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
+              className="p-2 hover:bg-neutral-900 rounded-lg transition-colors"
             >
-              <X className="w-5 h-5 text-slate-400" />
+              <X className="w-5 h-5 text-neutral-400" />
             </button>
           </div>
 
           {/* Content */}
           <div className="p-6 space-y-6">
             {/* Employee Info Card */}
-            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4">
+            <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl p-4">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h4 className="text-lg font-semibold text-white">{employee.full_name}</h4>
-                  <p className="text-sm text-slate-400 font-mono mt-1">
+                  <p className="text-sm text-neutral-400 font-mono mt-1">
                     {employee.wallet_address.slice(0, 12)}...{employee.wallet_address.slice(-10)}
                   </p>
                 </div>
                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                   employee.employee_type === 'employee'
-                    ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                    : 'bg-cyan-600/20 text-cyan-300 border border-cyan-500/30'
+                    ? 'bg-amber-600/20 text-amber-300 border border-amber-500/30'
+                    : 'bg-teal-600/20 text-teal-300 border border-teal-500/30'
                 }`}>
                   {employee.employee_type === 'employee' ? 'W-2 Employee' : '1099-NEC Contractor'}
                 </span>
@@ -368,11 +368,11 @@ export default function TaxFormGenerator({ employee, year, publicKey, onClose }:
 
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-slate-500">Department:</span>
+                  <span className="text-neutral-500">Department:</span>
                   <span className="ml-2 text-white font-medium">{employee.department}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Tax Rate:</span>
+                  <span className="text-neutral-500">Tax Rate:</span>
                   <span className="ml-2 text-white font-medium">{employee.tax_rate}%</span>
                 </div>
               </div>
@@ -380,22 +380,22 @@ export default function TaxFormGenerator({ employee, year, publicKey, onClose }:
 
             {/* Tax Summary */}
             <div>
-              <h4 className="text-sm font-medium text-slate-400 mb-3">Tax Year {year} Summary</h4>
+              <h4 className="text-sm font-medium text-neutral-400 mb-3">Tax Year {year} Summary</h4>
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-indigo-600/10 border border-indigo-500/30 rounded-lg p-4">
-                  <div className="text-xs text-slate-400 mb-1">Gross Pay</div>
+                <div className="bg-amber-600/10 border border-amber-500/30 rounded-lg p-4">
+                  <div className="text-xs text-neutral-400 mb-1">Gross Pay</div>
                   <div className="text-xl font-bold text-white">
                     ${employee.total_gross.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                 </div>
                 <div className="bg-red-600/10 border border-red-500/30 rounded-lg p-4">
-                  <div className="text-xs text-slate-400 mb-1">Tax Withheld</div>
+                  <div className="text-xs text-neutral-400 mb-1">Tax Withheld</div>
                   <div className="text-xl font-bold text-white">
                     ${employee.total_tax_withheld.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                 </div>
                 <div className="bg-emerald-600/10 border border-emerald-500/30 rounded-lg p-4">
-                  <div className="text-xs text-slate-400 mb-1">Net Disbursed</div>
+                  <div className="text-xs text-neutral-400 mb-1">Net Disbursed</div>
                   <div className="text-xl font-bold text-white">
                     ${employee.total_net.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
@@ -406,18 +406,18 @@ export default function TaxFormGenerator({ employee, year, publicKey, onClose }:
             {/* Transaction Count */}
             <div className="flex items-center gap-2 text-sm">
               <CheckCircle className="w-4 h-4 text-emerald-400" />
-              <span className="text-slate-300">
+              <span className="text-neutral-300">
                 <span className="font-medium text-white">{transactions.length}</span> blockchain-verified payments
               </span>
             </div>
 
             {/* Verification Badge */}
-            <div className="bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-500/30 rounded-xl p-4">
+            <div className="bg-gradient-to-r from-amber-600/20 to-orange-600/20 border border-amber-500/30 rounded-xl p-4">
               <div className="flex items-start gap-3">
-                <Shield className="w-5 h-5 text-indigo-400 flex-shrink-0 mt-0.5" />
+                <Shield className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
                   <h5 className="text-sm font-semibold text-white mb-1">LUME Verified Document</h5>
-                  <p className="text-xs text-slate-400 leading-relaxed">
+                  <p className="text-xs text-neutral-400 leading-relaxed">
                     This tax form is generated from cryptographically verified Stellar blockchain transactions. 
                     All transaction hashes can be independently verified on Stellar Expert.
                   </p>
@@ -431,7 +431,7 @@ export default function TaxFormGenerator({ employee, year, publicKey, onClose }:
                 href={`https://stellar.expert/explorer/testnet/account/${employee.wallet_address}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                className="flex items-center gap-2 text-sm text-amber-400 hover:text-amber-300 transition-colors"
               >
                 <ExternalLink className="w-4 h-4" />
                 View on Stellar Expert
@@ -440,18 +440,18 @@ export default function TaxFormGenerator({ employee, year, publicKey, onClose }:
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-between p-6 border-t border-slate-700 bg-slate-800/50">
+          <div className="flex items-center justify-between p-6 border-t border-neutral-800 bg-neutral-900/50">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-slate-400 hover:text-white transition-colors"
+              className="px-4 py-2 text-neutral-400 hover:text-white transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={generatePDF}
               disabled={loading || employee.total_gross === 0}
-              className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-700 
-                       disabled:text-slate-500 text-white rounded-lg font-medium 
+              className="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 disabled:bg-neutral-700 
+                       disabled:text-neutral-500 text-white rounded-lg font-medium 
                        flex items-center gap-2 transition-colors"
             >
               {loading ? (

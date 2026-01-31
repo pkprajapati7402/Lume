@@ -199,10 +199,10 @@ export default function InvestSection() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-600/20 via-orange-600/10 to-rose-600/20 border border-white/10 p-8"
+        className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-600/10 via-orange-600/5 to-neutral-900/50 border border-neutral-800/50 p-8"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/20 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl" />
         
         <div className="relative">
           <div className="flex items-center gap-4 mb-6">
@@ -211,29 +211,29 @@ export default function InvestSection() {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-white">Liquidity Pools</h2>
-              <p className="text-gray-400">Earn passive income by providing liquidity</p>
+              <p className="text-neutral-400">Earn passive income by providing liquidity</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+            <div className="p-4 rounded-2xl bg-neutral-900/50 border border-neutral-800/50">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="w-4 h-4 text-amber-400" />
-                <span className="text-sm text-gray-400">Total TVL</span>
+                <span className="text-sm text-neutral-400">Total TVL</span>
               </div>
               <p className="text-2xl font-bold text-white">{formatCurrency(totalTVL)}</p>
             </div>
-            <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+            <div className="p-4 rounded-2xl bg-neutral-900/50 border border-neutral-800/50">
               <div className="flex items-center gap-2 mb-2">
                 <Percent className="w-4 h-4 text-emerald-400" />
-                <span className="text-sm text-gray-400">Avg APR</span>
+                <span className="text-sm text-neutral-400">Avg APR</span>
               </div>
               <p className="text-2xl font-bold text-emerald-400">{avgAPR.toFixed(1)}%</p>
             </div>
-            <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+            <div className="p-4 rounded-2xl bg-neutral-900/50 border border-neutral-800/50">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-4 h-4 text-violet-400" />
-                <span className="text-sm text-gray-400">Active Pools</span>
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span className="text-sm text-neutral-400">Active Pools</span>
               </div>
               <p className="text-2xl font-bold text-white">{pools.length}</p>
             </div>
@@ -246,12 +246,12 @@ export default function InvestSection() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="flex items-start gap-4 p-4 rounded-2xl bg-violet-500/10 border border-violet-500/20"
+        className="flex items-start gap-4 p-4 rounded-2xl bg-sky-500/10 border border-sky-500/20"
       >
-        <Info className="w-5 h-5 text-violet-400 flex-shrink-0 mt-0.5" />
+        <Info className="w-5 h-5 text-sky-400 flex-shrink-0 mt-0.5" />
         <div className="text-sm">
           <p className="text-white font-medium mb-1">How Liquidity Pools Work</p>
-          <p className="text-gray-400">
+          <p className="text-neutral-400">
             Provide liquidity to earn a share of trading fees. The more liquidity you provide, 
             the more fees you earn. Note: Impermanent loss may occur during volatile market conditions.
           </p>
@@ -267,7 +267,7 @@ export default function InvestSection() {
             whileTap={{ scale: 0.95 }}
             onClick={fetchPools}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400 transition-all"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700/50 text-neutral-400 transition-all"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
@@ -277,7 +277,7 @@ export default function InvestSection() {
         {loading ? (
           <div className="space-y-4">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-24 rounded-2xl bg-white/5 animate-pulse" />
+              <div key={i} className="h-24 rounded-2xl bg-neutral-800/50 animate-pulse" />
             ))}
           </div>
         ) : (
@@ -288,37 +288,37 @@ export default function InvestSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 overflow-hidden"
+                className="rounded-2xl bg-neutral-900/50 border border-neutral-800/50 overflow-hidden"
               >
                 <button
                   onClick={() => setExpandedPool(expandedPool === pool.id ? null : pool.id)}
-                  className="w-full p-6 flex items-center justify-between hover:bg-white/5 transition-colors"
+                  className="w-full p-6 flex items-center justify-between hover:bg-neutral-800/30 transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex -space-x-2">
-                      <span className="text-2xl bg-[#1a1a24] rounded-full p-2 border-2 border-[#0d0d14]">
+                      <span className="text-2xl bg-neutral-900 rounded-full p-2 border-2 border-black">
                         {pool.assetIcons[0]}
                       </span>
-                      <span className="text-2xl bg-[#1a1a24] rounded-full p-2 border-2 border-[#0d0d14]">
+                      <span className="text-2xl bg-neutral-900 rounded-full p-2 border-2 border-black">
                         {pool.assetIcons[1]}
                       </span>
                     </div>
                     <div className="text-left">
                       <p className="font-semibold text-white">{pool.name}</p>
-                      <p className="text-sm text-gray-500">Constant Product AMM</p>
+                      <p className="text-sm text-neutral-500">Constant Product AMM</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-8">
                     <div className="hidden sm:block text-right">
-                      <p className="text-sm text-gray-400">TVL</p>
+                      <p className="text-sm text-neutral-400">TVL</p>
                       <p className="font-semibold text-white">{formatCurrency(pool.tvl)}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-400">APR</p>
+                      <p className="text-sm text-neutral-400">APR</p>
                       <p className="font-semibold text-emerald-400">{pool.apr}%</p>
                     </div>
-                    <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${
+                    <ChevronDown className={`w-5 h-5 text-neutral-400 transition-transform ${
                       expandedPool === pool.id ? 'rotate-180' : ''
                     }`} />
                   </div>
@@ -333,22 +333,22 @@ export default function InvestSection() {
                       transition={{ duration: 0.2 }}
                       className="overflow-hidden"
                     >
-                      <div className="px-6 pb-6 pt-2 border-t border-white/5">
+                      <div className="px-6 pb-6 pt-2 border-t border-neutral-800/50">
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-                          <div className="p-3 rounded-xl bg-white/5">
-                            <p className="text-xs text-gray-500 mb-1">24h Volume</p>
+                          <div className="p-3 rounded-xl bg-neutral-800/50">
+                            <p className="text-xs text-neutral-500 mb-1">24h Volume</p>
                             <p className="font-semibold text-white">{formatCurrency(pool.volume24h)}</p>
                           </div>
-                          <div className="p-3 rounded-xl bg-white/5">
-                            <p className="text-xs text-gray-500 mb-1">Pool Fee</p>
+                          <div className="p-3 rounded-xl bg-neutral-800/50">
+                            <p className="text-xs text-neutral-500 mb-1">Pool Fee</p>
                             <p className="font-semibold text-white">0.3%</p>
                           </div>
-                          <div className="p-3 rounded-xl bg-white/5">
-                            <p className="text-xs text-gray-500 mb-1">Your Liquidity</p>
+                          <div className="p-3 rounded-xl bg-neutral-800/50">
+                            <p className="text-xs text-neutral-500 mb-1">Your Liquidity</p>
                             <p className="font-semibold text-white">{formatCurrency(pool.myLiquidity)}</p>
                           </div>
-                          <div className="p-3 rounded-xl bg-white/5">
-                            <p className="text-xs text-gray-500 mb-1">Your Shares</p>
+                          <div className="p-3 rounded-xl bg-neutral-800/50">
+                            <p className="text-xs text-neutral-500 mb-1">Your Shares</p>
                             <p className="font-semibold text-white">{pool.shares.toFixed(6)}</p>
                           </div>
                         </div>
@@ -374,7 +374,7 @@ export default function InvestSection() {
                               setActiveTab('withdraw');
                             }}
                             disabled={pool.myLiquidity === 0}
-                            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700/50 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                           >
                             <Minus className="w-4 h-4" />
                             Remove
@@ -400,7 +400,7 @@ export default function InvestSection() {
         <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
         <div className="text-sm">
           <p className="text-white font-medium mb-1">Risk Disclosure</p>
-          <p className="text-gray-400">
+          <p className="text-neutral-400">
             Providing liquidity involves risks including impermanent loss and smart contract risks. 
             Only invest what you can afford to lose. Past returns do not guarantee future performance.
           </p>
@@ -422,39 +422,39 @@ export default function InvestSection() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#0d0d14] rounded-3xl p-6 border border-white/10 max-w-md w-full"
+              className="bg-black rounded-3xl p-6 border border-neutral-800/50 max-w-md w-full"
             >
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="flex -space-x-2">
-                    <span className="text-xl bg-[#1a1a24] rounded-full p-2 border-2 border-[#0d0d14]">
+                    <span className="text-xl bg-neutral-900 rounded-full p-2 border-2 border-black">
                       {selectedPool.assetIcons[0]}
                     </span>
-                    <span className="text-xl bg-[#1a1a24] rounded-full p-2 border-2 border-[#0d0d14]">
+                    <span className="text-xl bg-neutral-900 rounded-full p-2 border-2 border-black">
                       {selectedPool.assetIcons[1]}
                     </span>
                   </div>
                   <div>
                     <h3 className="font-bold text-white">{selectedPool.name}</h3>
-                    <p className="text-sm text-gray-500">APR: {selectedPool.apr}%</p>
+                    <p className="text-sm text-neutral-500">APR: {selectedPool.apr}%</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setSelectedPool(null)}
-                  className="p-2 hover:bg-white/5 rounded-lg transition-colors text-gray-400"
+                  className="p-2 hover:bg-neutral-800/50 rounded-lg transition-colors text-neutral-400"
                 >
                   ×
                 </button>
               </div>
 
               {/* Tabs */}
-              <div className="flex gap-2 p-1 bg-white/5 rounded-xl mb-6">
+              <div className="flex gap-2 p-1 bg-neutral-900/50 rounded-xl mb-6">
                 <button
                   onClick={() => setActiveTab('deposit')}
                   className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
                     activeTab === 'deposit'
                       ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
-                      : 'text-gray-400 hover:text-white'
+                      : 'text-neutral-400 hover:text-white'
                   }`}
                 >
                   <Lock className="w-4 h-4" />
@@ -465,7 +465,7 @@ export default function InvestSection() {
                   className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition-all ${
                     activeTab === 'withdraw'
                       ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
-                      : 'text-gray-400 hover:text-white'
+                      : 'text-neutral-400 hover:text-white'
                   }`}
                 >
                   <Unlock className="w-4 h-4" />
@@ -476,7 +476,7 @@ export default function InvestSection() {
               {activeTab === 'deposit' ? (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">
+                    <label className="block text-sm text-neutral-400 mb-2">
                       Amount ({selectedPool.assets[0]})
                     </label>
                     <input
@@ -484,23 +484,23 @@ export default function InvestSection() {
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="0.00"
-                      className="w-full px-4 py-4 rounded-2xl bg-black/30 border border-white/5 text-white placeholder:text-gray-600 outline-none focus:border-amber-500/50 transition-colors text-lg"
+                      className="w-full px-4 py-4 rounded-2xl bg-black/40 border border-neutral-800/50 text-white placeholder:text-neutral-600 outline-none focus:border-amber-500/50 transition-colors text-lg"
                     />
                   </div>
 
-                  <div className="p-4 rounded-xl bg-white/5 space-y-2">
+                  <div className="p-4 rounded-xl bg-neutral-800/50 space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Estimated {selectedPool.assets[1]} needed</span>
+                      <span className="text-neutral-400">Estimated {selectedPool.assets[1]} needed</span>
                       <span className="text-white">
                         {amount ? (parseFloat(amount) * 0.12).toFixed(4) : '0.00'}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Pool share</span>
+                      <span className="text-neutral-400">Pool share</span>
                       <span className="text-white">~0.0001%</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">Estimated daily earnings</span>
+                      <span className="text-neutral-400">Estimated daily earnings</span>
                       <span className="text-emerald-400">
                         ~${amount ? ((parseFloat(amount) * 0.12 * (selectedPool.apr / 100)) / 365).toFixed(4) : '0.00'}
                       </span>
@@ -530,7 +530,7 @@ export default function InvestSection() {
               ) : (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-2">
+                    <label className="block text-sm text-neutral-400 mb-2">
                       Shares to withdraw
                     </label>
                     <input
@@ -539,20 +539,20 @@ export default function InvestSection() {
                       onChange={(e) => setAmount(e.target.value)}
                       placeholder="0.00"
                       max={selectedPool.shares}
-                      className="w-full px-4 py-4 rounded-2xl bg-black/30 border border-white/5 text-white placeholder:text-gray-600 outline-none focus:border-amber-500/50 transition-colors text-lg"
+                      className="w-full px-4 py-4 rounded-2xl bg-black/40 border border-neutral-800/50 text-white placeholder:text-neutral-600 outline-none focus:border-amber-500/50 transition-colors text-lg"
                     />
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs text-neutral-500 mt-2">
                       Available: {selectedPool.shares.toFixed(6)} shares
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-white/5 space-y-2">
+                  <div className="p-4 rounded-xl bg-neutral-800/50 space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">You will receive</span>
+                      <span className="text-neutral-400">You will receive</span>
                       <span className="text-white">~{amount || '0'} {selectedPool.assets[0]}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-400">And</span>
+                      <span className="text-neutral-400">And</span>
                       <span className="text-white">
                         ~{amount ? (parseFloat(amount) * 0.12).toFixed(4) : '0'} {selectedPool.assets[1]}
                       </span>
@@ -564,7 +564,7 @@ export default function InvestSection() {
                     whileTap={{ scale: 0.98 }}
                     onClick={handleWithdraw}
                     disabled={isProcessing || !amount || selectedPool.shares === 0}
-                    className="w-full py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
+                    className="w-full py-4 rounded-2xl bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700/50 text-white font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-3"
                   >
                     {isProcessing ? (
                       <>
@@ -591,15 +591,15 @@ export default function InvestSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/5 border border-violet-500/20 p-6"
+          className="rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/20 p-6"
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 rounded-xl bg-violet-500/20">
-              <Zap className="w-5 h-5 text-violet-400" />
+            <div className="p-3 rounded-xl bg-amber-500/20">
+              <Zap className="w-5 h-5 text-amber-400" />
             </div>
             <h4 className="font-semibold text-white">Instant Settlement</h4>
           </div>
-          <p className="text-gray-400 text-sm">
+          <p className="text-neutral-400 text-sm">
             Stellar DEX transactions settle in 3-5 seconds with minimal fees.
           </p>
         </motion.div>
@@ -608,15 +608,15 @@ export default function InvestSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/5 border border-cyan-500/20 p-6"
+          className="rounded-2xl bg-gradient-to-br from-sky-500/10 to-blue-500/5 border border-sky-500/20 p-6"
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 rounded-xl bg-cyan-500/20">
-              <Shield className="w-5 h-5 text-cyan-400" />
+            <div className="p-3 rounded-xl bg-sky-500/20">
+              <Shield className="w-5 h-5 text-sky-400" />
             </div>
             <h4 className="font-semibold text-white">Non-Custodial</h4>
           </div>
-          <p className="text-gray-400 text-sm">
+          <p className="text-neutral-400 text-sm">
             Your funds remain in your wallet. You control your private keys at all times.
           </p>
         </motion.div>
@@ -633,7 +633,7 @@ export default function InvestSection() {
             </div>
             <h4 className="font-semibold text-white">Earn Passively</h4>
           </div>
-          <p className="text-gray-400 text-sm">
+          <p className="text-neutral-400 text-sm">
             Earn trading fees proportional to your share of the liquidity pool.
           </p>
         </motion.div>

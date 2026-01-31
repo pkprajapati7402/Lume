@@ -103,7 +103,7 @@ export default function XLMPriceChart() {
       const isIncreasing = data.isIncreasing;
       
       return (
-        <div className="bg-slate-900/95 border-2 rounded-lg px-4 py-3 shadow-2xl" 
+        <div className="bg-black/95 border-2 rounded-lg px-4 py-3 shadow-2xl" 
              style={{ borderColor: isIncreasing ? '#10b981' : '#ef4444' }}>
           <div className="flex items-center gap-2 mb-2">
             {isIncreasing ? (
@@ -111,12 +111,12 @@ export default function XLMPriceChart() {
             ) : (
               <TrendingDown className="w-4 h-4 text-red-400" />
             )}
-            <p className="text-slate-300 text-xs font-medium">{data.date}</p>
+            <p className="text-neutral-300 text-xs font-medium">{data.date}</p>
           </div>
           <p className={`text-lg font-bold ${isIncreasing ? 'text-emerald-400' : 'text-red-400'}`}>
             ${payload[0].value.toFixed(6)}
           </p>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-neutral-500 mt-1">
             {isIncreasing ? '↑ Increasing' : '↓ Decreasing'}
           </p>
         </div>
@@ -137,21 +137,21 @@ export default function XLMPriceChart() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl overflow-hidden"
+      className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl overflow-hidden"
     >
       {/* Header */}
-      <div className="px-6 py-4 border-b border-slate-700/50">
+      <div className="px-6 py-4 border-b border-neutral-800/50">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
               <span className="text-white font-bold text-lg">✨</span>
             </div>
             <div>
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
                 Stellar (XLM) Price
-                <Activity className="w-4 h-4 text-indigo-400" />
+                <Activity className="w-4 h-4 text-amber-400" />
               </h3>
-              <p className="text-slate-400 text-sm">Live market data</p>
+              <p className="text-neutral-400 text-sm">Live market data</p>
             </div>
           </div>
 
@@ -163,8 +163,8 @@ export default function XLMPriceChart() {
                 onClick={() => setTimeRange(option.value)}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                   timeRange === option.value
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-white'
+                    ? 'bg-amber-600 text-white'
+                    : 'bg-neutral-800/50 text-neutral-400 hover:bg-neutral-800 hover:text-white'
                 }`}
               >
                 {option.label}
@@ -172,7 +172,7 @@ export default function XLMPriceChart() {
             ))}
             <button
               onClick={fetchXLMPriceData}
-              className="p-2 rounded-lg bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-white transition-all"
+              className="p-2 rounded-lg bg-neutral-800/50 text-neutral-400 hover:bg-neutral-800 hover:text-white transition-all"
               title="Refresh data"
             >
               <RefreshCw className="w-4 h-4" />
@@ -185,7 +185,7 @@ export default function XLMPriceChart() {
           <div className="mt-4 flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-end gap-4">
               <div>
-                <p className="text-xs text-slate-400 mb-1 uppercase tracking-wider">Current Price</p>
+                <p className="text-xs text-neutral-400 mb-1 uppercase tracking-wider">Current Price</p>
                 <p className="text-4xl font-bold text-white">
                   ${currentPrice.toFixed(6)}
                 </p>
@@ -214,20 +214,20 @@ export default function XLMPriceChart() {
             {/* Quick Stats */}
             <div className="flex gap-4">
               <div className="text-right">
-                <p className="text-xs text-slate-500 uppercase tracking-wider">High</p>
+                <p className="text-xs text-neutral-500 uppercase tracking-wider">High</p>
                 <p className="text-sm font-bold text-emerald-400">
                   ${Math.max(...priceData.map(d => d.price)).toFixed(6)}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-slate-500 uppercase tracking-wider">Low</p>
+                <p className="text-xs text-neutral-500 uppercase tracking-wider">Low</p>
                 <p className="text-sm font-bold text-red-400">
                   ${Math.min(...priceData.map(d => d.price)).toFixed(6)}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-slate-500 uppercase tracking-wider">Range</p>
-                <p className="text-sm font-bold text-slate-300">
+                <p className="text-xs text-neutral-500 uppercase tracking-wider">Range</p>
+                <p className="text-sm font-bold text-neutral-300">
                   {((Math.max(...priceData.map(d => d.price)) - Math.min(...priceData.map(d => d.price))) / Math.min(...priceData.map(d => d.price)) * 100).toFixed(2)}%
                 </p>
               </div>
@@ -241,8 +241,8 @@ export default function XLMPriceChart() {
         {isLoading || !isMounted ? (
           <div className="h-80 flex items-center justify-center">
             <div className="text-center">
-              <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin mx-auto mb-3" />
-              <p className="text-slate-400">Loading price data...</p>
+              <RefreshCw className="w-8 h-8 text-amber-400 animate-spin mx-auto mb-3" />
+              <p className="text-neutral-400">Loading price data...</p>
             </div>
           </div>
         ) : error ? (
@@ -252,7 +252,7 @@ export default function XLMPriceChart() {
               <p className="text-red-400 font-medium">{error}</p>
               <button
                 onClick={fetchXLMPriceData}
-                className="mt-3 text-sm text-indigo-400 hover:text-indigo-300 underline"
+                className="mt-3 text-sm text-amber-400 hover:text-amber-300 underline"
               >
                 Try again
               </button>
@@ -265,8 +265,8 @@ export default function XLMPriceChart() {
                 <defs>
                   {/* Neutral gradient for the area */}
                   <linearGradient id="colorPriceNeutral" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#f59e0b" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 
@@ -318,13 +318,13 @@ export default function XLMPriceChart() {
                 {currentPrice && (
                   <ReferenceLine 
                     y={currentPrice} 
-                    stroke="#6366f1" 
+                    stroke="#f59e0b" 
                     strokeDasharray="5 5"
                     strokeWidth={2}
                     label={{ 
                       value: `Now: $${currentPrice.toFixed(6)}`, 
                       position: 'right',
-                      fill: '#6366f1',
+                      fill: '#f59e0b',
                       fontSize: 11,
                       fontWeight: 700
                     }}
@@ -336,11 +336,11 @@ export default function XLMPriceChart() {
                   cursor={{ stroke: '#64748b', strokeWidth: 1, strokeDasharray: '3 3' }}
                 />
                 
-                {/* Main price line with neutral indigo color */}
+                {/* Main price line with neutral amber color */}
                 <Line 
                   type="monotone" 
                   dataKey="price" 
-                  stroke="#6366f1" 
+                  stroke="#f59e0b" 
                   strokeWidth={2.5}
                   dot={(props: any) => {
                     const { cx, cy, payload } = props;
@@ -373,7 +373,7 @@ export default function XLMPriceChart() {
                   }}
                   activeDot={{ 
                     r: 7, 
-                    fill: '#6366f1',
+                    fill: '#f59e0b',
                     stroke: '#fff',
                     strokeWidth: 2
                   }}
@@ -396,14 +396,14 @@ export default function XLMPriceChart() {
 
         {/* Data Source Attribution */}
         {!isLoading && !error && (
-          <div className="mt-4 pt-4 border-t border-slate-700/50">
-            <p className="text-xs text-slate-500 text-center">
+          <div className="mt-4 pt-4 border-t border-neutral-800/50">
+            <p className="text-xs text-neutral-500 text-center">
               Data provided by{' '}
               <a
                 href="https://www.coingecko.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-indigo-400 hover:text-indigo-300 underline"
+                className="text-amber-400 hover:text-amber-300 underline"
               >
                 CoinGecko
               </a>

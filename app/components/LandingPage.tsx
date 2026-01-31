@@ -153,24 +153,24 @@ export default function LandingPage() {
       icon: Zap,
       title: 'Individual Payouts',
       description: 'Instant FX conversion for single payments. Send to any team member worldwide with real-time exchange rates.',
-      color: 'from-purple-500 to-pink-500'
+      color: 'from-amber-500 to-orange-500'
     },
     {
       icon: Users,
       title: 'Bulk Payments',
       description: 'CSV Scaling for mass distributions. Upload your payment list and process hundreds of transactions in one click.',
-      color: 'from-blue-500 to-cyan-500'
+      color: 'from-neutral-600 to-neutral-700'
     },
     {
       icon: Building2,
       title: 'Direct Off-Ramps',
       description: 'MoneyGram Integration for cash pickups. Your team can withdraw locally without needing a bank account.',
-      color: 'from-emerald-500 to-teal-500'
+      color: 'from-emerald-600 to-teal-600'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-gradient-to-br from-black via-neutral-950 to-black">
       <Navbar />
       
       {/* Hero Section */}
@@ -190,7 +190,7 @@ export default function LandingPage() {
               <motion.div variants={fadeInUp} className="space-y-4">
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight">
                   Global Payroll at the{' '}
-                  <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400 bg-clip-text text-transparent">
                     Speed of Light
                   </span>
                 </h1>
@@ -198,10 +198,10 @@ export default function LandingPage() {
 
               <motion.p
                 variants={fadeInUp}
-                className="text-xl sm:text-2xl text-slate-300 leading-relaxed"
+                className="text-xl sm:text-2xl text-neutral-300 leading-relaxed"
               >
                 Pay your international team in seconds with{' '}
-                <span className="text-purple-400 font-semibold">90% lower fees</span>{' '}
+                <span className="text-amber-400 font-semibold">90% lower fees</span>{' '}
                 using Stellar Path Payments.
               </motion.p>
 
@@ -214,7 +214,7 @@ export default function LandingPage() {
                     handleConnect();
                   }}
                   disabled={isConnecting}
-                  className="group inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  className="group inline-flex items-center gap-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-900 px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-amber-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/30 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   suppressHydrationWarning
                 >
                   <Wallet className="w-5 h-5" />
@@ -229,7 +229,7 @@ export default function LandingPage() {
               variants={fadeInUp}
               className="relative"
             >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/20">
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/10">
                 <img
                   src="/payment-illustration.png"
                   alt="Global payment illustration"
@@ -252,7 +252,7 @@ export default function LandingPage() {
             <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
               Everything You Need
             </h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            <p className="text-xl text-neutral-400 max-w-2xl mx-auto">
               Powerful features designed for modern global teams
             </p>
           </motion.div>
@@ -268,7 +268,7 @@ export default function LandingPage() {
               <motion.div
                 key={index}
                 variants={fadeInUp}
-                className="group relative bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 hover:bg-slate-800/80 transition-all duration-300 hover:scale-105 hover:border-slate-600"
+                className="group relative bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-2xl p-8 hover:bg-neutral-900/80 transition-all duration-300 hover:scale-105 hover:border-neutral-700"
               >
                 {/* Icon Container */}
                 <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${feature.color} mb-6`}>
@@ -279,7 +279,7 @@ export default function LandingPage() {
                 <h3 className="text-2xl font-bold text-white mb-4">
                   {feature.title}
                 </h3>
-                <p className="text-slate-400 leading-relaxed">
+                <p className="text-neutral-400 leading-relaxed">
                   {feature.description}
                 </p>
 
@@ -302,13 +302,13 @@ export default function LandingPage() {
               { icon: Shield, title: 'Secure', desc: 'Bank-level encryption' },
               { icon: Clock, title: '5-Second Settlements', desc: 'Lightning fast transfers' },
             ].map((item, idx) => (
-              <div key={idx} className="flex items-start gap-4 bg-slate-800/30 rounded-xl p-6 border border-slate-700/30">
-                <div className="p-3 rounded-lg bg-slate-700/50">
-                  <item.icon className="w-5 h-5 text-purple-400" />
+              <div key={idx} className="flex items-start gap-4 bg-neutral-900/30 rounded-xl p-6 border border-neutral-800/30">
+                <div className="p-3 rounded-lg bg-neutral-800/50">
+                  <item.icon className="w-5 h-5 text-amber-400" />
                 </div>
                 <div>
                   <h4 className="text-white font-semibold mb-1">{item.title}</h4>
-                  <p className="text-slate-400 text-sm">{item.desc}</p>
+                  <p className="text-neutral-400 text-sm">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -327,7 +327,7 @@ export default function LandingPage() {
             <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
               Simple, Transparent Pricing
             </h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            <p className="text-xl text-neutral-400 max-w-2xl mx-auto">
               Pay only 1% per transaction. No hidden fees, no surprises.
             </p>
           </motion.div>
@@ -339,30 +339,30 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8"
+              className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-2xl p-8"
             >
               <div className="mb-6">
                 <h3 className="text-2xl font-bold text-white mb-2">Starter</h3>
-                <p className="text-slate-400">For small teams</p>
+                <p className="text-neutral-400">For small teams</p>
               </div>
               <div className="mb-6">
                 <div className="flex items-baseline gap-2">
                   <span className="text-5xl font-bold text-white">1%</span>
-                  <span className="text-slate-400">per transaction</span>
+                  <span className="text-neutral-400">per transaction</span>
                 </div>
               </div>
               <ul className="space-y-4 mb-8">
                 {['Up to 50 payments/month', 'Individual payouts', 'Basic support', 'Email notifications'].map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-slate-300">{feature}</span>
+                    <span className="text-neutral-300">{feature}</span>
                   </li>
                 ))}
               </ul>
               <button
                 onClick={handleConnect}
                 disabled={isConnecting}
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-neutral-800 hover:bg-neutral-700 text-white px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 suppressHydrationWarning
               >
                 {isConnecting ? 'Connecting...' : 'Get Started'}
@@ -375,33 +375,33 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="relative bg-gradient-to-b from-purple-900/40 to-slate-800/50 backdrop-blur-sm border-2 border-purple-500/50 rounded-2xl p-8 transform scale-105"
+              className="relative bg-gradient-to-b from-amber-900/20 to-neutral-900/50 backdrop-blur-sm border-2 border-amber-500/40 rounded-2xl p-8 transform scale-105"
             >
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-amber-500 to-orange-500 text-slate-900 px-4 py-1 rounded-full text-sm font-semibold">
                 Most Popular
               </div>
               <div className="mb-6">
                 <h3 className="text-2xl font-bold text-white mb-2">Professional</h3>
-                <p className="text-slate-400">For growing companies</p>
+                <p className="text-neutral-400">For growing companies</p>
               </div>
               <div className="mb-6">
                 <div className="flex items-baseline gap-2">
                   <span className="text-5xl font-bold text-white">0.9%</span>
-                  <span className="text-slate-400">per transaction</span>
+                  <span className="text-neutral-400">per transaction</span>
                 </div>
               </div>
               <ul className="space-y-4 mb-8">
                 {['Unlimited payments', 'Bulk CSV uploads', 'Priority support', 'Advanced analytics', 'API access', 'Custom integrations'].map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-slate-300">{feature}</span>
+                    <CheckCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-neutral-300">{feature}</span>
                   </li>
                 ))}
               </ul>
               <button
                 onClick={handleConnect}
                 disabled={isConnecting}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 suppressHydrationWarning
               >
                 {isConnecting ? 'Connecting...' : 'Get Started'}
@@ -414,28 +414,28 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8"
+              className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-2xl p-8"
             >
               <div className="mb-6">
                 <h3 className="text-2xl font-bold text-white mb-2">Enterprise</h3>
-                <p className="text-slate-400">For large organizations</p>
+                <p className="text-neutral-400">For large organizations</p>
               </div>
               <div className="mb-6">
                 <div className="flex items-baseline gap-2">
                   <span className="text-5xl font-bold text-white">Custom</span>
                 </div>
-                <p className="text-slate-400 text-sm mt-2">Volume discounts available</p>
+                <p className="text-neutral-400 text-sm mt-2">Volume discounts available</p>
               </div>
               <ul className="space-y-4 mb-8">
                 {['Everything in Pro', 'Dedicated account manager', 'Custom contracts', 'White-label options', '24/7 phone support', 'SLA guarantees'].map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-slate-300">{feature}</span>
+                    <span className="text-neutral-300">{feature}</span>
                   </li>
                 ))}
               </ul>
               <button 
-                className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                className="w-full bg-neutral-800 hover:bg-neutral-700 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                 suppressHydrationWarning
               >
                 Contact Sales
@@ -454,24 +454,24 @@ export default function LandingPage() {
             <div className="text-center mb-6">
               <TrendingDown className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-white mb-2">See Your Savings</h3>
-              <p className="text-slate-400">Compare Lume to traditional payment methods</p>
+              <p className="text-neutral-400">Compare Lume to traditional payment methods</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-slate-800/50 rounded-xl p-6 text-center">
+              <div className="bg-neutral-900/50 rounded-xl p-6 text-center">
                 <DollarSign className="w-8 h-8 text-red-400 mx-auto mb-3" />
-                <div className="text-sm text-slate-400 mb-2">Traditional Banks</div>
+                <div className="text-sm text-neutral-400 mb-2">Traditional Banks</div>
                 <div className="text-3xl font-bold text-red-400">5-7%</div>
-                <div className="text-xs text-slate-500 mt-2">+ 3-5 days delay</div>
+                <div className="text-xs text-neutral-500 mt-2">+ 3-5 days delay</div>
               </div>
-              <div className="bg-slate-800/50 rounded-xl p-6 text-center">
+              <div className="bg-neutral-900/50 rounded-xl p-6 text-center">
                 <DollarSign className="w-8 h-8 text-amber-400 mx-auto mb-3" />
-                <div className="text-sm text-slate-400 mb-2">Wire Transfers</div>
+                <div className="text-sm text-neutral-400 mb-2">Wire Transfers</div>
                 <div className="text-3xl font-bold text-amber-400">3-5%</div>
-                <div className="text-xs text-slate-500 mt-2">+ 1-2 days delay</div>
+                <div className="text-xs text-neutral-500 mt-2">+ 1-2 days delay</div>
               </div>
               <div className="bg-gradient-to-br from-emerald-900/50 to-teal-900/50 rounded-xl p-6 text-center border-2 border-emerald-500/30">
                 <DollarSign className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
-                <div className="text-sm text-slate-400 mb-2">Lume</div>
+                <div className="text-sm text-neutral-400 mb-2">Lume</div>
                 <div className="text-3xl font-bold text-emerald-400">1%</div>
                 <div className="text-xs text-emerald-400 mt-2">Instant settlement</div>
               </div>
@@ -491,7 +491,7 @@ export default function LandingPage() {
             <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
               About Lume
             </h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            <p className="text-xl text-neutral-400 max-w-2xl mx-auto">
               Revolutionizing global payroll with blockchain technology
             </p>
           </motion.div>
@@ -506,7 +506,7 @@ export default function LandingPage() {
               <h3 className="text-3xl font-bold text-white mb-6">
                 Built on the Stellar Network
               </h3>
-              <div className="space-y-4 text-slate-300 leading-relaxed">
+              <div className="space-y-4 text-neutral-300 leading-relaxed">
                 <p>
                   Lume leverages the power of Stellar's blockchain to provide fast, affordable, and reliable cross-border payments. Our mission is to make global payroll accessible to companies of all sizes.
                 </p>
@@ -532,9 +532,9 @@ export default function LandingPage() {
                 { label: 'Transaction Fee', value: '1%' },
                 { label: 'Uptime', value: '99.9%' },
               ].map((stat, idx) => (
-                <div key={idx} className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 text-center">
-                  <div className="text-3xl font-bold text-purple-400 mb-2">{stat.value}</div>
-                  <div className="text-slate-400 text-sm">{stat.label}</div>
+                <div key={idx} className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6 text-center">
+                  <div className="text-3xl font-bold text-amber-400 mb-2">{stat.value}</div>
+                  <div className="text-neutral-400 text-sm">{stat.label}</div>
                 </div>
               ))}
             </motion.div>
@@ -572,15 +572,15 @@ export default function LandingPage() {
                   icon: Shield
                 },
               ].map((item, idx) => (
-                <div key={idx} className="flex gap-4 bg-slate-800/30 rounded-xl p-6 border border-slate-700/30">
+                <div key={idx} className="flex gap-4 bg-neutral-900/30 rounded-xl p-6 border border-neutral-800/30">
                   <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
                       <item.icon className="w-6 h-6 text-white" />
                     </div>
                   </div>
                   <div>
                     <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
-                    <p className="text-slate-400">{item.desc}</p>
+                    <p className="text-neutral-400">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -600,7 +600,7 @@ export default function LandingPage() {
             <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
               Get in Touch
             </h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            <p className="text-xl text-neutral-400 max-w-2xl mx-auto">
               Have questions? We're here to help.
             </p>
           </motion.div>
@@ -612,16 +612,16 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8"
+              className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-2xl p-8"
             >
               <form className="space-y-6" onSubmit={handleContactSubmit}>
                 <div>
-                  <label className="block text-slate-300 text-sm font-medium mb-2">Name</label>
+                  <label className="block text-neutral-300 text-sm font-medium mb-2">Name</label>
                   <input
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full bg-black/50 border border-neutral-800 rounded-lg px-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500 transition-colors"
                     placeholder="John Doe"
                     autoComplete="name"
                     suppressHydrationWarning
@@ -630,12 +630,12 @@ export default function LandingPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-300 text-sm font-medium mb-2">Email</label>
+                  <label className="block text-neutral-300 text-sm font-medium mb-2">Email</label>
                   <input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
+                    className="w-full bg-black/50 border border-neutral-800 rounded-lg px-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500 transition-colors"
                     placeholder="john@company.com"
                     autoComplete="email"
                     suppressHydrationWarning
@@ -644,12 +644,12 @@ export default function LandingPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-300 text-sm font-medium mb-2">Message</label>
+                  <label className="block text-neutral-300 text-sm font-medium mb-2">Message</label>
                   <textarea
                     rows={5}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full bg-slate-900/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors resize-none"
+                    className="w-full bg-black/50 border border-neutral-800 rounded-lg px-4 py-3 text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500 transition-colors resize-none"
                     placeholder="Tell us about your payroll needs..."
                     autoComplete="off"
                     suppressHydrationWarning
@@ -660,7 +660,7 @@ export default function LandingPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-purple-500/25 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   suppressHydrationWarning
                 >
                   {isSubmitting ? (
@@ -690,43 +690,43 @@ export default function LandingPage() {
                 <h3 className="text-2xl font-bold text-white mb-6">Contact Information</h3>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-slate-800/50 border border-slate-700/50 flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5 text-purple-400" />
+                    <div className="w-12 h-12 rounded-lg bg-neutral-900/50 border border-neutral-800/50 flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-5 h-5 text-amber-400" />
                     </div>
                     <div>
-                      <div className="text-slate-400 text-sm mb-1">Email</div>
+                      <div className="text-neutral-400 text-sm mb-1">Email</div>
                       <div className="text-white font-semibold">support@lume.pay</div>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-slate-800/50 border border-slate-700/50 flex items-center justify-center flex-shrink-0">
-                      <MessageSquare className="w-5 h-5 text-purple-400" />
+                    <div className="w-12 h-12 rounded-lg bg-neutral-900/50 border border-neutral-800/50 flex items-center justify-center flex-shrink-0">
+                      <MessageSquare className="w-5 h-5 text-amber-400" />
                     </div>
                     <div>
-                      <div className="text-slate-400 text-sm mb-1">Live Chat</div>
+                      <div className="text-neutral-400 text-sm mb-1">Live Chat</div>
                       <div className="text-white font-semibold">Available 24/7</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-purple-900/30 to-blue-900/30 backdrop-blur-sm border border-purple-500/30 rounded-xl p-6">
+              <div className="bg-gradient-to-br from-amber-900/20 to-orange-900/20 backdrop-blur-sm border border-amber-500/30 rounded-xl p-6">
                 <h4 className="text-white font-semibold mb-3">Enterprise Inquiries</h4>
-                <p className="text-slate-400 text-sm mb-4">
+                <p className="text-neutral-400 text-sm mb-4">
                   Looking to process high volumes? Contact our enterprise team for custom solutions and volume discounts.
                 </p>
-                <button className="text-purple-400 font-semibold text-sm hover:text-purple-300 transition-colors flex items-center gap-2">
+                <button className="text-amber-400 font-semibold text-sm hover:text-amber-300 transition-colors flex items-center gap-2">
                   Schedule a Call
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="bg-slate-800/30 backdrop-blur-sm border border-slate-700/30 rounded-xl p-6">
+              <div className="bg-neutral-900/30 backdrop-blur-sm border border-neutral-800/30 rounded-xl p-6">
                 <h4 className="text-white font-semibold mb-3">FAQs & Documentation</h4>
-                <p className="text-slate-400 text-sm mb-4">
+                <p className="text-neutral-400 text-sm mb-4">
                   Check out our comprehensive documentation and frequently asked questions.
                 </p>
-                <button className="text-purple-400 font-semibold text-sm hover:text-purple-300 transition-colors flex items-center gap-2">
+                <button className="text-amber-400 font-semibold text-sm hover:text-amber-300 transition-colors flex items-center gap-2">
                   View Docs
                   <ArrowRight className="w-4 h-4" />
                 </button>
@@ -743,21 +743,21 @@ export default function LandingPage() {
           transition={{ duration: 0.8 }}
           className="relative max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 pb-32"
         >
-          <div className="relative bg-gradient-to-r from-purple-900/30 to-blue-900/30 backdrop-blur-sm border border-purple-500/30 rounded-3xl p-12 text-center overflow-hidden">
+          <div className="relative bg-gradient-to-r from-neutral-900/50 to-neutral-900/30 backdrop-blur-sm border border-neutral-700/50 rounded-3xl p-12 text-center overflow-hidden">
             {/* Background glow */}
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-blue-600/10 blur-xl" />
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-600/5 to-orange-600/5 blur-xl" />
             
             <div className="relative space-y-6">
               <h2 className="text-3xl sm:text-4xl font-bold text-white">
                 Ready to revolutionize your payroll?
               </h2>
-              <p className="text-slate-300 text-lg max-w-2xl mx-auto">
+              <p className="text-neutral-300 text-lg max-w-2xl mx-auto">
                 Join thousands of companies using Stellar Payroll to pay their global teams faster and cheaper.
               </p>
               <button
                 onClick={handleConnect}
                 disabled={isConnecting}
-                className="inline-flex items-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-slate-100 transition-all duration-300 hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-400 to-orange-500 text-slate-900 px-8 py-4 rounded-xl text-lg font-semibold hover:from-amber-300 hover:to-orange-400 transition-all duration-300 hover:scale-105 shadow-xl shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Wallet className="w-5 h-5" />
                 {isConnecting ? 'Connecting...' : 'Start Paying Globally'}

@@ -365,7 +365,7 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
         transition={{ duration: 0.5 }}
       >
         <h2 className="text-2xl font-bold text-white mb-2">Bulk Operations</h2>
-        <p className="text-slate-400">Add employees or process bulk payments using CSV files</p>
+        <p className="text-neutral-400">Add employees or process bulk payments using CSV files</p>
       </motion.div>
 
       {/* Mode Selector */}
@@ -373,7 +373,7 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
-        className="flex gap-4 p-1 bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-lg w-fit"
+        className="flex gap-4 p-1 bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-lg w-fit"
       >
         <button
           onClick={() => {
@@ -385,8 +385,8 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
           }}
           className={`px-6 py-2.5 rounded-md font-medium transition-all ${
             mode === 'employee'
-              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-amber-600 text-white shadow-lg shadow-amber-500/25'
+              : 'text-neutral-400 hover:text-white'
           }`}
         >
           <div className="flex items-center gap-2">
@@ -404,8 +404,8 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
           }}
           className={`px-6 py-2.5 rounded-md font-medium transition-all ${
             mode === 'payment'
-              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25'
-              : 'text-slate-400 hover:text-white'
+              ? 'bg-amber-600 text-white shadow-lg shadow-amber-500/25'
+              : 'text-neutral-400 hover:text-white'
           }`}
         >
           <div className="flex items-center gap-2">
@@ -462,28 +462,28 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6"
+            className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6"
           >
             <h3 className="text-lg font-semibold text-white mb-4">Payment Progress</h3>
             
             {/* Progress Bar */}
             <div className="mb-4">
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-slate-400">
+                <span className="text-neutral-400">
                   Processing {paymentProgress.currentBatch} of {paymentProgress.totalBatches} transaction{paymentProgress.totalBatches !== 1 ? 's' : ''}
                 </span>
-                <span className="text-indigo-400 font-medium">
+                <span className="text-amber-400 font-medium">
                   {paymentProgress.processedRecipients} / {paymentProgress.totalRecipients} recipients
                 </span>
               </div>
-              <div className="w-full bg-slate-700 rounded-full h-3 overflow-hidden">
+              <div className="w-full bg-neutral-800 rounded-full h-3 overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ 
                     width: `${(paymentProgress.processedRecipients / paymentProgress.totalRecipients) * 100}%` 
                   }}
                   transition={{ duration: 0.5 }}
-                  className="h-full bg-gradient-to-r from-indigo-600 to-purple-600"
+                  className="h-full bg-gradient-to-r from-amber-500 to-orange-600"
                 />
               </div>
             </div>
@@ -519,7 +519,7 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
                           href={`https://stellar.expert/explorer/${network}/tx/${batch.transactionHash}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-indigo-400 hover:text-indigo-300 underline mt-1 inline-block"
+                          className="text-xs text-amber-400 hover:text-amber-300 underline mt-1 inline-block"
                         >
                           View transaction →
                         </a>
@@ -552,14 +552,14 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6"
+          className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6"
         >
           <h3 className="text-lg font-semibold text-white mb-6">Upload CSV File</h3>
 
           {/* Download Template Button */}
           <button
             onClick={downloadTemplate}
-            className="w-full flex items-center justify-center gap-2 bg-slate-700/50 hover:bg-slate-700 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300 mb-6 border border-slate-600"
+            className="w-full flex items-center justify-center gap-2 bg-neutral-800/50 hover:bg-neutral-700 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300 mb-6 border border-neutral-700"
           >
             <Download className="w-5 h-5" />
             Download CSV Template
@@ -572,8 +572,8 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
             onDrop={handleDrop}
             className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-all ${
               isDragging
-                ? 'border-indigo-500 bg-indigo-500/10'
-                : 'border-slate-700 hover:border-slate-600'
+                ? 'border-amber-500 bg-amber-500/10'
+                : 'border-neutral-700 hover:border-neutral-600'
             }`}
           >
             <input
@@ -585,14 +585,14 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
             
             {!uploadedFile ? (
               <>
-                <FileSpreadsheet className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                <FileSpreadsheet className="w-16 h-16 text-neutral-600 mx-auto mb-4" />
                 <h4 className="text-white font-semibold mb-2">
                   Drop your CSV file here
                 </h4>
-                <p className="text-slate-400 text-sm mb-4">
+                <p className="text-neutral-400 text-sm mb-4">
                   or click to browse
                 </p>
-                <p className="text-slate-500 text-xs">
+                <p className="text-neutral-500 text-xs">
                   Maximum file size: 5MB
                 </p>
               </>
@@ -602,10 +602,10 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
                 <h4 className="text-white font-semibold mb-2">
                   {parsedData.length} employee{parsedData.length !== 1 ? 's' : ''} found
                 </h4>
-                <p className="text-slate-400 text-sm mb-2">
+                <p className="text-neutral-400 text-sm mb-2">
                   {uploadedFile.name}
                 </p>
-                <p className="text-slate-500 text-xs">
+                <p className="text-neutral-500 text-xs">
                   Ready to upload to database
                 </p>
                 <button
@@ -615,7 +615,7 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
                     setParsedData([]);
                     setError(null);
                   }}
-                  className="mt-4 text-indigo-400 hover:text-indigo-300 text-sm font-medium"
+                  className="mt-4 text-amber-400 hover:text-amber-300 text-sm font-medium"
                 >
                   Remove file
                 </button>
@@ -627,28 +627,28 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
             <>
               {/* Payment Summary (for payment mode) */}
               {mode === 'payment' && paymentCost && (
-                <div className="mt-6 bg-indigo-500/10 border border-indigo-500/30 rounded-lg p-4">
+                <div className="mt-6 bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
                   <div className="flex items-center gap-2 mb-3">
-                    <DollarSign className="w-5 h-5 text-indigo-400" />
-                    <h4 className="text-indigo-300 font-semibold">Payment Summary</h4>
+                    <DollarSign className="w-5 h-5 text-amber-400" />
+                    <h4 className="text-amber-300 font-semibold">Payment Summary</h4>
                   </div>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Recipients:</span>
+                      <span className="text-neutral-400">Recipients:</span>
                       <span className="text-white font-medium">{parsedData.length}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Transactions:</span>
+                      <span className="text-neutral-400">Transactions:</span>
                       <span className="text-white font-medium">{paymentCost.numberOfTransactions}</span>
                     </div>
                     {Object.entries(paymentCost.totalAmount).map(([asset, amount]) => (
                       <div key={asset} className="flex justify-between">
-                        <span className="text-slate-400">Total {asset}:</span>
+                        <span className="text-neutral-400">Total {asset}:</span>
                         <span className="text-white font-medium">{amount.toFixed(2)}</span>
                       </div>
                     ))}
-                    <div className="flex justify-between pt-2 border-t border-slate-700">
-                      <span className="text-slate-400">Est. Network Fees:</span>
+                    <div className="flex justify-between pt-2 border-t border-neutral-800">
+                      <span className="text-neutral-400">Est. Network Fees:</span>
                       <span className="text-emerald-400 font-medium">{paymentCost.estimatedFees.toFixed(5)} XLM</span>
                     </div>
                   </div>
@@ -658,7 +658,7 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
               <button 
                 onClick={mode === 'employee' ? handleUpload : handleBulkPayment}
                 disabled={isPending || isProcessingPayments}
-                className="w-full mt-6 flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full mt-6 flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
                 suppressHydrationWarning
               >
                 {isProcessingPayments ? (
@@ -695,23 +695,23 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
           className="space-y-6"
         >
           {/* CSV Format Guide */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6">
+          <div className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-white mb-4">CSV Format Guide</h3>
             <div className="space-y-4">
               <div>
-                <h4 className="text-indigo-400 font-medium mb-2">Required Columns:</h4>
-                <ul className="space-y-2 text-sm text-slate-300">
+                <h4 className="text-amber-400 font-medium mb-2">Required Columns:</h4>
+                <ul className="space-y-2 text-sm text-neutral-300">
                   <li className="flex items-start gap-2">
-                    <span className="text-indigo-500 font-bold">•</span>
+                    <span className="text-amber-500 font-bold">•</span>
                     <span><strong>Full_Name:</strong> Employee's full name</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-indigo-500 font-bold">•</span>
+                    <span className="text-amber-500 font-bold">•</span>
                     <span><strong>Wallet_Address:</strong> Stellar wallet address (G...)</span>
                   </li>
                   {mode === 'payment' && (
                     <li className="flex items-start gap-2">
-                      <span className="text-indigo-500 font-bold">•</span>
+                      <span className="text-amber-500 font-bold">•</span>
                       <span><strong>Amount:</strong> Payment amount (numeric)</span>
                     </li>
                   )}
@@ -719,13 +719,13 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
               </div>
 
               <div>
-                <h4 className="text-indigo-400 font-medium mb-2">Column Mapping:</h4>
-                <div className="space-y-2 text-sm text-slate-300 bg-slate-900/30 rounded-lg p-3">
+                <h4 className="text-amber-400 font-medium mb-2">Column Mapping:</h4>
+                <div className="space-y-2 text-sm text-neutral-300 bg-black/30 rounded-lg p-3">
                   <div className="grid grid-cols-2 gap-2">
-                    <span className="text-indigo-300 font-semibold">Column Name</span>
-                    <span className="text-slate-400">Description</span>
+                    <span className="text-amber-300 font-semibold">Column Name</span>
+                    <span className="text-neutral-400">Description</span>
                   </div>
-                  <div className="h-px bg-slate-700"></div>
+                  <div className="h-px bg-neutral-800"></div>
                   <div className="grid grid-cols-2 gap-2">
                     <span className="font-mono text-xs">Full_Name</span>
                     <span className="text-xs">Employee's complete name</span>
@@ -749,15 +749,15 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
                 </div>
               </div>
 
-              <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4 font-mono text-xs text-slate-300 overflow-x-auto">
-                <div className="text-indigo-400 mb-2">Example CSV Format:</div>
+              <div className="bg-black/50 border border-neutral-800 rounded-lg p-4 font-mono text-xs text-neutral-300 overflow-x-auto">
+                <div className="text-amber-400 mb-2">Example CSV Format:</div>
                 <div className="whitespace-nowrap">
                   <div className="text-emerald-400">Full_Name,Wallet_Address,Role,Department,Preferred_Asset</div>
                   <div className="mt-1">John Doe,GXXX...XXX,Software Engineer,Engineering,USDC</div>
                   <div>Jane Smith,GYYY...YYY,Product Designer,Design,EURT</div>
                   <div>Mike Johnson,GZZZ...ZZZ,Marketing Manager,Marketing,USDC</div>
                 </div>
-                <div className="text-slate-500 text-xs mt-3 whitespace-normal">
+                <div className="text-neutral-500 text-xs mt-3 whitespace-normal">
                   💡 Tip: Open the downloaded template in Excel or Google Sheets for easier editing
                 </div>
               </div>
@@ -765,12 +765,12 @@ David Brown,GBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,1400,DevOps Eng
           </div>
 
           {/* Important Notes */}
-          <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-xl p-6">
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-6">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-6 h-6 text-indigo-400 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-6 h-6 text-amber-400 flex-shrink-0 mt-0.5" />
               <div className="space-y-2">
-                <h4 className="text-indigo-300 font-semibold">Important Notes</h4>
-                <ul className="space-y-1.5 text-sm text-slate-300">
+                <h4 className="text-amber-300 font-semibold">Important Notes</h4>
+                <ul className="space-y-1.5 text-sm text-neutral-300">
                   <li>• Duplicate wallet addresses will be rejected by the database</li>
                   <li>• All employees will be added simultaneously</li>
                   <li>• Invalid wallet addresses will cause the upload to fail</li>

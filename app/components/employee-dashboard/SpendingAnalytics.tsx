@@ -48,7 +48,7 @@ interface SpendingCategory {
   color: string;
 }
 
-const COLORS = ['#8b5cf6', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#ec4899'];
+const COLORS = ['#f59e0b', '#10b981', '#06b6d4', '#8b5cf6', '#ef4444', '#ec4899'];
 
 export default function SpendingAnalytics() {
   const { publicKey, network } = useAuthStore();
@@ -92,6 +92,28 @@ export default function SpendingAnalytics() {
         ? 'https://horizon-testnet.stellar.org' 
         : 'https://horizon.stellar.org';
       const server = new StellarSDK.Horizon.Server(horizonUrl);
+
+      // Check if account exists first
+      try {
+        await server.loadAccount(publicKey);
+      } catch (accountError: any) {
+        if (accountError?.response?.status === 404) {
+          // Account not found - not yet funded on this network
+          console.log(`Account not found on ${network}. Wallet may not be funded yet.`);
+          setTransactions([]);
+          setStats({
+            totalSent: 0,
+            totalReceived: 0,
+            netFlow: 0,
+            transactionCount: 0,
+            avgTransaction: 0,
+            percentChange: 0,
+          });
+          setLoading(false);
+          return;
+        }
+        throw accountError;
+      }
 
       const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90;
       const startDate = new Date();
@@ -260,9 +282,9 @@ export default function SpendingAnalytics() {
       title: 'Avg Transaction',
       value: stats.avgTransaction.toFixed(2),
       icon: CreditCard,
-      color: 'from-violet-500 to-purple-600',
-      bgColor: 'bg-violet-500/10',
-      textColor: 'text-violet-400',
+      color: 'from-amber-500 to-orange-600',
+      bgColor: 'bg-amber-500/10',
+      textColor: 'text-amber-400',
     },
   ];
 
@@ -276,20 +298,20 @@ export default function SpendingAnalytics() {
       >
         <div>
           <h2 className="text-2xl font-bold text-white">Spending Analytics</h2>
-          <p className="text-gray-400">Track your transaction history and spending patterns</p>
+          <p className="text-neutral-400">Track your transaction history and spending patterns</p>
         </div>
         
         <div className="flex items-center gap-3">
           {/* Time Range Selector */}
-          <div className="flex items-center bg-white/5 rounded-xl border border-white/10 p-1">
+          <div className="flex items-center bg-neutral-900/50 rounded-xl border border-neutral-800/50 p-1">
             {(['7d', '30d', '90d'] as const).map((range) => (
               <button
                 key={range}
                 onClick={() => setTimeRange(range)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   timeRange === range
-                    ? 'bg-violet-500 text-white'
-                    : 'text-gray-400 hover:text-white'
+                    ? 'bg-amber-500 text-white'
+                    : 'text-neutral-400 hover:text-white'
                 }`}
               >
                 {range}
@@ -302,9 +324,9 @@ export default function SpendingAnalytics() {
             whileTap={{ scale: 0.95 }}
             onClick={fetchTransactions}
             disabled={loading}
-            className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all"
+            className="p-3 rounded-xl bg-neutral-800/50 hover:bg-neutral-700/50 border border-neutral-700/50 transition-all"
           >
-            <RefreshCw className={`w-5 h-5 text-gray-400 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-5 h-5 text-neutral-400 ${loading ? 'animate-spin' : ''}`} />
           </motion.button>
         </div>
       </motion.div>
@@ -319,7 +341,7 @@ export default function SpendingAnalytics() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 p-6"
+              className="relative overflow-hidden rounded-2xl bg-neutral-900/50 border border-neutral-800/50 p-6"
             >
               <div className={`absolute top-0 right-0 w-24 h-24 ${stat.bgColor} rounded-full blur-2xl`} />
               
@@ -327,7 +349,7 @@ export default function SpendingAnalytics() {
                 <div className={`inline-flex p-3 rounded-xl ${stat.bgColor} mb-4`}>
                   <Icon className={`w-5 h-5 ${stat.textColor}`} />
                 </div>
-                <p className="text-gray-400 text-sm mb-1">{stat.title}</p>
+                <p className="text-neutral-400 text-sm mb-1">{stat.title}</p>
                 <p className="text-2xl font-bold text-white">{stat.value} XLM</p>
               </div>
             </motion.div>
@@ -342,13 +364,13 @@ export default function SpendingAnalytics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="lg:col-span-2 rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 p-6"
+          className="lg:col-span-2 rounded-2xl bg-neutral-900/50 border border-neutral-800/50 p-6"
         >
           <h3 className="text-lg font-semibold text-white mb-6">Transaction Flow</h3>
           
           {loading || !isMounted ? (
             <div className="h-64 flex items-center justify-center">
-              <RefreshCw className="w-8 h-8 text-gray-500 animate-spin" />
+              <RefreshCw className="w-8 h-8 text-neutral-500 animate-spin" />
             </div>
           ) : dailySpending.length > 0 ? (
             <div style={{ width: '100%', height: 280, minHeight: 280 }}>
@@ -407,7 +429,7 @@ export default function SpendingAnalytics() {
               </ResponsiveContainer>
             </div>
           ) : (
-            <div className="h-64 flex items-center justify-center text-gray-500">
+            <div className="h-64 flex items-center justify-center text-neutral-500">
               No transaction data available
             </div>
           )}
@@ -418,13 +440,13 @@ export default function SpendingAnalytics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 p-6"
+          className="rounded-2xl bg-neutral-900/50 border border-neutral-800/50 p-6"
         >
           <h3 className="text-lg font-semibold text-white mb-6">Spending by Asset</h3>
           
           {loading || !isMounted ? (
             <div className="h-64 flex items-center justify-center">
-              <RefreshCw className="w-8 h-8 text-gray-500 animate-spin" />
+              <RefreshCw className="w-8 h-8 text-neutral-500 animate-spin" />
             </div>
           ) : categoryData.length > 0 ? (
             <div>
@@ -464,7 +486,7 @@ export default function SpendingAnalytics() {
                         className="w-3 h-3 rounded-full" 
                         style={{ backgroundColor: cat.color }}
                       />
-                      <span className="text-sm text-gray-400">{cat.name}</span>
+                      <span className="text-sm text-neutral-400">{cat.name}</span>
                     </div>
                     <span className="text-sm font-medium text-white">{cat.value}</span>
                   </div>
@@ -472,7 +494,7 @@ export default function SpendingAnalytics() {
               </div>
             </div>
           ) : (
-            <div className="h-64 flex items-center justify-center text-gray-500">
+            <div className="h-64 flex items-center justify-center text-neutral-500">
               No spending data
             </div>
           )}
@@ -484,13 +506,13 @@ export default function SpendingAnalytics() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="rounded-2xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 p-6"
+        className="rounded-2xl bg-neutral-900/50 border border-neutral-800/50 p-6"
       >
         <h3 className="text-lg font-semibold text-white mb-6">Monthly Comparison</h3>
         
         {loading || !isMounted ? (
           <div className="h-64 flex items-center justify-center">
-            <RefreshCw className="w-8 h-8 text-gray-500 animate-spin" />
+            <RefreshCw className="w-8 h-8 text-neutral-500 animate-spin" />
           </div>
         ) : monthlyData.length > 0 ? (
           <div style={{ width: '100%', height: 280, minHeight: 280 }}>
@@ -523,7 +545,7 @@ export default function SpendingAnalytics() {
             </ResponsiveContainer>
           </div>
         ) : (
-          <div className="h-64 flex items-center justify-center text-gray-500">
+          <div className="h-64 flex items-center justify-center text-neutral-500">
             No monthly data available
           </div>
         )}
@@ -535,15 +557,15 @@ export default function SpendingAnalytics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="rounded-2xl bg-gradient-to-br from-violet-500/10 to-purple-500/5 border border-violet-500/20 p-6"
+          className="rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/20 p-6"
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 rounded-xl bg-violet-500/20">
-              <Target className="w-5 h-5 text-violet-400" />
+            <div className="p-3 rounded-xl bg-amber-500/20">
+              <Target className="w-5 h-5 text-amber-400" />
             </div>
             <h4 className="font-semibold text-white">Spending Goal</h4>
           </div>
-          <p className="text-gray-400 text-sm mb-3">
+          <p className="text-neutral-400 text-sm mb-3">
             {stats.percentChange >= 0 
               ? `Your spending increased by ${Math.abs(stats.percentChange).toFixed(1)}% compared to the previous period.`
               : `Great! You spent ${Math.abs(stats.percentChange).toFixed(1)}% less than the previous period.`
@@ -565,15 +587,15 @@ export default function SpendingAnalytics() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="rounded-2xl bg-gradient-to-br from-cyan-500/10 to-blue-500/5 border border-cyan-500/20 p-6"
+          className="rounded-2xl bg-gradient-to-br from-sky-500/10 to-blue-500/5 border border-sky-500/20 p-6"
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 rounded-xl bg-cyan-500/20">
-              <Zap className="w-5 h-5 text-cyan-400" />
+            <div className="p-3 rounded-xl bg-sky-500/20">
+              <Zap className="w-5 h-5 text-sky-400" />
             </div>
             <h4 className="font-semibold text-white">Activity</h4>
           </div>
-          <p className="text-gray-400 text-sm mb-3">
+          <p className="text-neutral-400 text-sm mb-3">
             You made {stats.transactionCount} transactions in the selected period.
           </p>
           <p className="text-2xl font-bold text-white">{stats.transactionCount}</p>
@@ -591,7 +613,7 @@ export default function SpendingAnalytics() {
             </div>
             <h4 className="font-semibold text-white">Net Position</h4>
           </div>
-          <p className="text-gray-400 text-sm mb-3">
+          <p className="text-neutral-400 text-sm mb-3">
             {stats.netFlow >= 0 
               ? 'You received more than you sent!'
               : 'You sent more than you received.'

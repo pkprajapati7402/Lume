@@ -89,27 +89,27 @@ export default function AccountBalance() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/80 transition-all"
+      className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6 hover:bg-neutral-800/50 transition-all"
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-600">
+          <div className="p-3 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600">
             <Wallet className="w-6 h-6 text-white" />
           </div>
           <div>
             <h3 className="text-white font-semibold text-lg">Account Balance</h3>
-            <p className="text-slate-400 text-sm capitalize">{network} Assets</p>
+            <p className="text-neutral-400 text-sm capitalize">{network} Assets</p>
           </div>
         </div>
 
         <button
           onClick={fetchBalances}
           disabled={isLoading}
-          className="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-700 transition-colors disabled:opacity-50"
+          className="p-2 rounded-lg bg-neutral-800/50 hover:bg-neutral-700 transition-colors disabled:opacity-50"
           title="Refresh"
         >
           <RefreshCw
-            className={`w-4 h-4 text-slate-300 ${isLoading ? 'animate-spin' : ''}`}
+            className={`w-4 h-4 text-neutral-300 ${isLoading ? 'animate-spin' : ''}`}
           />
         </button>
       </div>
@@ -127,14 +127,14 @@ export default function AccountBalance() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30"
+              className="bg-black/50 rounded-lg p-4 border border-neutral-800/30"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                     balance.assetType === 'native' 
-                      ? 'bg-gradient-to-br from-blue-400 to-cyan-500' 
-                      : 'bg-gradient-to-br from-indigo-400 to-purple-500'
+                      ? 'bg-gradient-to-br from-amber-400 to-orange-500' 
+                      : 'bg-gradient-to-br from-amber-400 to-orange-500'
                   }`}>
                     <span className="text-white font-bold text-sm">
                       {balance.assetCode.substring(0, 2)}
@@ -145,7 +145,7 @@ export default function AccountBalance() {
                       {balance.assetCode}
                     </div>
                     {balance.assetIssuer && (
-                      <div className="text-xs text-slate-500 font-mono">
+                      <div className="text-xs text-neutral-500 font-mono">
                         {balance.assetIssuer.substring(0, 8)}...{balance.assetIssuer.substring(balance.assetIssuer.length - 4)}
                       </div>
                     )}
@@ -158,7 +158,7 @@ export default function AccountBalance() {
                       maximumFractionDigits: balance.assetType === 'native' ? 7 : 4,
                     })}
                   </div>
-                  <div className="text-xs text-slate-500 flex items-center gap-1 justify-end">
+                  <div className="text-xs text-neutral-500 flex items-center gap-1 justify-end">
                     <TrendingUp className="w-3 h-3" />
                     Available
                   </div>
@@ -169,14 +169,14 @@ export default function AccountBalance() {
 
           {/* Last Updated */}
           {lastUpdated && (
-            <div className="text-xs text-slate-500 text-center pt-2">
+            <div className="text-xs text-neutral-500 text-center pt-2">
               Updated {lastUpdated.toLocaleTimeString()}
             </div>
           )}
         </div>
       ) : (
         <div className="flex items-center justify-center h-32">
-          <div className="animate-pulse text-slate-500">Loading balances...</div>
+          <div className="animate-pulse text-neutral-500">Loading balances...</div>
         </div>
       )}
     </motion.div>

@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Sparkles, Twitter, Github, Linkedin, Mail } from 'lucide-react';
+import Image from 'next/image';
+import { Twitter, Github, Linkedin, Mail } from 'lucide-react';
 
 export default function Footer() {
   const footerLinks = {
@@ -39,11 +40,11 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="relative bg-slate-950 border-t border-slate-800/50">
+    <footer className="relative bg-black border-t border-neutral-800/50">
       {/* Background gradient effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
@@ -51,16 +52,19 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 group mb-4">
+            <Link href="/" className="flex items-center group mb-4">
               <div className="relative">
-                <Sparkles className="w-8 h-8 text-purple-400 group-hover:text-purple-300 transition-colors" />
-                <div className="absolute inset-0 bg-purple-500/30 blur-xl group-hover:bg-purple-400/40 transition-all" />
+                <Image 
+                  src="/lume-logo.png" 
+                  alt="Lume" 
+                  width={120} 
+                  height={44} 
+                  className="h-11 w-auto object-contain group-hover:scale-105 transition-transform"
+                />
+                <div className="absolute inset-0 bg-amber-500/30 blur-xl group-hover:bg-amber-400/40 transition-all" />
               </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                Lume
-              </span>
             </Link>
-            <p className="text-slate-400 text-sm mb-4">
+            <p className="text-neutral-400 text-sm mb-4">
               Global payroll at the speed of light. Pay your international team with 90% lower fees.
             </p>
             {/* Social Links */}
@@ -70,7 +74,7 @@ export default function Footer() {
                   key={social.label}
                   href={social.href}
                   aria-label={social.label}
-                  className="p-2 rounded-lg bg-slate-800/50 hover:bg-slate-800 text-slate-400 hover:text-white transition-all duration-300 hover:scale-110"
+                  className="p-2 rounded-lg bg-neutral-900/50 hover:bg-neutral-800 text-neutral-400 hover:text-white transition-all duration-300 hover:scale-110"
                 >
                   <social.icon className="w-4 h-4" />
                 </a>
@@ -87,7 +91,7 @@ export default function Footer() {
                   <li key={link.name}>
                     <a
                       href={link.href}
-                      className="text-slate-400 hover:text-white transition-colors text-sm"
+                      className="text-neutral-400 hover:text-white transition-colors text-sm"
                     >
                       {link.name}
                     </a>
@@ -99,14 +103,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="pt-8 border-t border-slate-800/50">
+        <div className="pt-8 border-t border-neutral-800/50">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-slate-400 text-sm">
+            <p className="text-neutral-400 text-sm">
               © {new Date().getFullYear()} Lume. All rights reserved.
             </p>
-            <p className="text-slate-400 text-sm">
+            <p className="text-neutral-400 text-sm">
               Built with ❤️ using{' '}
-              <span className="text-purple-400 font-medium">Stellar Network</span>
+              <span className="text-amber-400 font-medium">Stellar Network</span>
             </p>
           </div>
         </div>

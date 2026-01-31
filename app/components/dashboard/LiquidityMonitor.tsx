@@ -111,16 +111,16 @@ export default function LiquidityMonitor({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/80 transition-all"
+      className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6 hover:bg-neutral-900/80 transition-all"
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600">
+          <div className="p-3 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600">
             <TrendingUp className="w-6 h-6 text-white" />
           </div>
           <div>
             <h3 className="text-white font-semibold text-lg">Live FX Rate</h3>
-            <p className="text-slate-400 text-sm">
+            <p className="text-neutral-400 text-sm">
               {sourceAssetCode} → {destAssetCode}
             </p>
           </div>
@@ -129,11 +129,11 @@ export default function LiquidityMonitor({
         <button
           onClick={fetchOrderbook}
           disabled={isLoading}
-          className="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-700 transition-colors disabled:opacity-50"
+          className="p-2 rounded-lg bg-neutral-800/50 hover:bg-neutral-800 transition-colors disabled:opacity-50"
           title="Refresh"
         >
           <RefreshCw
-            className={`w-4 h-4 text-slate-300 ${isLoading ? 'animate-spin' : ''}`}
+            className={`w-4 h-4 text-neutral-300 ${isLoading ? 'animate-spin' : ''}`}
           />
         </button>
       </div>
@@ -144,20 +144,20 @@ export default function LiquidityMonitor({
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm">{error}</span>
           </div>
-          <p className="text-xs text-slate-400 text-center">
+          <p className="text-xs text-neutral-400 text-center">
             Try switching networks or the orderbook may not have active trades yet.
           </p>
         </div>
       ) : orderbookData ? (
         <div className="space-y-4">
           {/* FX Rate Display */}
-          <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30">
-            <div className="text-slate-400 text-sm mb-2">Exchange Rate</div>
+          <div className="bg-black/50 rounded-lg p-4 border border-neutral-800/30">
+            <div className="text-neutral-400 text-sm mb-2">Exchange Rate</div>
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-bold text-white">
                 {orderbookData.fxRate.toFixed(4)}
               </span>
-              <span className="text-slate-400 text-sm">
+              <span className="text-neutral-400 text-sm">
                 {destAssetCode}/{sourceAssetCode}
               </span>
             </div>
@@ -165,15 +165,15 @@ export default function LiquidityMonitor({
 
           {/* Spread and Liquidity Status */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-slate-900/30 rounded-lg p-3">
-              <div className="text-slate-400 text-xs mb-1">Spread</div>
+            <div className="bg-black/30 rounded-lg p-3">
+              <div className="text-neutral-400 text-xs mb-1">Spread</div>
               <div className="text-xl font-semibold text-white">
                 {orderbookData.spread.toFixed(3)}%
               </div>
             </div>
 
-            <div className="bg-slate-900/30 rounded-lg p-3">
-              <div className="text-slate-400 text-xs mb-1">Status</div>
+            <div className="bg-black/30 rounded-lg p-3">
+              <div className="text-neutral-400 text-xs mb-1">Status</div>
               {orderbookData.isStableLiquidity ? (
                 <div className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30">
                   <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
@@ -193,15 +193,15 @@ export default function LiquidityMonitor({
           </div>
 
           {/* Bid/Ask Prices */}
-          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-700/30">
+          <div className="grid grid-cols-2 gap-3 pt-3 border-t border-neutral-800/30">
             <div>
-              <div className="text-slate-500 text-xs mb-1">Top Bid</div>
+              <div className="text-neutral-500 text-xs mb-1">Top Bid</div>
               <div className="text-sm font-medium text-emerald-400">
                 {orderbookData.topBidPrice}
               </div>
             </div>
             <div>
-              <div className="text-slate-500 text-xs mb-1">Top Ask</div>
+              <div className="text-neutral-500 text-xs mb-1">Top Ask</div>
               <div className="text-sm font-medium text-red-400">
                 {orderbookData.topAskPrice}
               </div>
@@ -210,14 +210,14 @@ export default function LiquidityMonitor({
 
           {/* Last Updated */}
           {lastUpdated && (
-            <div className="text-xs text-slate-500 text-center pt-2">
+            <div className="text-xs text-neutral-500 text-center pt-2">
               Updated {lastUpdated.toLocaleTimeString()}
             </div>
           )}
         </div>
       ) : (
         <div className="flex items-center justify-center h-32">
-          <div className="animate-pulse text-slate-500">Loading orderbook...</div>
+          <div className="animate-pulse text-neutral-500">Loading orderbook...</div>
         </div>
       )}
     </motion.div>

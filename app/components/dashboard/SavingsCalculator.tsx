@@ -187,7 +187,7 @@ export default function SavingsCalculator() {
           </div>
           <div>
             <h3 className="text-white font-semibold text-lg">Savings Calculator</h3>
-            <p className="text-slate-400 text-sm">vs. {BANK_WIRE_FEE_PERCENT}% Traditional Fees</p>
+            <p className="text-neutral-400 text-sm">vs. {BANK_WIRE_FEE_PERCENT}% Traditional Fees</p>
           </div>
         </div>
 
@@ -212,7 +212,7 @@ export default function SavingsCalculator() {
           {/* Total Savings Display */}
           <div className="relative">
             <div className="text-center">
-              <div className="text-slate-400 text-sm mb-2">Total Savings (Last 30 Days)</div>
+              <div className="text-neutral-400 text-sm mb-2">Total Savings (Last 30 Days)</div>
               <motion.div
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
@@ -227,7 +227,7 @@ export default function SavingsCalculator() {
                   })}
                 </span>
               </motion.div>
-              <p className="text-slate-500 text-xs mt-2">
+              <p className="text-neutral-500 text-xs mt-2">
                 Saved by using Stellar network
               </p>
             </div>
@@ -245,8 +245,8 @@ export default function SavingsCalculator() {
 
           {/* Transaction Stats */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-slate-900/30 rounded-lg p-3 border border-slate-700/30">
-              <div className="text-slate-400 text-xs mb-1">Total Sent</div>
+            <div className="bg-black/30 rounded-lg p-3 border border-neutral-800/30">
+              <div className="text-neutral-400 text-xs mb-1">Total Sent</div>
               <div className="text-lg font-semibold text-white">
                 ${transactionData.totalUSDC.toLocaleString('en-US', {
                   minimumFractionDigits: 0,
@@ -255,15 +255,15 @@ export default function SavingsCalculator() {
               </div>
             </div>
 
-            <div className="bg-slate-900/30 rounded-lg p-3 border border-slate-700/30">
-              <div className="text-slate-400 text-xs mb-1">Transactions</div>
+            <div className="bg-black/30 rounded-lg p-3 border border-neutral-800/30">
+              <div className="text-neutral-400 text-xs mb-1">Transactions</div>
               <div className="text-lg font-semibold text-white">
                 {transactionData.transactionCount}
               </div>
             </div>
 
-            <div className="bg-slate-900/30 rounded-lg p-3 border border-emerald-700/30">
-              <div className="text-slate-400 text-xs mb-1">Fee Rate</div>
+            <div className="bg-black/30 rounded-lg p-3 border border-emerald-700/30">
+              <div className="text-neutral-400 text-xs mb-1">Fee Rate</div>
               <div className="text-lg font-semibold text-emerald-400 flex items-center gap-1">
                 <Zap className="w-4 h-4" />
                 ~$0.00001
@@ -272,9 +272,9 @@ export default function SavingsCalculator() {
           </div>
 
           {/* Comparison Bar */}
-          <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30">
+          <div className="bg-black/50 rounded-lg p-4 border border-neutral-800/30">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-400 text-xs">Traditional Bank Wire</span>
+              <span className="text-neutral-400 text-xs">Traditional Bank Wire</span>
               <span className="text-red-400 text-sm font-semibold">
                 ${(transactionData.totalUSDC * (BANK_WIRE_FEE_PERCENT / 100)).toLocaleString('en-US', {
                   minimumFractionDigits: 2,
@@ -282,7 +282,7 @@ export default function SavingsCalculator() {
                 })}
               </span>
             </div>
-            <div className="w-full bg-slate-800 rounded-full h-2 mb-3">
+            <div className="w-full bg-neutral-800 rounded-full h-2 mb-3">
               <div
                 className="bg-gradient-to-r from-red-500 to-red-600 h-2 rounded-full"
                 style={{ width: '100%' }}
@@ -290,10 +290,10 @@ export default function SavingsCalculator() {
             </div>
 
             <div className="flex items-center justify-between mb-2">
-              <span className="text-slate-400 text-xs">Stellar Network</span>
+              <span className="text-neutral-400 text-xs">Stellar Network</span>
               <span className="text-emerald-400 text-sm font-semibold">~$0.00001</span>
             </div>
-            <div className="w-full bg-slate-800 rounded-full h-2">
+            <div className="w-full bg-neutral-800 rounded-full h-2">
               <div
                 className="bg-gradient-to-r from-emerald-500 to-teal-600 h-2 rounded-full"
                 style={{ width: '0.5%', minWidth: '4px' }}
@@ -302,7 +302,7 @@ export default function SavingsCalculator() {
           </div>
 
           {/* Last Updated */}
-          <div className="text-xs text-slate-500 text-center flex items-center justify-center gap-2">
+          <div className="text-xs text-neutral-500 text-center flex items-center justify-center gap-2">
             <TrendingDown className="w-3.5 h-3.5 rotate-180 text-emerald-400" />
             <span>Updated {transactionData.lastFetched.toLocaleTimeString()}</span>
           </div>

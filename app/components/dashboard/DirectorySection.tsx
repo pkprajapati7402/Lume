@@ -119,11 +119,11 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
       >
         <div>
           <h2 className="text-2xl font-bold text-white mb-2">Employee Directory</h2>
-          <p className="text-slate-400">Manage your team members and payment preferences</p>
+          <p className="text-neutral-400">Manage your team members and payment preferences</p>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-indigo-500/25"
+          className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-amber-500/25"
           suppressHydrationWarning
         >
           <Plus className="w-5 h-5" />
@@ -138,13 +138,13 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
         transition={{ duration: 0.5, delay: 0.1 }}
         className="relative"
       >
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by name, email, or country..."
-          className="w-full pl-12 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+          className="w-full pl-12 pr-4 py-3 bg-neutral-900/50 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
         />
       </motion.div>
 
@@ -161,19 +161,19 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 * index }}
-            className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/80 transition-all hover:scale-[1.02] group"
+            className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6 hover:bg-neutral-800/50 transition-all hover:scale-[1.02] group"
           >
             {/* Header */}
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
                   <span className="text-white font-semibold text-lg">
                     {employee.full_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                   </span>
                 </div>
                 <div>
                   <h3 className="text-white font-semibold">{employee.full_name}</h3>
-                  <div className="flex items-center gap-1 text-slate-400 text-sm">
+                  <div className="flex items-center gap-1 text-neutral-400 text-sm">
                     <span>{employee.department}</span>
                   </div>
                 </div>
@@ -183,30 +183,30 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
               <button 
                 onClick={() => handleDeleteEmployee(employee.id)}
                 disabled={isPending}
-                className="p-2 hover:bg-slate-700 rounded-lg transition-colors disabled:opacity-50"
+                className="p-2 hover:bg-neutral-700 rounded-lg transition-colors disabled:opacity-50"
               >
-                <Trash2 className="w-4 h-4 text-slate-400 hover:text-red-400" />
+                <Trash2 className="w-4 h-4 text-neutral-400 hover:text-red-400" />
               </button>
             </div>
 
             {/* Details */}
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-sm">
-                <Wallet className="w-4 h-4 text-slate-500" />
-                <span className="text-slate-400 text-xs">{employee.role}</span>
+                <Wallet className="w-4 h-4 text-neutral-500" />
+                <span className="text-neutral-400 text-xs">{employee.role}</span>
               </div>
               
               <div>
-                <div className="text-xs text-slate-500 mb-1">Wallet Address</div>
-                <div className="font-mono text-xs text-slate-300 bg-slate-900/50 px-3 py-2 rounded border border-slate-700 break-all">
+                <div className="text-xs text-neutral-500 mb-1">Wallet Address</div>
+                <div className="font-mono text-xs text-neutral-300 bg-black/50 px-3 py-2 rounded border border-neutral-800 break-all">
                   {employee.wallet_address}
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-slate-700">
+              <div className="flex items-center justify-between pt-3 border-t border-neutral-800">
                 <div>
-                  <div className="text-xs text-slate-500 mb-1">Preferred Asset</div>
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                  <div className="text-xs text-neutral-500 mb-1">Preferred Asset</div>
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
                     {employee.preferred_asset}
                   </span>
                 </div>
@@ -217,7 +217,7 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
             <div className="grid grid-cols-2 gap-2 mt-4">
               <button 
                 onClick={() => setSelectedEmployee(employee)}
-                className="bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 px-4 py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2"
+                className="bg-teal-600/20 hover:bg-teal-600/30 text-teal-300 border border-teal-500/30 px-4 py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2"
               >
                 <Eye className="w-4 h-4" />
                 View History
@@ -228,7 +228,7 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
                   recipientName: employee.full_name,
                   preferredAsset: employee.preferred_asset
                 })}
-                className="bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 px-4 py-2 rounded-lg font-medium transition-all hover:scale-[1.02]"
+                className="bg-amber-600/20 hover:bg-amber-600/30 text-amber-300 border border-amber-500/30 px-4 py-2 rounded-lg font-medium transition-all hover:scale-[1.02]"
               >
                 Quick Pay
               </button>
@@ -239,7 +239,7 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
 
       {filteredEmployees.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-slate-400">
+          <p className="text-neutral-400">
             {employees.length === 0 ? 'No employees yet. Add your first team member!' : 'No employees found matching your search.'}
           </p>
         </div>
@@ -251,13 +251,13 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-slate-800 border border-slate-700 rounded-xl p-6 max-w-md w-full"
+            className="bg-neutral-900 border border-neutral-800 rounded-xl p-6 max-w-md w-full"
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-white">Add New Employee</h3>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-slate-400 hover:text-white transition-colors"
+                className="text-neutral-400 hover:text-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -271,41 +271,41 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
 
             <form onSubmit={handleAddEmployee} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-neutral-300 mb-2">
                   Full Name *
                 </label>
                 <input
                   type="text"
                   name="name"
                   required
-                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-2 bg-black/50 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="John Doe"
                   suppressHydrationWarning
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-neutral-300 mb-2">
                   Stellar Wallet Address *
                 </label>
                 <input
                   type="text"
                   name="walletAddress"
                   required
-                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
+                  className="w-full px-4 py-2 bg-black/50 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-sm"
                   placeholder="GXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
                   suppressHydrationWarning
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-neutral-300 mb-2">
                   Role
                 </label>
                 <input
                   type="text"
                   name="role"
-                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-2 bg-black/50 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="Software Engineer"
                   defaultValue="Employee"
                   suppressHydrationWarning
@@ -313,13 +313,13 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-neutral-300 mb-2">
                   Department
                 </label>
                 <input
                   type="text"
                   name="department"
-                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-2 bg-black/50 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="Engineering"
                   defaultValue="General"
                   suppressHydrationWarning
@@ -327,12 +327,12 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-neutral-300 mb-2">
                   Preferred Asset
                 </label>
                 <select
                   name="preferredAsset"
-                  className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-4 py-2 bg-black/50 border border-neutral-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
                   defaultValue="USDC"
                   suppressHydrationWarning
                 >
@@ -348,7 +348,7 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition-colors"
+                  className="flex-1 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-white rounded-lg font-medium transition-colors"
                   suppressHydrationWarning
                 >
                   Cancel
@@ -356,7 +356,7 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="flex-1 px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white rounded-lg font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   suppressHydrationWarning
                 >
                   {isPending ? 'Adding...' : 'Add Employee'}

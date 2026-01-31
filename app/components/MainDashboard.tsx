@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../store/authStore';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { 
   Wallet, 
   LayoutDashboard,
@@ -10,7 +11,6 @@ import {
   Upload,
   Users,
   LogOut,
-  Sparkles,
   Menu,
   X,
   History,
@@ -110,24 +110,27 @@ export default function MainDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-black">
       {/* Top Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800/50">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-black/95 backdrop-blur-md border-b border-neutral-800/50">
         <div className="px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Logo & Mobile Menu */}
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="lg:hidden p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400"
+              className="lg:hidden p-2 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-400"
             >
               {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
             
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-indigo-400" />
-              <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
-                Lume
-              </span>
+            <div className="flex items-center">
+              <Image 
+                src="/lume-logo.png" 
+                alt="Lume" 
+                width={120} 
+                height={44} 
+                className="h-11 w-auto object-contain"
+              />
             </div>
           </div>
           
@@ -136,31 +139,31 @@ export default function MainDashboard() {
             {/* Network Toggle */}
             <button
               onClick={handleNetworkToggle}
-              className="flex items-center gap-2 px-3 py-1.5 bg-slate-800/50 hover:bg-slate-800 rounded-lg border border-slate-700/50 transition-colors group"
+              className="flex items-center gap-2 px-3 py-1.5 bg-neutral-900/50 hover:bg-neutral-800 rounded-lg border border-neutral-700/50 transition-colors group"
               title={`Switch to ${network === 'testnet' ? 'mainnet' : 'testnet'}`}
             >
               <div className={`w-2 h-2 rounded-full ${network === 'testnet' ? 'bg-amber-400' : 'bg-emerald-400'} animate-pulse`} />
-              <span className="text-slate-300 text-sm font-medium capitalize">
+              <span className="text-neutral-300 text-sm font-medium capitalize">
                 {network}
               </span>
             </button>
 
-            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-slate-800/50 rounded-lg border border-slate-700/50">
-              <Wallet className="w-4 h-4 text-indigo-400" />
-              <span className="text-slate-300 text-sm font-mono">
+            <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-neutral-900/50 rounded-lg border border-neutral-700/50">
+              <Wallet className="w-4 h-4 text-amber-400" />
+              <span className="text-neutral-300 text-sm font-mono">
                 {publicKey?.slice(0, 4)}...{publicKey?.slice(-4)}
               </span>
             </div>
             <button
               onClick={() => setUserRole(null)}
-              className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white"
+              className="p-2 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-400 hover:text-white"
               title="Switch Role"
             >
               <UserCog className="w-5 h-5" />
             </button>
             <button
               onClick={handleDisconnect}
-              className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white"
+              className="p-2 hover:bg-neutral-800 rounded-lg transition-colors text-neutral-400 hover:text-white"
               title="Disconnect"
             >
               <LogOut className="w-5 h-5" />
@@ -171,7 +174,7 @@ export default function MainDashboard() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-16 bottom-0 z-40 w-64 bg-slate-900/95 backdrop-blur-md border-r border-slate-800/50 transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed left-0 top-16 bottom-0 z-40 w-64 bg-black/95 backdrop-blur-md border-r border-neutral-800/50 transition-transform duration-300 lg:translate-x-0 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -185,8 +188,8 @@ export default function MainDashboard() {
               }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-all ${
                 activeSection === item.id
-                  ? 'bg-gradient-to-r from-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-500/25'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                  ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-amber-500/25'
+                  : 'text-neutral-400 hover:text-white hover:bg-neutral-800/50'
               }`}
             >
               <item.icon className="w-5 h-5" />
@@ -196,10 +199,10 @@ export default function MainDashboard() {
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-800/50">
-          <div className="bg-indigo-500/10 border border-indigo-500/30 rounded-lg p-4">
-            <p className="text-indigo-300 text-sm font-medium mb-1">Need Help?</p>
-            <p className="text-slate-400 text-xs">Check our documentation or contact support</p>
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-neutral-800/50">
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
+            <p className="text-amber-300 text-sm font-medium mb-1">Need Help?</p>
+            <p className="text-neutral-400 text-xs">Check our documentation or contact support</p>
           </div>
         </div>
       </aside>

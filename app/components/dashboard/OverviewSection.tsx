@@ -47,7 +47,7 @@ const StatsCard = ({ icon: Icon, label, value, subtitle, trend, color, isLoading
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-6 hover:bg-slate-800/80 transition-all"
+      className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-6 hover:bg-neutral-800/50 transition-all"
     >
       <div className="flex items-start justify-between mb-4">
         <div className={`p-3 rounded-lg bg-gradient-to-br ${color}`}>
@@ -64,13 +64,13 @@ const StatsCard = ({ icon: Icon, label, value, subtitle, trend, color, isLoading
           </span>
         )}
       </div>
-      <h3 className="text-slate-400 text-sm mb-1">{label}</h3>
+      <h3 className="text-neutral-400 text-sm mb-1">{label}</h3>
       {isLoading ? (
-        <div className="h-10 bg-slate-700/50 animate-pulse rounded"></div>
+        <div className="h-10 bg-neutral-700/50 animate-pulse rounded"></div>
       ) : (
         <>
           <p className="text-3xl font-bold text-white mb-1">{value}</p>
-          <p className="text-slate-500 text-xs">{subtitle}</p>
+          <p className="text-neutral-500 text-xs">{subtitle}</p>
         </>
       )}
     </motion.div>
@@ -171,7 +171,7 @@ export default function OverviewSection({ onNavigate }: OverviewSectionProps = {
       value: formatCurrency(stats.totalPaid),
       subtitle: 'Last 30 days',
       trend: formatTrend(stats.totalPaidTrend),
-      color: 'from-indigo-500 to-indigo-600'
+      color: 'from-amber-500 to-orange-600'
     },
     {
       icon: TrendingDown,
@@ -186,7 +186,7 @@ export default function OverviewSection({ onNavigate }: OverviewSectionProps = {
       label: 'Active Employees',
       value: stats.activeEmployees.toString(),
       subtitle: stats.activeEmployees === 1 ? '1 team member' : `${stats.activeEmployees} team members`,
-      color: 'from-indigo-500 to-purple-600'
+      color: 'from-sky-500 to-blue-600'
     }
   ];
 
@@ -208,12 +208,12 @@ export default function OverviewSection({ onNavigate }: OverviewSectionProps = {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="bg-slate-800/30 border border-slate-700/30 rounded-lg px-4 py-2"
+        className="bg-neutral-900/30 border border-neutral-800/30 rounded-lg px-4 py-2"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-indigo-400" />
-            <span className="text-xs font-medium text-slate-400">Network Status</span>
+            <Activity className="w-4 h-4 text-amber-400" />
+            <span className="text-xs font-medium text-neutral-400">Network Status</span>
           </div>
           
           <div className="flex items-center gap-4">
@@ -221,7 +221,7 @@ export default function OverviewSection({ onNavigate }: OverviewSectionProps = {
             <div className="flex items-center gap-2">
               <Zap className="w-3.5 h-3.5 text-emerald-400" />
               <div>
-                <span className="text-xs text-slate-500">Speed: </span>
+                <span className="text-xs text-neutral-500">Speed: </span>
                 <span className="text-xs font-semibold text-emerald-400">
                   {isLoading ? '...' : error ? 'Error' : `${networkSpeed}s`}
                 </span>
@@ -229,7 +229,7 @@ export default function OverviewSection({ onNavigate }: OverviewSectionProps = {
             </div>
 
             {lastUpdated && (
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-neutral-500">
                 {lastUpdated.toLocaleTimeString()}
               </span>
             )}
@@ -264,53 +264,53 @@ export default function OverviewSection({ onNavigate }: OverviewSectionProps = {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl overflow-hidden"
+        className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl overflow-hidden"
       >
-        <div className="px-6 py-4 border-b border-slate-700/50">
+        <div className="px-6 py-4 border-b border-neutral-800/50">
           <h3 className="text-xl font-bold text-white">Recent Payments</h3>
-          <p className="text-slate-400 text-sm mt-1">Your latest transactions on Stellar</p>
+          <p className="text-neutral-400 text-sm mt-1">Your latest transactions on Stellar</p>
         </div>
 
         {/* Table */}
         <div className="overflow-x-auto">
           {isLoadingPayments ? (
             <div className="px-6 py-12 text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
-              <p className="text-slate-400 mt-3">Loading recent payments...</p>
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
+              <p className="text-neutral-400 mt-3">Loading recent payments...</p>
             </div>
           ) : recentPayments.length === 0 ? (
             <div className="px-6 py-12 text-center">
-              <Send className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-              <p className="text-slate-400">No payments yet</p>
-              <p className="text-slate-500 text-sm mt-1">Your recent transactions will appear here</p>
+              <Send className="w-12 h-12 text-neutral-600 mx-auto mb-3" />
+              <p className="text-neutral-400">No payments yet</p>
+              <p className="text-neutral-500 text-sm mt-1">Your recent transactions will appear here</p>
             </div>
           ) : (
             <table className="w-full">
-              <thead className="bg-slate-900/50">
+              <thead className="bg-black/50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                     Recipient
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                     Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                     Asset
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                     Time
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-neutral-400 uppercase tracking-wider">
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-700/50">
+              <tbody className="divide-y divide-neutral-800/50">
                 {recentPayments.map((payment) => (
-                  <tr key={payment.id} className="hover:bg-slate-900/30 transition-colors">
+                  <tr key={payment.id} className="hover:bg-neutral-900/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
                           <span className="text-white font-semibold text-sm">
                             {payment.recipient.charAt(0).toUpperCase()}
                           </span>
@@ -322,17 +322,17 @@ export default function OverviewSection({ onNavigate }: OverviewSectionProps = {
                       <span className="text-white font-semibold">${payment.amount}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
                         {payment.asset}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-slate-400 text-sm">
+                    <td className="px-6 py-4 whitespace-nowrap text-neutral-400 text-sm">
                       {payment.timeAgo}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <button
                         onClick={() => handleViewOnLedger(payment.txHash)}
-                        className="inline-flex items-center gap-1.5 text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors group"
+                        className="inline-flex items-center gap-1.5 text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors group"
                       >
                         View on Ledger
                         <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -347,10 +347,10 @@ export default function OverviewSection({ onNavigate }: OverviewSectionProps = {
 
         {/* View All Link */}
         {recentPayments.length > 0 && (
-          <div className="px-6 py-4 bg-slate-900/30 border-t border-slate-700/50">
+          <div className="px-6 py-4 bg-neutral-900/30 border-t border-neutral-800/50">
             <button 
               onClick={handleViewAllTransactions}
-              className="text-indigo-400 hover:text-indigo-300 text-sm font-medium flex items-center gap-2 transition-colors group"
+              className="text-amber-400 hover:text-amber-300 text-sm font-medium flex items-center gap-2 transition-colors group"
             >
               View all transactions
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -364,24 +364,24 @@ export default function OverviewSection({ onNavigate }: OverviewSectionProps = {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="bg-slate-800/30 border border-slate-700/30 rounded-lg px-4 py-3"
+        className="bg-neutral-900/30 border border-neutral-800/30 rounded-lg px-4 py-3"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <DollarSign className="w-4 h-4 text-indigo-400" />
-            <span className="text-xs text-slate-400">Current Base Fee</span>
+            <DollarSign className="w-4 h-4 text-amber-400" />
+            <span className="text-xs text-neutral-400">Current Base Fee</span>
           </div>
           <div className="text-right">
-            <span className="text-sm font-semibold text-indigo-400">
+            <span className="text-sm font-semibold text-amber-400">
               {isLoading ? (
-                <span className="text-slate-500">Loading...</span>
+                <span className="text-neutral-500">Loading...</span>
               ) : error ? (
                 <span className="text-red-400">Error</span>
               ) : (
                 `${baseFee} stroops`
               )}
             </span>
-            <span className="text-xs text-slate-500 ml-2">(~$0.00001)</span>
+            <span className="text-xs text-neutral-500 ml-2">(~$0.00001)</span>
           </div>
         </div>
       </motion.div>

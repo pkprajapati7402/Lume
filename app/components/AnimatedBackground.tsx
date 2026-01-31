@@ -37,13 +37,13 @@ export default function AnimatedBackground() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // Generate shooting stars
-    const shootingStarsData = Array.from({ length: 8 }, (_, i) => ({
+    // Generate shooting stars - more frequent and visible
+    const shootingStarsData = Array.from({ length: 15 }, (_, i) => ({
       id: i,
-      delay: Math.random() * 10,
-      duration: 1 + Math.random() * 2,
+      delay: Math.random() * 8,
+      duration: 0.8 + Math.random() * 1.5,
       left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 60}%`
+      top: `${Math.random() * 50}%`
     }));
     setShootingStars(shootingStarsData);
 
@@ -58,15 +58,15 @@ export default function AnimatedBackground() {
     }));
     setParticles(particlesData);
 
-    // Generate starfield
-    const starsData = Array.from({ length: 150 }, (_, i) => ({
+    // Generate starfield - more stars for black background
+    const starsData = Array.from({ length: 200 }, (_, i) => ({
       id: i,
-      size: Math.random() < 0.7 ? 1 : Math.random() < 0.9 ? 2 : 3,
+      size: Math.random() < 0.6 ? 1 : Math.random() < 0.85 ? 2 : 3,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
       delay: Math.random() * 10,
       duration: 2 + Math.random() * 6,
-      opacity: 0.3 + Math.random() * 0.7
+      opacity: 0.4 + Math.random() * 0.6
     }));
     setStars(starsData);
 
@@ -79,7 +79,7 @@ export default function AnimatedBackground() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Gradient Orbs - static elements are safe */}
         <motion.div
-          className="absolute -top-40 -right-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
+          className="absolute -top-40 -right-40 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -91,7 +91,7 @@ export default function AnimatedBackground() {
           }}
         />
         <motion.div
-          className="absolute top-60 -left-40 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
+          className="absolute top-60 -left-40 w-96 h-96 bg-orange-500/15 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.3, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -104,7 +104,7 @@ export default function AnimatedBackground() {
           }}
         />
         <motion.div
-          className="absolute bottom-20 right-1/3 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl"
+          className="absolute bottom-20 right-1/3 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.4, 1],
             opacity: [0.2, 0.4, 0.2],
@@ -124,7 +124,7 @@ export default function AnimatedBackground() {
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Gradient Orbs */}
       <motion.div
-        className="absolute -top-40 -right-40 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"
+        className="absolute -top-40 -right-40 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -136,7 +136,7 @@ export default function AnimatedBackground() {
         }}
       />
       <motion.div
-        className="absolute top-60 -left-40 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
+        className="absolute top-60 -left-40 w-96 h-96 bg-orange-500/15 rounded-full blur-3xl"
         animate={{
           scale: [1, 1.3, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -149,7 +149,7 @@ export default function AnimatedBackground() {
         }}
       />
       <motion.div
-        className="absolute bottom-20 right-1/3 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl"
+        className="absolute bottom-20 right-1/3 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"
         animate={{
           scale: [1, 1.4, 1],
           opacity: [0.2, 0.4, 0.2],
@@ -166,28 +166,28 @@ export default function AnimatedBackground() {
       {shootingStars.map((star) => (
         <motion.div
           key={star.id}
-          className="absolute w-1 h-1 bg-white rounded-full"
+          className="absolute w-1.5 h-1.5 bg-white rounded-full"
           style={{
             left: star.left,
             top: star.top,
-            boxShadow: '0 0 10px 2px rgba(255, 255, 255, 0.5), 0 0 20px 4px rgba(147, 51, 234, 0.3)'
+            boxShadow: '0 0 6px 3px rgba(255, 255, 255, 0.8), 0 0 12px 6px rgba(251, 191, 36, 0.4), 0 0 20px 10px rgba(251, 191, 36, 0.2)'
           }}
           initial={{ opacity: 0, x: 0, y: 0 }}
           animate={{
             opacity: [0, 1, 1, 0],
-            x: [0, -100, -200],
-            y: [0, 100, 200],
+            x: [0, -150, -300],
+            y: [0, 150, 300],
           }}
           transition={{
             duration: star.duration,
             delay: star.delay,
             repeat: Infinity,
-            repeatDelay: 8 + Math.random() * 5,
+            repeatDelay: 4 + Math.random() * 4,
             ease: "easeOut"
           }}
         >
           {/* Shooting star tail */}
-          <div className="absolute w-20 h-px bg-gradient-to-r from-white to-transparent opacity-70" 
+          <div className="absolute w-32 h-0.5 bg-gradient-to-r from-white via-amber-200/50 to-transparent" 
                style={{ 
                  transform: 'rotate(-45deg)',
                  transformOrigin: 'left center'
@@ -254,7 +254,7 @@ export default function AnimatedBackground() {
             <motion.path
               d="M 50 0 L 0 0 0 50"
               fill="none"
-              stroke="rgba(139, 92, 246, 0.3)"
+              stroke="rgba(251, 191, 36, 0.2)"
               strokeWidth="0.5"
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
@@ -282,7 +282,7 @@ export default function AnimatedBackground() {
           ease: "easeInOut"
         }}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-purple-400">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-amber-400">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
         </svg>
       </motion.div>
@@ -300,7 +300,7 @@ export default function AnimatedBackground() {
           delay: 1
         }}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-blue-400">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-orange-400">
           <circle cx="12" cy="12" r="10" strokeWidth={1.5} />
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6l4 2" />
         </svg>
@@ -320,7 +320,7 @@ export default function AnimatedBackground() {
           delay: 2
         }}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-cyan-400">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-yellow-400">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       </motion.div>
@@ -338,7 +338,7 @@ export default function AnimatedBackground() {
           ease: "linear"
         }}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-purple-400">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-amber-400">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 10h.01M15 10h.01M9.5 15.5c1 1 2.5 1.5 2.5 1.5s1.5-.5 2.5-1.5" />
         </svg>
@@ -346,7 +346,7 @@ export default function AnimatedBackground() {
 
       {/* Pulse Rings */}
       <motion.div
-        className="absolute left-1/4 top-1/3 w-32 h-32 rounded-full border-2 border-purple-500/20"
+        className="absolute left-1/4 top-1/3 w-32 h-32 rounded-full border-2 border-amber-500/20"
         animate={{
           scale: [1, 2, 2],
           opacity: [0.5, 0.2, 0]
@@ -358,7 +358,7 @@ export default function AnimatedBackground() {
         }}
       />
       <motion.div
-        className="absolute right-1/3 bottom-1/3 w-40 h-40 rounded-full border-2 border-blue-500/20"
+        className="absolute right-1/3 bottom-1/3 w-40 h-40 rounded-full border-2 border-orange-500/20"
         animate={{
           scale: [1, 2.5, 2.5],
           opacity: [0.5, 0.2, 0]
@@ -381,7 +381,7 @@ export default function AnimatedBackground() {
             height: Math.random() < 0.5 ? 2 : 3,
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            background: Math.random() < 0.5 ? '#ffffff' : Math.random() < 0.7 ? '#a78bfa' : '#60a5fa',
+            background: Math.random() < 0.5 ? '#ffffff' : Math.random() < 0.7 ? '#fbbf24' : '#fb923c',
             boxShadow: '0 0 8px currentColor'
           }}
           animate={{

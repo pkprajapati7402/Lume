@@ -228,7 +228,7 @@ export default function HistoryTable() {
         transition={{ duration: 0.5 }}
       >
         <h2 className="text-2xl font-bold text-white mb-2">Transaction History</h2>
-        <p className="text-slate-400">View and export your payment transaction records</p>
+        <p className="text-neutral-400">View and export your payment transaction records</p>
       </motion.div>
 
       {/* Statistics Cards */}
@@ -237,14 +237,14 @@ export default function HistoryTable() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-4"
+          className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-4"
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-slate-400 text-sm mb-1">Total Transactions</p>
+              <p className="text-neutral-400 text-sm mb-1">Total Transactions</p>
               <p className="text-2xl font-bold text-white">{stats.total}</p>
             </div>
-            <TrendingUp className="w-8 h-8 text-indigo-400 opacity-50" />
+            <TrendingUp className="w-8 h-8 text-amber-400 opacity-50" />
           </div>
         </motion.div>
 
@@ -252,11 +252,11 @@ export default function HistoryTable() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-4"
+          className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-4"
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-slate-400 text-sm mb-1">Successful</p>
+              <p className="text-neutral-400 text-sm mb-1">Successful</p>
               <p className="text-2xl font-bold text-emerald-400">{stats.successful}</p>
             </div>
             <CheckCircle className="w-8 h-8 text-emerald-400 opacity-50" />
@@ -267,11 +267,11 @@ export default function HistoryTable() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-4"
+          className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-4"
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-slate-400 text-sm mb-1">Failed</p>
+              <p className="text-neutral-400 text-sm mb-1">Failed</p>
               <p className="text-2xl font-bold text-red-400">{stats.failed}</p>
             </div>
             <XCircle className="w-8 h-8 text-red-400 opacity-50" />
@@ -282,14 +282,14 @@ export default function HistoryTable() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.25 }}
-          className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-4"
+          className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-4"
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-slate-400 text-sm mb-1">Total Paid</p>
+              <p className="text-neutral-400 text-sm mb-1">Total Paid</p>
               <p className="text-2xl font-bold text-white">${stats.totalAmount.toFixed(2)}</p>
             </div>
-            <Calendar className="w-8 h-8 text-purple-400 opacity-50" />
+            <Calendar className="w-8 h-8 text-amber-400 opacity-50" />
           </div>
         </motion.div>
       </div>
@@ -299,18 +299,18 @@ export default function HistoryTable() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl p-4"
+        className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl p-4"
       >
         <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-neutral-400" />
             <input
               type="text"
               placeholder="Search by hash, employee, or asset..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              className="w-full pl-10 pr-4 py-2 bg-black/50 border border-neutral-800 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
             />
           </div>
 
@@ -320,7 +320,7 @@ export default function HistoryTable() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value as 'all' | 'success' | 'failed')}
-              className="px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+              className="px-4 py-2 bg-black/50 border border-neutral-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
             >
               <option value="all">All Status</option>
               <option value="success">Success Only</option>
@@ -331,7 +331,7 @@ export default function HistoryTable() {
             <button
               onClick={fetchTransactionHistory}
               disabled={isLoading}
-              className="px-4 py-2 bg-slate-700/50 hover:bg-slate-700 text-white rounded-lg font-medium transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-neutral-800/50 hover:bg-neutral-700 text-white rounded-lg font-medium transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
               Refresh
@@ -341,7 +341,7 @@ export default function HistoryTable() {
             <button
               onClick={exportToCSV}
               disabled={filteredTransactions.length === 0}
-              className="px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-lg font-medium transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white rounded-lg font-medium transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download className="w-4 h-4" />
               Export CSV
@@ -367,21 +367,21 @@ export default function HistoryTable() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
-        className="bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-xl overflow-hidden"
+        className="bg-neutral-900/50 backdrop-blur-sm border border-neutral-800/50 rounded-xl overflow-hidden"
       >
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
-              <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin mx-auto mb-3" />
-              <p className="text-slate-400">Loading transaction history...</p>
+              <RefreshCw className="w-8 h-8 text-amber-400 animate-spin mx-auto mb-3" />
+              <p className="text-neutral-400">Loading transaction history...</p>
             </div>
           </div>
         ) : filteredTransactions.length === 0 ? (
           <div className="flex items-center justify-center py-12">
             <div className="text-center">
-              <Clock className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-              <p className="text-slate-400 font-medium mb-1">No transactions found</p>
-              <p className="text-slate-500 text-sm">
+              <Clock className="w-12 h-12 text-neutral-600 mx-auto mb-3" />
+              <p className="text-neutral-400 font-medium mb-1">No transactions found</p>
+              <p className="text-neutral-500 text-sm">
                 {searchQuery || filterStatus !== 'all' 
                   ? 'Try adjusting your filters'
                   : 'Start making payments to see your transaction history'
@@ -392,36 +392,36 @@ export default function HistoryTable() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-slate-900/50 border-b border-slate-700">
+              <thead className="bg-black/50 border-b border-neutral-800">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-neutral-400 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-neutral-400 uppercase tracking-wider">
                     Date & Time
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-neutral-400 uppercase tracking-wider">
                     Employee
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-neutral-400 uppercase tracking-wider">
                     Amount
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-neutral-400 uppercase tracking-wider">
                     Fee
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-left text-xs font-medium text-neutral-400 uppercase tracking-wider">
                     Transaction
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-700/50">
+              <tbody className="divide-y divide-neutral-800/50">
                 {filteredTransactions.map((tx, index) => (
                   <motion.tr
                     key={tx.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="hover:bg-slate-700/30 transition-colors"
+                    className="hover:bg-neutral-800/30 transition-colors"
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
@@ -434,10 +434,10 @@ export default function HistoryTable() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-300">
+                      <div className="text-sm text-neutral-300">
                         {new Date(tx.created_at).toLocaleDateString()}
                       </div>
-                      <div className="text-xs text-slate-500">
+                      <div className="text-xs text-neutral-500">
                         {new Date(tx.created_at).toLocaleTimeString()}
                       </div>
                     </td>
@@ -446,7 +446,7 @@ export default function HistoryTable() {
                         {tx.employeeName || 'Unknown'}
                       </div>
                       {tx.employeeName && (
-                        <div className="text-xs text-slate-500 font-mono">
+                        <div className="text-xs text-neutral-500 font-mono">
                           {tx.source_account.substring(0, 8)}...{tx.source_account.substring(tx.source_account.length - 8)}
                         </div>
                       )}
@@ -455,16 +455,16 @@ export default function HistoryTable() {
                       {tx.amount && tx.assetCode ? (
                         <div className="text-sm">
                           <span className="text-white font-medium">{tx.amount.toFixed(2)}</span>
-                          <span className="text-slate-400 ml-1">{tx.assetCode}</span>
+                          <span className="text-neutral-400 ml-1">{tx.assetCode}</span>
                         </div>
                       ) : (
-                        <span className="text-slate-500 text-sm">
+                        <span className="text-neutral-500 text-sm">
                           {tx.operation_count} op{tx.operation_count !== 1 ? 's' : ''}
                         </span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-slate-400">
+                      <div className="text-sm text-neutral-400">
                         {(parseInt(tx.fee_charged) / 10000000).toFixed(5)} XLM
                       </div>
                     </td>
@@ -473,7 +473,7 @@ export default function HistoryTable() {
                         href={`https://stellar.expert/explorer/${network}/tx/${tx.hash}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors"
+                        className="inline-flex items-center gap-1 text-amber-400 hover:text-amber-300 text-sm font-medium transition-colors"
                       >
                         <span className="font-mono">
                           {tx.hash.substring(0, 8)}...
@@ -491,7 +491,7 @@ export default function HistoryTable() {
 
       {/* Results Count */}
       {!isLoading && filteredTransactions.length > 0 && (
-        <p className="text-center text-sm text-slate-400">
+        <p className="text-center text-sm text-neutral-400">
           Showing {filteredTransactions.length} of {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
         </p>
       )}
