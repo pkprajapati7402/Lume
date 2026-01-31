@@ -1,6 +1,6 @@
 'use client';
 
-import { supabase } from './supabase';
+import { createClient } from './supabase';
 import type {
   UserProfile,
   UserProfileInsert,
@@ -20,6 +20,9 @@ import type {
   Notification,
   UserRoleType,
 } from '@/types/database';
+
+// Create supabase client instance
+const supabase = createClient();
 
 // ============================================
 // USER PROFILES
