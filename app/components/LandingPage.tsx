@@ -34,20 +34,23 @@ export default function LandingPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { setAuthorized, network } = useAuthStore();
-  const isMountedRef = useRef(true);
+  const isMountedRef = useRef(false);
 
   useEffect(() => {
+    isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
     };
   }, []);
 
   const handleConnect = async () => {
-    if (!isMountedRef.current) return;
+    console.log('handleConnect called, isMounted:', isMountedRef.current);
     setIsConnecting(true);
+    console.log('Starting wallet connection...');
     
     try {
       const result = await connectWallet(network);
+      console.log('connectWallet result:', result);
       
       if (!result.success) {
         if (result.error?.includes('cancelled')) {
@@ -175,7 +178,7 @@ export default function LandingPage() {
         {/* Animated Background */}
         <AnimatedBackground />
 
-        <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-32 pb-32">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-32 pb-32">
           <motion.div
             initial="initial"
             animate="animate"
@@ -203,11 +206,15 @@ export default function LandingPage() {
               </motion.p>
 
               {/* CTA Button */}
-              <motion.div variants={fadeInUp} className="pt-4">
+              <motion.div variants={fadeInUp} className="pt-4 relative z-20">
                 <button
-                  onClick={handleConnect}
+                  type="button"
+                  onClick={() => {
+                    console.log('Hero Get Started clicked');
+                    handleConnect();
+                  }}
                   disabled={isConnecting}
-                  className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-purple-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                   suppressHydrationWarning
                 >
                   <Wallet className="w-5 h-5" />

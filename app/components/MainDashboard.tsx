@@ -15,7 +15,8 @@ import {
   X,
   History,
   BarChart3,
-  FileText
+  FileText,
+  UserCog
 } from 'lucide-react';
 import OverviewSection from './dashboard/OverviewSection';
 import PayEmployeeSection from './dashboard/PayEmployeeSection';
@@ -36,7 +37,7 @@ interface PrefilledPaymentData {
 }
 
 export default function MainDashboard() {
-  const { publicKey, setGuest, network, setNetwork } = useAuthStore();
+  const { publicKey, setGuest, network, setNetwork, setUserRole } = useAuthStore();
   const [activeSection, setActiveSection] = useState<Section>('overview');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -150,6 +151,13 @@ export default function MainDashboard() {
                 {publicKey?.slice(0, 4)}...{publicKey?.slice(-4)}
               </span>
             </div>
+            <button
+              onClick={() => setUserRole(null)}
+              className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white"
+              title="Switch Role"
+            >
+              <UserCog className="w-5 h-5" />
+            </button>
             <button
               onClick={handleDisconnect}
               className="p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white"

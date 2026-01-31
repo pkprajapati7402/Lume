@@ -89,6 +89,7 @@ const COLORS = ['#8b5cf6', '#ec4899', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'
 export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProps) {
   const [payouts, setPayouts] = useState<PayoutRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const [spendingByAsset, setSpendingByAsset] = useState<SpendingByAsset[]>([]);
   const [spendingTrend, setSpendingTrend] = useState<SpendingTrend[]>([]);
   const [topEmployees, setTopEmployees] = useState<TopEmployee[]>([]);
@@ -102,6 +103,12 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
     lastMonthSpent: 0,
     percentageChange: 0,
   });
+
+  // Delay chart rendering until component is mounted
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const fetchAnalytics = async () => {
     setLoading(true);
@@ -462,8 +469,14 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
             <TrendingUp className="w-5 h-5 text-purple-400" />
             Spending Trend (Last 14 Days)
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={spendingTrend}>
+          {!isMounted || loading ? (
+            <div className="h-[300px] flex items-center justify-center">
+              <RefreshCw className="w-8 h-8 text-gray-500 animate-spin" />
+            </div>
+          ) : (
+          <div style={{ width: '100%', height: 300, minHeight: 300, minWidth: 0 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={spendingTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
               <XAxis dataKey="date" stroke="#9ca3af" style={{ fontSize: '12px' }} />
               <YAxis stroke="#9ca3af" style={{ fontSize: '12px' }} />
@@ -483,8 +496,10 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
                 dot={{ fill: '#8b5cf6', r: 4 }}
                 activeDot={{ r: 6 }}
               />
-            </LineChart>
-          </ResponsiveContainer>
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+          )}
         </motion.div>
 
         {/* Spending by Asset (Pie Chart) */}
@@ -498,8 +513,14 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
             <DollarSign className="w-5 h-5 text-pink-400" />
             Spending by Asset
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
+          {!isMounted || loading ? (
+            <div className="h-[300px] flex items-center justify-center">
+              <RefreshCw className="w-8 h-8 text-gray-500 animate-spin" />
+            </div>
+          ) : (
+          <div style={{ width: '100%', height: 300, minHeight: 300, minWidth: 0 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
               <Pie
                 data={spendingByAsset}
                 dataKey="total"
@@ -520,8 +541,10 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
                   borderRadius: '8px',
                 }}
               />
-            </PieChart>
-          </ResponsiveContainer>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          )}
         </motion.div>
       </div>
 
@@ -537,8 +560,14 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
             <Building2 className="w-5 h-5 text-cyan-400" />
             Department Spending
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={departmentSpending}>
+          {!isMounted || loading ? (
+            <div className="h-[300px] flex items-center justify-center">
+              <RefreshCw className="w-8 h-8 text-gray-500 animate-spin" />
+            </div>
+          ) : (
+          <div style={{ width: '100%', height: 300, minHeight: 300, minWidth: 0 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={departmentSpending}>
               <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
               <XAxis dataKey="department" stroke="#9ca3af" style={{ fontSize: '12px' }} />
               <YAxis stroke="#9ca3af" style={{ fontSize: '12px' }} />
@@ -551,8 +580,10 @@ export default function AnalyticsDashboard({ publicKey, network }: AnalyticsProp
                 labelStyle={{ color: '#f3f4f6' }}
               />
               <Bar dataKey="total" fill="#06b6d4" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          )}
         </motion.div>
       )}
 

@@ -26,6 +26,13 @@ export default function XLMPriceChart() {
   const [timeRange, setTimeRange] = useState<'7' | '30' | '90' | '365'>('365');
   const [currentPrice, setCurrentPrice] = useState<number | null>(null);
   const [priceChange, setPriceChange] = useState<PriceChange | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Delay chart rendering until component is mounted
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     fetchXLMPriceData();
@@ -231,7 +238,7 @@ export default function XLMPriceChart() {
 
       {/* Chart Area */}
       <div className="px-6 py-6">
-        {isLoading ? (
+        {isLoading || !isMounted ? (
           <div className="h-80 flex items-center justify-center">
             <div className="text-center">
               <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin mx-auto mb-3" />
@@ -252,7 +259,7 @@ export default function XLMPriceChart() {
             </div>
           </div>
         ) : (
-          <div className="h-80">
+          <div className="h-80" style={{ minHeight: 320, minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={priceData}>
                 <defs>
