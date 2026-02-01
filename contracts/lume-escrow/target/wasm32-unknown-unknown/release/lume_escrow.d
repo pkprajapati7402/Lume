@@ -1,0 +1,1 @@
+C:\Users\HP15\OneDrive\Documents\GitHub\Lume\contracts\lume-escrow\target\wasm32-unknown-unknown\release\lume_escrow.wasm: C:\Users\HP15\OneDrive\Documents\GitHub\Lume\contracts\lume-escrow\src\lib.rs

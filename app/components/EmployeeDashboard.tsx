@@ -22,14 +22,16 @@ import {
   Settings,
   Bell,
   Moon,
-  UserCog
+  UserCog,
+  ShieldCheck
 } from 'lucide-react';
 import WalletSection from './employee-dashboard/WalletSection';
 import SendPaymentSection from './employee-dashboard/SendPaymentSection';
 import SpendingAnalytics from './employee-dashboard/SpendingAnalytics';
 import InvestSection from './employee-dashboard/InvestSection';
+import { EscrowTab } from './escrow';
 
-type Section = 'wallet' | 'send' | 'analytics' | 'invest';
+type Section = 'wallet' | 'send' | 'analytics' | 'invest' | 'escrow';
 
 export default function EmployeeDashboard() {
   const { publicKey, setGuest, network, setNetwork, setUserRole } = useAuthStore();
@@ -55,6 +57,7 @@ export default function EmployeeDashboard() {
     { id: 'send' as Section, label: 'Send Payment', icon: Send },
     { id: 'analytics' as Section, label: 'Analytics', icon: BarChart3 },
     { id: 'invest' as Section, label: 'Invest', icon: TrendingUp },
+    { id: 'escrow' as Section, label: 'Escrow', icon: ShieldCheck },
   ];
 
   const renderSection = () => {
@@ -67,6 +70,8 @@ export default function EmployeeDashboard() {
         return <SpendingAnalytics />;
       case 'invest':
         return <InvestSection />;
+      case 'escrow':
+        return <EscrowTab walletAddress={publicKey || ''} network={network} userRole="employee" />;
       default:
         return <WalletSection />;
     }

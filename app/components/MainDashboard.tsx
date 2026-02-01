@@ -16,7 +16,8 @@ import {
   History,
   BarChart3,
   FileText,
-  UserCog
+  UserCog,
+  ShieldCheck
 } from 'lucide-react';
 import OverviewSection from './dashboard/OverviewSection';
 import PayEmployeeSection from './dashboard/PayEmployeeSection';
@@ -25,10 +26,11 @@ import DirectorySection from './dashboard/DirectorySection';
 import HistoryTable from './dashboard/HistoryTable';
 import AnalyticsDashboard from './dashboard/AnalyticsDashboard';
 import ComplianceSection from './dashboard/ComplianceSection';
+import { EscrowTab } from './escrow';
 import { getEmployees } from '../actions/employees';
 import type { Employee } from '@/types/database';
 
-type Section = 'overview' | 'pay' | 'bulk' | 'directory' | 'history' | 'analytics' | 'compliance';
+type Section = 'overview' | 'pay' | 'bulk' | 'directory' | 'history' | 'analytics' | 'compliance' | 'escrow';
 
 interface PrefilledPaymentData {
   recipientAddress?: string;
@@ -77,6 +79,7 @@ export default function MainDashboard() {
     { id: 'history' as Section, label: 'Transaction History', icon: History },
     { id: 'analytics' as Section, label: 'Analytics', icon: BarChart3 },
     { id: 'compliance' as Section, label: 'Compliance', icon: FileText },
+    { id: 'escrow' as Section, label: 'Escrow', icon: ShieldCheck },
   ];
 
   const handleQuickPay = (employeeData: PrefilledPaymentData) => {
@@ -104,6 +107,8 @@ export default function MainDashboard() {
         return <AnalyticsDashboard publicKey={publicKey || ''} network={network} />;
       case 'compliance':
         return <ComplianceSection publicKey={publicKey || ''} network={network} />;
+      case 'escrow':
+        return <EscrowTab walletAddress={publicKey || ''} network={network} userRole="employer" />;
       default:
         return <OverviewSection />;
     }

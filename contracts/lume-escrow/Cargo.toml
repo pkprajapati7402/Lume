@@ -1,0 +1,31 @@
+[package]
+name = "lume-escrow"
+version = "1.0.0"
+authors = ["Lume Team"]
+edition = "2021"
+description = "2-of-3 Multisig Escrow Smart Contract for Lume Platform"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib"]
+doctest = false
+
+[dependencies]
+soroban-sdk = { version = "21.7.4" }
+
+[dev-dependencies]
+soroban-sdk = { version = "21.7.4", features = ["testutils"] }
+
+[profile.release]
+opt-level = "z"
+overflow-checks = true
+debug = 0
+strip = "symbols"
+debug-assertions = false
+panic = "abort"
+codegen-units = 1
+lto = true
+
+[profile.release-with-logs]
+inherits = "release"
+debug-assertions = true

@@ -11,62 +11,412 @@ cross-border payments with 5-second transaction finality.
 
 TECH STACK:
 -----------
-- Frontend: Next.js 16 (React 19), TypeScript, Tailwind CSS 4
-- Blockchain: Stellar SDK v13.3.0, Stellar Wallets Kit
+- Frontend: Next.js 16.1.4 (React 19.2.3), TypeScript, Tailwind CSS 4
+- Blockchain: Stellar SDK v13.3.0, Stellar Wallets Kit v1.9.5
 - Database: Supabase (PostgreSQL with SSR)
-- State Management: Zustand
-- UI/Animation: Framer Motion, Lucide React, Sonner (notifications)
-- Charts: Recharts
+- State Management: Zustand v5.0.10
+- UI/Animation: Framer Motion v12.28.1, Lucide React v0.562.0
+- Notifications: Sonner v2.0.7
+- Charts: Recharts v3.7.0
+- PDF Generation: jsPDF v4.0.0
+- QR Code: qrcode v1.5.4
 - External APIs: CoinGecko (XLM price data)
 
 ================================================================================
                         CORE FUNCTIONAL FEATURES
 ================================================================================
 
-AUTHENTICATION & PAYMENTS
---------------------------
-- Multi-wallet support (Freighter, Albedo, xBull, WalletConnect)
-- Real Stellar payment transactions with path payments
-- Batch payment processing (up to 100 operations per TX)
-- Network toggle (testnet/mainnet) with graceful error handling
+AUTHENTICATION & WALLET CONNECTION
+-----------------------------------
+✅ Multi-wallet support:
+   - Freighter (primary, desktop & mobile via deep-linking)
+   - xBull (feature-rich Stellar wallet)
+   - Albedo (web-based, always available)
+   - WalletConnect (mobile wallet protocol)
+✅ Role-based access (Employer vs Employee)
+✅ Pre-connect role selection modal
+✅ Wallet selection modal with availability detection
+✅ Network toggle (Testnet/Mainnet) with persistent state
+✅ Graceful error handling for connection failures
 
-EMPLOYEE MANAGEMENT
+SUPPORTED ASSETS (6 CURRENCIES)
+--------------------------------
+✅ XLM - Stellar Lumens (native)
+✅ USDC - USD Coin
+✅ EURT - Euro Token
+✅ NGNT - Nigerian Naira Token
+✅ BRLT - Brazilian Real Token
+✅ ARST - Argentine Peso Token
+
+================================================================================
+                        EMPLOYER DASHBOARD (14 COMPONENTS)
+================================================================================
+
+1. OVERVIEW SECTION
 -------------------
-- Full CRUD operations with Supabase integration
-- CSV bulk upload with validation
-- Quick Pay feature with form pre-fill
-- Employee transaction history with search/filter
+✅ Total paid amount (last 30 days) with trend percentage
+✅ Total saved vs SWIFT (~90% lower fees)
+✅ Active employees count with trends
+✅ Recent payments table with live data
+✅ Stellar Expert transaction links
+✅ Quick navigation to other sections
 
-DASHBOARD & ANALYTICS
----------------------
-- Real-time statistics from Supabase (Total Paid, Saved, Active Employees)
-- Recent payments table with live data
-- Spending analytics with trend charts
-- XLM price chart with CoinGecko API
-- Network statistics and FX rates from Stellar DEX
+2. PAY EMPLOYEE SECTION
+-----------------------
+✅ Individual payment processing
+✅ 6 supported assets with real-time FX rates
+✅ Stellar DEX path finding for FX estimation
+✅ Asset swap functionality
+✅ Recipient address validation (Stellar format)
+✅ Destination account existence check
+✅ Trustline verification for non-XLM assets
+✅ Auto-creation of new accounts (minimum 1 XLM)
+✅ Transaction memo support
+✅ Prefill support from employee directory
 
-TRANSACTION MANAGEMENT
+3. BULK UPLOAD SECTION
 ----------------------
-- Transaction history with Stellar Horizon API integration
-- CSV export for compliance
-- Network-aware Stellar Expert links
-- Search/filter by hash, employee, or asset
+✅ Two modes: Employee Import & Bulk Payment
+✅ CSV file upload with drag-and-drop
+✅ Header validation and file parsing
+✅ Employee Mode: Import name, wallet, role, department, preferred asset
+✅ Payment Mode: Import name, wallet, amount, asset
+✅ Batch payment processing (up to 100 operations per TX)
+✅ Progress tracking during batch processing
+✅ Retry failed recipients
+✅ Payment cost estimation
+✅ CSV template download
 
-COMPLIANCE & TAX REPORTING
---------------------------
-- W-2 and 1099-NEC PDF generation with jsPDF
-- YTD summary with tax calculations
-- Employee classification (W-2 vs 1099-NEC)
-- QuickBooks/Xero compatible CSV export
-- Blockchain-verified tax documents
+4. DIRECTORY SECTION
+--------------------
+✅ Add individual employees (name, wallet, role, department, asset)
+✅ Delete employees with confirmation dialog
+✅ Search by name, wallet address, or department
+✅ Employee cards with avatar initials
+✅ Quick Pay button (navigates with prefill)
+✅ View History button (opens detail modal)
 
-USER EXPERIENCE
+5. EMPLOYEE DETAIL MODAL
+------------------------
+✅ Transaction history for specific employee
+✅ Search and filter transactions
+✅ Sort by date or amount
+✅ Statistics: Total paid, transaction count, average payment
+✅ CSV export (individual employee transactions)
+✅ Stellar Expert transaction links
+
+6. HISTORY TABLE
+----------------
+✅ Fetch from Stellar Horizon API
+✅ Enrich with Supabase payout records (employee names)
+✅ Statistics cards: Total, Successful, Failed, Total Paid
+✅ Search by hash, employee name, or asset
+✅ Filter by status (All, Success, Failed)
+✅ CSV export with full transaction details
+✅ Stellar Expert transaction links
+
+7. ANALYTICS DASHBOARD
+----------------------
+✅ Pie Chart: Spending by asset type
+✅ Line Chart: Spending trend (14-day daily breakdown)
+✅ Bar Chart: Department spending comparison
+✅ Top 10 employees by payment volume
+✅ Total spent (90 days)
+✅ Total payments count
+✅ Average payment size
+✅ Unique employees paid
+✅ Month-over-month comparison
+
+8. COMPLIANCE SECTION
+---------------------
+✅ Year filter (2020 - current year)
+✅ Employee type filter: W-2 Employees / 1099-NEC Contractors
+✅ Search by name, wallet, department
+✅ Aggregated yearly data per employee
+✅ Summary cards: Total Gross Pay, Tax Withheld, Net Disbursed
+✅ Employee vs Contractor counts
+✅ CSV export (Annual Compliance Report)
+✅ Generate tax forms button
+
+9. TAX FORM GENERATOR
+---------------------
+✅ W-2 forms for employees (PDF)
+✅ 1099-NEC forms for contractors (PDF)
+✅ Professional PDF documents using jsPDF
+✅ Employee information section
+✅ Tax year summary with colored boxes
+✅ Transaction history table (up to 15 recent)
+✅ Blockchain verification notice
+✅ LUME verified watermark
+✅ Stellar Expert links for verification
+
+10. XLM PRICE CHART
+-------------------
+✅ CoinGecko API integration
+✅ Time range options: 7D, 1M, 3M, 1Y
+✅ Area chart with gradient fill (Recharts)
+✅ Price color-coded by movement (green/red)
+✅ Current price with change percentage
+✅ Custom tooltips with trend indicators
+✅ Manual refresh button
+
+11. LIQUIDITY MONITOR
+---------------------
+✅ Live FX rate for asset pairs (default: USDC/NGNT)
+✅ Orderbook spread calculation
+✅ Top bid/ask prices display
+✅ Liquidity status indicator (Stable vs High Spread)
+✅ Configurable source/destination assets
+✅ 30-second auto-refresh
+
+12. SAVINGS CALCULATOR
+----------------------
+✅ Scans last 30 days of outgoing USDC payments
+✅ Calculates 5% savings vs traditional bank wire fees
+✅ Animated counter for savings display
+✅ Transaction count tracking
+✅ 60-second auto-refresh
+
+13. ACCOUNT BALANCE
+-------------------
+✅ All Stellar assets in wallet
+✅ XLM (native) + custom assets with issuers
+✅ Live balance updates (30-second refresh)
+✅ Asset icons with gradient backgrounds
+✅ Network indicator (Testnet/Mainnet)
+
+14. ESCROW & SECURE TRADE
+-------------------------
+✅ 2-of-3 multisig escrow for B2B transactions
+✅ Same feature set as Employee Dashboard escrow
+✅ Create orders as a seller (business vendor)
+✅ Purchase via marketplace as a buyer (business customer)
+✅ Full integration with Stellar blockchain
+✅ Defaults to "My Sales" tab for employers
+
+================================================================================
+                        EMPLOYEE DASHBOARD (5 COMPONENTS)
+================================================================================
+
+1. WALLET SECTION
+-----------------
+✅ Multi-asset balance display
+✅ Total USD value calculation
+✅ Hide/show balances toggle (privacy)
+✅ Full/truncated address toggle
+✅ QR Code generation (qrcode library)
+✅ QR code download as PNG
+✅ Copy address to clipboard
+✅ Recent transactions list (10 most recent)
+✅ Sent/received transaction indicators
+✅ Asset icons with emoji mapping
+✅ Manual refresh button
+
+2. SEND PAYMENT SECTION
+-----------------------
+✅ 6 supported assets
+✅ Asset swap button (from ↔ to)
+✅ Quick amount buttons (10, 50, 100, 500)
+✅ Real-time path payment estimation
+✅ Address validation
+✅ Memo field support
+✅ Transaction info cards: Settlement time, Fee, Security
+✅ Success state with Stellar Expert link
+
+3. SPENDING ANALYTICS
+---------------------
+✅ Time ranges: 7 days, 30 days, 90 days
+✅ Area Chart: Daily sent vs received (two-tone)
+✅ Pie Chart: Spending by asset type
+✅ Bar Chart: Monthly aggregation
+✅ Stats: Total Sent, Total Received, Net Flow
+✅ Average transaction size
+✅ Percentage change (period comparison)
+
+4. INVEST SECTION (DeFi/Liquidity Pools)
+----------------------------------------
+✅ Mock liquidity pools: XLM/USDC, XLM/EURT, USDC/EURT, XLM/yXLM
+✅ Pool information: TVL, APR, 24h Volume
+✅ My Liquidity position tracking
+✅ Pool share count
+✅ Summary cards: Total TVL, Average APR, Active Pools
+✅ Expandable pool details
+✅ Deposit/Withdraw tabs
+✅ Impermanent loss warning info banner
+
+5. ESCROW & SECURE TRADE
+------------------------
+✅ 2-of-3 multisig escrow system (Buyer + Seller + Admin)
+✅ Stellar-based secure vault accounts
+✅ MY SALES TAB (For Sellers):
+   - Create escrow order (Product ID + Amount in USDC)
+   - Auto-generated Stellar keypair for each order
+   - Order list with status badges (Created/Funded/Locked/Released/Refunded)
+   - Copy escrow address functionality
+   - Stellar Expert transaction links
+   - Order status color coding with icons
+✅ MARKETPLACE TAB (For Buyers):
+   - Search orders by Product ID
+   - Order detail view with amount and status
+   - "Get Payment Address" - copy escrow vault address
+   - "Lock Escrow" - locks funds with 2-of-3 multisig setup
+   - "Confirm Receipt & Release Funds" - triggers release to seller
+   - Freighter wallet signing integration
+   - Automatic admin co-signing on release
+✅ ESCROW FLOW:
+   1. Seller creates order → Escrow vault generated
+   2. Buyer searches order → Sends funds to vault
+   3. Buyer locks escrow → Multisig setup applied
+   4. Goods/services delivered → Buyer confirms receipt
+   5. Buyer + Admin sign release → Funds sent to seller
+✅ Security features:
+   - Escrow secret keys stored server-side only
+   - Public keys exposed, secrets never sent to client
+   - 2-of-3 threshold prevents unilateral fund movement
+   - Row-level security on Supabase database
+
+================================================================================
+                        USER INTERFACE FEATURES
+================================================================================
+
+LANDING PAGE
+------------
+✅ Hero section with animated gradients
+✅ Feature cards (Individual Payouts, Bulk Payments, Off-Ramps)
+✅ Two-step onboarding flow visualization
+✅ Contact form with Web3Forms API integration
+✅ Pricing section with tiers
+✅ Responsive design (mobile/desktop)
+✅ Framer Motion animations
+
+NAVBAR
+------
+✅ Fixed position with backdrop blur
+✅ Custom logo image (lume-logo.png)
+✅ Navigation links (Features, Pricing, About, Contact)
+✅ Get Started button (triggers connection flow)
+✅ Mobile hamburger menu
+✅ Network badge indicator
+
+FOOTER
+------
+✅ 4-column link structure (Product, Company, Resources, Legal)
+✅ Social icons (Twitter, GitHub, LinkedIn, Mail)
+✅ Brand tagline
+✅ Stellar Network attribution
+
+ANIMATED BACKGROUND
+-------------------
+✅ 200 twinkling stars with varied sizes/opacity
+✅ 15 shooting stars with random trajectories
+✅ 20 floating particles
+✅ 3 gradient orbs with pulsing animations
+✅ SSR-safe (prevents hydration errors)
+
+VISUAL THEME
+------------
+✅ True black background (#000000)
+✅ Amber/gold accent colors (professional theme)
+✅ Neutral gray tones for borders/text
+✅ Gradient accents (amber to orange)
+✅ Modern glassmorphism effects
+
+TOAST NOTIFICATIONS (Sonner)
+----------------------------
+✅ Success, Error, Info, Loading states
+✅ Rich content with clickable links
+✅ Custom durations
+✅ Transaction success with Stellar Expert links
+
+================================================================================
+                        BACKEND/DATA LAYER
+================================================================================
+
+SUPABASE INTEGRATION
+--------------------
+✅ Server-side client with cookies (SSR)
+✅ Browser client for Client Components
+✅ Row Level Security (RLS) enabled
+
+DATABASE TABLES
 ---------------
-- Landing page with contact form (Web3Forms integration)
-- Responsive design (mobile/tablet/desktop)
-- Toast notifications with Sonner
-- Animated background effects
-- Dark theme with gradient accents
+1. employees - Employee directory
+   • owner_wallet_address, full_name, wallet_address
+   • role, department, preferred_asset
+   • employee_type (W-2/1099), tax_rate
+
+2. payouts - Payment records
+   • transaction_hash, amount, asset_code, status
+   • employee_id, batch_id, tax_withheld, net_amount
+
+3. user_profiles - User preferences
+   • wallet_address, user_role, display_name, email
+   • preferred_currency, notification_preferences
+
+4. employee_transactions - Personal transaction tracking
+5. spending_categories - Spending categorization
+6. savings_goals - Financial goals
+7. liquidity_investments - Pool positions
+8. contacts - Address book
+9. notifications - User notifications
+
+SERVER ACTIONS
+--------------
+✅ getEmployees, addEmployee, deleteEmployee
+✅ importEmployeesFromCSV - CSV import
+✅ recordPayout - Store payment records
+✅ getPayoutHistory - Fetch transaction history
+✅ getDashboardStats - Aggregate statistics
+✅ getRecentPayments - Latest transactions
+
+================================================================================
+                        REAL-TIME FEATURES
+================================================================================
+
+| Feature                  | Refresh Interval |
+|--------------------------|------------------|
+| Account Balance          | 30 seconds       |
+| XLM Price Chart          | On-demand        |
+| Liquidity Monitor        | 30 seconds       |
+| Savings Calculator       | 60 seconds       |
+| Dashboard Stats          | 60 seconds       |
+| Recent Payments          | 60 seconds       |
+| Network Stats            | 30 seconds       |
+
+================================================================================
+                        EXPORT FORMATS
+================================================================================
+
+| Export Type              | Format | Component          |
+|--------------------------|--------|--------------------|
+| Transaction History      | CSV    | HistoryTable       |
+| Employee Transactions    | CSV    | EmployeeDetailModal|
+| Compliance Report        | CSV    | ComplianceSection  |
+| Tax Forms (W-2/1099-NEC) | PDF    | TaxFormGenerator   |
+| QR Code                  | PNG    | WalletSection      |
+
+================================================================================
+                        STELLAR INTEGRATION
+================================================================================
+
+✅ Horizon API (Testnet & Mainnet)
+✅ Path payments for FX conversion
+✅ Multi-operation transactions (up to 100 ops)
+✅ Account creation for new recipients
+✅ Trustline verification
+✅ Transaction signing via wallet kit
+✅ Network passphrase handling
+✅ Retry logic for network failures
+
+================================================================================
+                        MOBILE SUPPORT
+================================================================================
+
+✅ Mobile device detection
+✅ WalletConnect for mobile wallet apps
+✅ Freighter mobile deep-linking
+✅ Responsive UI components
+✅ Touch-friendly modals
 
 ================================================================================
                         NON-FUNCTIONAL FEATURES
@@ -76,21 +426,43 @@ USER EXPERIENCE
 1. CONTACT SALES FUNCTIONALITY
    Status: UI exists but no backend implementation
    Description: The Enterprise pricing tier displays a "Contact Sales" button
-   that currently has no functionality. When implemented, this would allow
-   potential enterprise customers to submit sales inquiries directly from the
-   pricing page, triggering email notifications to the sales team and storing
-   leads in a CRM system.
+   that currently has no functionality.
 
 2. MONEYGRAM INTEGRATION
+   Status: No implementation
+   Description: Integration with MoneyGram for cash-in/cash-out functionality.
+
+3. FIAT ON-RAMP/OFF-RAMP
+   Status: UI placeholder exists
+   Description: Direct fiat currency conversion within the platform.
+
+4. MULTI-SIGNATURE WALLET SUPPORT
+   Status: No implementation
+   Description: Multi-sig functionality requiring multiple signers for payments.
+
+5. EMAIL NOTIFICATIONS
+   Status: Database schema exists, no implementation
+   Description: Email alerts for payments, deposits, and account activity.
+
+6. RECURRING PAYMENTS
+   Status: No implementation
+   Description: Scheduled automatic payments for regular payroll.
+
+================================================================================
+                            DEPLOYMENT INFO
+================================================================================
+
 ENVIRONMENT VARIABLES
 ---------------------
-- NEXT_PUBLIC_SUPABASE_URL - Supabase project URL
-- NEXT_PUBLIC_SUPABASE_ANON_KEY - Supabase anonymous key
-- SUPABASE_SERVICE_ROLE_KEY - Service role key (server-only)
+• NEXT_PUBLIC_SUPABASE_URL - Supabase project URL
+• NEXT_PUBLIC_SUPABASE_ANON_KEY - Supabase anonymous key
+• SUPABASE_SERVICE_ROLE_KEY - Service role key (server-only)
 
 EXTERNAL DEPENDENCIES
 ---------------------
-- CoinGecko API (free tier, 10-50 calls/min)
+• CoinGecko API (free tier, 10-50 calls/min)
+• Web3Forms API (contact form)
+• Stellar Horizon API (testnet/mainnet)
 
 REPOSITORY
 ----------
@@ -98,47 +470,28 @@ https://github.com/pkprajapati7402/Lume
 
 PRODUCTION STATUS
 -----------------
-- Production-ready with all core features functional
-- PWA-ready with manifest
-- SEO optimized
-- All hydration errors resolved
--  Status: No implementation
-   Description: A dedicated portal where employees can log in to view their
-   payment history, update their wallet addresses, set payment preferences,
-   download tax documents, and manage their profile. This would complement the
-   employer dashboard and provide transparency to payees about their earnings
-   and transaction history.
-
-5. MULTI-SIGNATURE WALLET SUPPORT
-   Status: No implementation
-   Description: Multi-signature (multi-sig) functionality would require multiple
-   authorized signers to approve payments before they're submitted to the
-   Stellar network. This is critical for enterprises where financial controls
-   require approval workflows, preventing unauthorized payments and adding an
-   extra security layer for large transactions or bulk payroll processing.
-
-================================================================================
-                            DEPLOYMENT INFO
-================================================================================
-
-**Environment Variables:**
-• NEXT_PUBLIC_SUPABASE_URL - Supabase project URL
-• NEXT_PUBLIC_SUPABASE_ANON_KEY - Supabase anonymous key
-• SUPABASE_SERVICE_ROLE_KEY - Service role key (server-only)
-
-**External Dependencies:**
-• CoinGecko API (free tier, 10-50 calls/min)
-
-**Repository:**
-https://github.com/pkprajapati7402/Lume
-
-**Status:**
-✅ Production-ready
+✅ Production-ready with all core features functional
 ✅ PWA-ready with manifest
 ✅ SEO optimized
 ✅ All hydration errors resolved
 ✅ Comprehensive error handling
+✅ 50+ distinct features implemented
 
 ================================================================================
-Last Updated: January 27, 2026
+                        FEATURE COUNT SUMMARY
+================================================================================
+
+| Category                 | Feature Count |
+|--------------------------|---------------|
+| Employer Dashboard       | 13 components |
+| Employee Dashboard       | 4 components  |
+| Authentication/Wallet    | 5 features    |
+| Supported Assets         | 6 currencies  |
+| Chart Types              | 4 types       |
+| Export Formats           | 5 formats     |
+| Real-time Refreshes      | 7 features    |
+| Total Implemented        | 50+ features  |
+
+================================================================================
+Last Updated: February 1, 2026
 ================================================================================
