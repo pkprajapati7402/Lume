@@ -17,7 +17,8 @@ export default function AppLayout() {
     setIsMounted(true);
   }, []);
 
-  // Show role selection modal if authorized but no role selected
+  // Show role selection modal only if authorized but no role selected
+  // This handles edge cases like returning users who connected but never selected a role
   useEffect(() => {
     if (isAuthorized && publicKey && !userRole) {
       setShowRoleModal(true);

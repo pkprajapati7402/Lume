@@ -20,20 +20,25 @@ import {
 import Navbar from './Navbar';
 import Footer from './Footer';
 import AnimatedBackground from './AnimatedBackground';
+import PreConnectRoleModal from './PreConnectRoleModal';
+import WalletSelectionModal from './WalletSelectionModal';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/authStore';
-import { connectWallet } from '@/lib/wallet-service';
+import { connectSpecificWallet } from '@/lib/wallet-service';
 import { useState, useRef, useEffect } from 'react';
 
 export default function LandingPage() {
   const [isConnecting, setIsConnecting] = useState(false);
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<'employer' | 'employee' | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { setAuthorized, network } = useAuthStore();
+  const { setAuthorized, setUserRole, network } = useAuthStore();
   const isMountedRef = useRef(false);
 
   useEffect(() => {
@@ -43,14 +48,29 @@ export default function LandingPage() {
     };
   }, []);
 
-  const handleConnect = async () => {
-    console.log('handleConnect called, isMounted:', isMountedRef.current);
+  // Handle Get Started button click - show role selection first
+  const handleGetStarted = () => {
+    setShowRoleModal(true);
+  };
+
+  // Handle role selection - then show wallet options
+  const handleRoleSelect = (role: 'employer' | 'employee') => {
+    setSelectedRole(role);
+    setShowRoleModal(false);
+    // Small delay for smooth transition
+    setTimeout(() => {
+      setShowWalletModal(true);
+    }, 200);
+  };
+
+  // Handle wallet selection and connection
+  const handleWalletSelect = async (walletId: string) => {
+    console.log('handleWalletSelect called with wallet:', walletId);
     setIsConnecting(true);
-    console.log('Starting wallet connection...');
     
     try {
-      const result = await connectWallet(network);
-      console.log('connectWallet result:', result);
+      const result = await connectSpecificWallet(network, walletId);
+      console.log('connectSpecificWallet result:', result);
       
       if (!result.success) {
         if (result.error?.includes('cancelled')) {
@@ -71,7 +91,12 @@ export default function LandingPage() {
 
       if (result.publicKey) {
         console.log('Connected to wallet:', result.publicKey);
+        // Set the role that was selected earlier
+        if (selectedRole) {
+          setUserRole(selectedRole);
+        }
         setAuthorized(result.publicKey);
+        setShowWalletModal(false);
         toast.success('Wallet Connected', {
           description: `Connected to ${result.publicKey.slice(0, 8)}...${result.publicKey.slice(-8)}`,
         });
@@ -211,7 +236,7 @@ export default function LandingPage() {
                   type="button"
                   onClick={() => {
                     console.log('Hero Get Started clicked');
-                    handleConnect();
+                    handleGetStarted();
                   }}
                   disabled={isConnecting}
                   className="group inline-flex items-center gap-3 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-900 px-8 py-4 rounded-xl text-lg font-semibold shadow-lg shadow-amber-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/30 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
@@ -360,7 +385,7 @@ export default function LandingPage() {
                 ))}
               </ul>
               <button
-                onClick={handleConnect}
+                onClick={handleGetStarted}
                 disabled={isConnecting}
                 className="w-full bg-neutral-800 hover:bg-neutral-700 text-white px-6 py-3 rounded-lg font-semibold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 suppressHydrationWarning
@@ -399,7 +424,7 @@ export default function LandingPage() {
                 ))}
               </ul>
               <button
-                onClick={handleConnect}
+                onClick={handleGetStarted}
                 disabled={isConnecting}
                 className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 px-6 py-3 rounded-lg font-semibold transition-all shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                 suppressHydrationWarning
@@ -755,7 +780,7 @@ export default function LandingPage() {
                 Join thousands of companies using Stellar Payroll to pay their global teams faster and cheaper.
               </p>
               <button
-                onClick={handleConnect}
+                onClick={handleGetStarted}
                 disabled={isConnecting}
                 className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-400 to-orange-500 text-slate-900 px-8 py-4 rounded-xl text-lg font-semibold hover:from-amber-300 hover:to-orange-400 transition-all duration-300 hover:scale-105 shadow-xl shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -769,6 +794,26 @@ export default function LandingPage() {
       </main>
 
       <Footer />
+
+      {/* Pre-connect Role Selection Modal */}
+      <PreConnectRoleModal
+        isOpen={showRoleModal}
+        onClose={() => setShowRoleModal(false)}
+        onRoleSelect={handleRoleSelect}
+      />
+
+      {/* Wallet Selection Modal */}
+      {selectedRole && (
+        <WalletSelectionModal
+          isOpen={showWalletModal}
+          onClose={() => {
+            setShowWalletModal(false);
+            setSelectedRole(null);
+          }}
+          onSelectWallet={handleWalletSelect}
+          selectedRole={selectedRole}
+        />
+      )}
     </div>
   );
 }

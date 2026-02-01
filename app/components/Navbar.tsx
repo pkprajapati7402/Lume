@@ -6,12 +6,17 @@ import { Menu, X, Wallet } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useAuthStore } from '../store/authStore';
-import { connectWallet } from '@/lib/wallet-service';
+import { connectSpecificWallet } from '@/lib/wallet-service';
+import PreConnectRoleModal from './PreConnectRoleModal';
+import WalletSelectionModal from './WalletSelectionModal';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
-  const { setAuthorized, network } = useAuthStore();
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<'employer' | 'employee' | null>(null);
+  const { setAuthorized, setUserRole, network } = useAuthStore();
 
   const navLinks = [
     { name: 'Features', href: '#features' },
@@ -20,11 +25,28 @@ export default function Navbar() {
     { name: 'Contact', href: '#contact' },
   ];
 
-  const handleConnect = async () => {
+  // Handle Get Started button click - show role selection first
+  const handleGetStarted = () => {
+    setShowRoleModal(true);
+    setIsMenuOpen(false); // Close mobile menu if open
+  };
+
+  // Handle role selection - then show wallet options
+  const handleRoleSelect = (role: 'employer' | 'employee') => {
+    setSelectedRole(role);
+    setShowRoleModal(false);
+    // Small delay for smooth transition
+    setTimeout(() => {
+      setShowWalletModal(true);
+    }, 200);
+  };
+
+  // Handle wallet selection and connection
+  const handleWalletSelect = async (walletId: string) => {
     setIsConnecting(true);
     
     try {
-      const result = await connectWallet(network);
+      const result = await connectSpecificWallet(network, walletId);
       
       if (!result.success) {
         if (result.error?.includes('cancelled')) {
@@ -43,7 +65,12 @@ export default function Navbar() {
 
       if (result.publicKey) {
         console.log('Connected to wallet:', result.publicKey);
+        // Set the role that was selected earlier
+        if (selectedRole) {
+          setUserRole(selectedRole);
+        }
         setAuthorized(result.publicKey);
+        setShowWalletModal(false);
         toast.success('Wallet Connected', {
           description: `Connected to ${result.publicKey.slice(0, 8)}...${result.publicKey.slice(-8)}`,
         });
@@ -59,18 +86,19 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-neutral-800/50">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center group">
-            <div className="relative">
-              <Image 
-                src="/lume-logo.png" 
-                alt="Lume" 
-                width={120} 
-                height={44} 
-                className="h-11 w-auto object-contain group-hover:scale-105 transition-transform"
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-neutral-800/50">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link href="/" className="flex items-center group">
+              <div className="relative">
+                <Image 
+                  src="/lume-logo.png" 
+                  alt="Lume" 
+                  width={120} 
+                  height={44} 
+                  className="h-11 w-auto object-contain group-hover:scale-105 transition-transform"
               />
               <div className="absolute inset-0 bg-amber-500/30 blur-xl group-hover:bg-amber-400/40 transition-all" />
             </div>
@@ -92,7 +120,7 @@ export default function Navbar() {
           {/* Desktop CTA Button */}
           <div className="hidden md:block">
             <button
-              onClick={handleConnect}
+              onClick={handleGetStarted}
               disabled={isConnecting}
               className="flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-900 px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
               suppressHydrationWarning
@@ -127,7 +155,7 @@ export default function Navbar() {
               </a>
             ))}
             <button
-              onClick={handleConnect}
+              onClick={handleGetStarted}
               disabled={isConnecting}
               className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-900 px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 shadow-lg shadow-amber-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -137,6 +165,28 @@ export default function Navbar() {
           </div>
         </div>
       )}
-    </nav>
+      </nav>
+
+      {/* Pre-connect Role Selection Modal - rendered outside nav for proper z-index stacking */}
+      <PreConnectRoleModal
+        isOpen={showRoleModal}
+        onClose={() => setShowRoleModal(false)}
+        onRoleSelect={handleRoleSelect}
+      />
+
+      {/* Wallet Selection Modal - rendered outside nav for proper z-index stacking */}
+      {selectedRole && (
+        <WalletSelectionModal
+          isOpen={showWalletModal}
+          onClose={() => {
+            setShowWalletModal(false);
+            setSelectedRole(null);
+          }}
+          onSelectWallet={handleWalletSelect}
+          selectedRole={selectedRole}
+        />
+      )}
+    </>
   );
 }
+

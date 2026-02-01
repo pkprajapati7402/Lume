@@ -10,6 +10,7 @@ import {
   FREIGHTER_ID,
   XBULL_ID,
 } from '@creit.tech/stellar-wallets-kit';
+import { isConnected as isFreighterConnected } from '@stellar/freighter-api';
 import type { NetworkType } from '@/app/store/authStore';
 
 // Singleton instance
@@ -45,11 +46,32 @@ export async function getAvailableWallets(network: NetworkType): Promise<any[]> 
   // Get the supported wallets from the kit
   const supportedWallets = await kit.getSupportedWallets();
   
+  // Check if Freighter is installed using the official API
+  let freighterInstalled = false;
+  try {
+    const freighterResult = await isFreighterConnected();
+    // isConnected returns { isConnected: boolean } in newer versions
+    freighterInstalled = typeof freighterResult === 'object' 
+      ? freighterResult.isConnected !== undefined 
+      : !!freighterResult;
+    // Even if not connected, if we get a response, Freighter is installed
+    if (typeof freighterResult === 'object') {
+      freighterInstalled = true; // Extension is present
+    }
+  } catch (e) {
+    // If isConnected throws, check for window object fallbacks
+    freighterInstalled = !!(
+      (window as any).freighter || 
+      (window as any).freighterApi ||
+      (window as any).stellar?.freighter
+    );
+  }
+  
   // Filter to only show installed/available wallets
   const availableWallets = supportedWallets.filter((wallet: any) => {
     // Check if wallet is actually installed
     if (wallet.id === FREIGHTER_ID) {
-      return !!(window as any).freighter;
+      return freighterInstalled;
     }
     if (wallet.id === XBULL_ID) {
       return !!(window as any).xBullSDK;
@@ -135,6 +157,72 @@ export async function connectWallet(network: NetworkType): Promise<{
         });
       }
     }
+
+    // Get public key from connected wallet
+    const { address } = await kit.getAddress();
+
+    if (!address) {
+      return {
+        success: false,
+        error: 'Failed to retrieve wallet address',
+      };
+    }
+
+    return {
+      success: true,
+      publicKey: address,
+    };
+  } catch (error: any) {
+    console.error('Wallet connection error:', error);
+    
+    // Handle user rejection
+    if (error.message?.includes('User rejected') || error.message?.includes('closed') || error.message?.includes('cancelled')) {
+      return {
+        success: false,
+        error: 'Connection cancelled by user',
+      };
+    }
+
+    // Handle network errors
+    if (error.message?.includes('Network Error') || error.message?.includes('NetworkError') || error.message?.includes('Failed to fetch')) {
+      return {
+        success: false,
+        error: 'Network connection failed. Please check your internet connection and try again.',
+      };
+    }
+
+    // Handle timeout errors
+    if (error.message?.includes('timeout') || error.message?.includes('Timeout')) {
+      return {
+        success: false,
+        error: 'Connection timeout. The network may be slow or unavailable.',
+      };
+    }
+
+    return {
+      success: false,
+      error: error.message || 'Failed to connect wallet',
+    };
+  }
+}
+
+/**
+ * Connect to a specific wallet by ID
+ * This allows the user to select their preferred wallet
+ */
+export async function connectSpecificWallet(
+  network: NetworkType,
+  walletId: string
+): Promise<{
+  success: boolean;
+  publicKey?: string;
+  error?: string;
+}> {
+  try {
+    const kit = getWalletKit(network);
+    
+    // Set the selected wallet
+    kit.setWallet(walletId);
 
     // Get public key from connected wallet
     const { address } = await kit.getAddress();
