@@ -40,7 +40,7 @@ export async function getDashboardStats(
     const { data: allTransactions, error: txError } = await supabase
       .from('payouts')
       .select('amount, created_at, status')
-      .eq('owner_wallet', ownerWallet)
+      .eq('owner_wallet_address', ownerWallet)
       .eq('status', 'success')
       .gte('created_at', sixtyDaysAgo.toISOString())
       .order('created_at', { ascending: false });
@@ -54,7 +54,7 @@ export async function getDashboardStats(
     const { data: employees, error: empError } = await supabase
       .from('employees')
       .select('id')
-      .eq('owner_wallet', ownerWallet);
+      .eq('owner_wallet_address', ownerWallet);
     
     if (empError) {
       console.error('Error fetching employees:', empError);
