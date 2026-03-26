@@ -243,7 +243,7 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
           duration: 8000,
         });
 
-        // Record payout in Supabase using server action (non-blocking)
+        // Record payout in Supabase using server action (non-blocking but properly handled)
         recordPayoutAction({
           transactionHash: result.transactionHash,
           amount: result.amount,
@@ -257,7 +257,7 @@ export default function PayEmployeeSection({ prefilledData }: PayEmployeeSection
             console.warn('⚠️ Payment succeeded but database recording failed:', recordResult.error);
           }
         }).catch((err) => {
-          console.warn('⚠️ Database recording error:', err);
+          console.error('⚠️ Database recording error:', err);
         });
 
         // Clear form after success

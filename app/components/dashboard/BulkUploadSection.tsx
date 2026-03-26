@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { 
   Upload as UploadIcon, 
   FileSpreadsheet, 
@@ -43,7 +43,7 @@ export default function BulkUploadSection() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [parsedData, setParsedData] = useState<ParsedEmployee[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<{ success: boolean; message: string } | null>(null);
   
   // Payment-specific state
@@ -151,7 +151,7 @@ export default function BulkUploadSection() {
     }
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (parsedData.length === 0) return;
 
     if (!publicKey) {
@@ -159,7 +159,8 @@ export default function BulkUploadSection() {
       return;
     }
 
-    startTransition(async () => {
+    setIsPending(true);
+    try {
       const result = await bulkAddEmployees(parsedData, publicKey);
 
       if (result.error) {
@@ -177,7 +178,14 @@ export default function BulkUploadSection() {
           setUploadStatus(null);
         }, 3000);
       }
-    });
+    } catch (error) {
+      const errorMessage = 'An unexpected error occurred';
+      setError(errorMessage);
+      setUploadStatus({ success: false, message: errorMessage });
+      console.error('Error uploading employees:', error);
+    } finally {
+      setIsPending(false);
+    }
   };
 
   const handleBulkPayment = async () => {

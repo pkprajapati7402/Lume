@@ -14,7 +14,7 @@ import {
   AlertCircle,
   FileCheck
 } from 'lucide-react';
-import { createClient } from '@/lib/supabase';
+import { createClient, isSupabaseConfigured } from '@/lib/supabase';
 import { toast } from 'sonner';
 import type { NetworkType } from '@/app/store/authStore';
 import { json2csv } from 'json-2-csv';
@@ -46,6 +46,7 @@ export default function ComplianceSection({ publicKey, network }: ComplianceSect
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedEmployee, setSelectedEmployee] = useState<EmployeeComplianceData | null>(null);
   const [showTaxFormModal, setShowTaxFormModal] = useState(false);
+  const [configError, setConfigError] = useState<string | null>(null);
 
   // Generate array of years from 2020 to current year
   const years = Array.from({ length: new Date().getFullYear() - 2019 }, (_, i) => 2020 + i).reverse();
@@ -56,6 +57,15 @@ export default function ComplianceSection({ publicKey, network }: ComplianceSect
 
   const fetchComplianceData = async () => {
     setLoading(true);
+    setConfigError(null);
+    
+    // Check if Supabase is configured
+    if (!isSupabaseConfigured()) {
+      setConfigError('Database not configured. Please set up Supabase environment variables.');
+      setLoading(false);
+      return;
+    }
+    
     try {
       const supabase = createClient();
 
@@ -109,10 +119,24 @@ export default function ComplianceSection({ publicKey, network }: ComplianceSect
       });
 
       setComplianceData(aggregated);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching compliance data:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Could not fetch tax and compliance information';
+      if (error?.message?.includes('not configured')) {
+        errorMessage = 'Database not configured. Please set up Supabase.';
+        setConfigError(errorMessage);
+      } else if (error?.code === 'PGRST116' || error?.message?.includes('does not exist')) {
+        errorMessage = 'Tax columns not found. Please run the database migration.';
+        setConfigError(errorMessage);
+      } else if (error?.code === '42703') {
+        errorMessage = 'Missing database columns. Run the add_tax_columns.sql migration.';
+        setConfigError(errorMessage);
+      }
+      
       toast.error('Failed to Load Compliance Data', {
-        description: 'Could not fetch tax and compliance information',
+        description: errorMessage,
       });
     } finally {
       setLoading(false);
@@ -216,6 +240,40 @@ export default function ComplianceSection({ publicKey, network }: ComplianceSect
         </motion.button>
       </motion.div>
 
+      {/* Configuration Error State */}
+      {configError && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-red-900/20 border border-red-800 rounded-xl p-6"
+        >
+          <div className="flex items-start gap-4">
+            <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-red-400 mb-2">Configuration Required</h3>
+              <p className="text-neutral-300 mb-4">{configError}</p>
+              <div className="bg-black/50 rounded-lg p-4 text-sm">
+                <p className="text-amber-400 font-semibold mb-2">Setup Instructions:</p>
+                <ol className="list-decimal list-inside space-y-2 text-neutral-400">
+                  <li>Create a <code className="bg-neutral-800 px-1 rounded">.env.local</code> file in the project root</li>
+                  <li>Add your Supabase credentials:
+                    <pre className="mt-2 bg-neutral-800 p-2 rounded text-xs overflow-x-auto">
+{`NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key`}
+                    </pre>
+                  </li>
+                  <li>Run the <code className="bg-neutral-800 px-1 rounded">add_tax_columns.sql</code> migration in your Supabase dashboard</li>
+                  <li>Restart the development server</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Only show the rest of the UI if no config error */}
+      {!configError && (
+        <>
       {/* Filters */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -476,6 +534,8 @@ export default function ComplianceSection({ publicKey, network }: ComplianceSect
             setSelectedEmployee(null);
           }}
         />
+      )}
+        </>
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Plus, Trash2, Wallet, X, Eye } from 'lucide-react';
 import { toast } from 'sonner';
 import { addEmployee, deleteEmployee } from '@/app/actions/employees';
@@ -24,7 +24,7 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
   const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -62,7 +62,8 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
     const formData = new FormData(form);
     formData.append('ownerWallet', publicKey);
     
-    startTransition(async () => {
+    setIsPending(true);
+    try {
       const result = await addEmployee(formData);
       
       if (result.error) {
@@ -78,7 +79,14 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
         form.reset();
         await refreshEmployees();
       }
-    });
+    } catch (error) {
+      toast.error('Failed to Add Employee', {
+        description: 'An unexpected error occurred',
+      });
+      console.error('Error adding employee:', error);
+    } finally {
+      setIsPending(false);
+    }
   };
 
   const handleDeleteEmployee = async (employeeId: string) => {
@@ -93,7 +101,8 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
       return;
     }
 
-    startTransition(async () => {
+    setIsPending(true);
+    try {
       const result = await deleteEmployee(employeeId, publicKey);
       
       if (result.error) {
@@ -106,7 +115,14 @@ export default function DirectorySection({ initialEmployees, onQuickPay }: Direc
         });
         await refreshEmployees();
       }
-    });
+    } catch (error) {
+      toast.error('Failed to Delete Employee', {
+        description: 'An unexpected error occurred',
+      });
+      console.error('Error deleting employee:', error);
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
